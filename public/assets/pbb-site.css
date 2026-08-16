@@ -562,3 +562,63 @@ footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline;
   .segment-hero h1,
   .segment-hero .lede { transition: none; }
 }
+
+/* ==========================================================================
+   "PARA SA'YO" — the two pillars nearest the chosen segment
+   --------------------------------------------------------------------------
+   Added content, not withheld content. The band is hidden until a segment is
+   known and stays hidden with JavaScript off, so a visitor who never answers
+   sees exactly the page they saw before. Nothing is removed from anyone.
+   ========================================================================== */
+
+.foryou-list {
+  display: grid;
+  gap: .85rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .foryou-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.foryou-card {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--pbb-gold, #c9a227);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--pbb-ink, #122016);
+  text-decoration: none;
+}
+
+.foryou-card:hover { background: var(--pbb-tint, #e8f3ea); }
+
+.foryou-card:focus-visible {
+  outline: 3px solid var(--pbb-forest, #0a6e2e);
+  outline-offset: 3px;
+}
+
+.foryou-head { display: flex; align-items: center; gap: .6rem; }
+
+.foryou-letter {
+  flex: 0 0 auto;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--pbb-forest-deep, #063d1b);
+  color: var(--pbb-gold-bright, #f0c420);
+  font-family: var(--pbb-font-display, inherit);
+  font-weight: 800;
+}
+
+.foryou-title {
+  font-family: var(--pbb-font-label, inherit);
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.foryou-line { font-size: .95rem; line-height: 1.55; }

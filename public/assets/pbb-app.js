@@ -74,13 +74,32 @@
     try { return JSON.parse(raw); } catch (e) { return []; }
   }
 
-  function writeOutbox(items) { lsSet(OUTBOX_KEY, JSON.stringify(items)); }
+  /* Returns TRUE only if the write actually landed.
+     This used to swallow lsSet's result, so queueForRetry always returned
+     undefined and submitLead reported 'failed' for every queued submission —
+     including the ones that queued perfectly. A member who filled in the
+     whole form, took a photo and signed was told their details had not been
+     sent, while the envelope sat safely in localStorage. */
+  function writeOutbox(items) { return lsSet(OUTBOX_KEY, JSON.stringify(items)); }
+
+  /* A membership envelope carries a photo and a signature as data URLs and
+     runs to roughly 130 KB. Twenty-five of those is 3 MB, which is at or over
+     the localStorage quota on the phones this has to work on — so the queue is
+     bounded by BYTES as well as by count, dropping the oldest until the new
+     one fits. Returns false if it still cannot be stored, and the caller says
+     so rather than claiming a save that did not happen. */
+  var OUTBOX_MAX_ITEMS = 25;
+  var OUTBOX_MAX_BYTES = 1500000;
 
   function queueForRetry(envelope) {
     var all = readOutbox();
-    if (all.length >= 25) all.shift();   // bound the queue; never fill the disk
     all.push({ envelope: envelope, queuedAt: new Date().toISOString(), attempts: 0 });
-    return writeOutbox(all);
+
+    while (all.length > OUTBOX_MAX_ITEMS ||
+           (all.length > 1 && JSON.stringify(all).length > OUTBOX_MAX_BYTES)) {
+      all.shift();
+    }
+    return writeOutbox(all) === true;
   }
 
   function postEnvelope(envelope) {
@@ -133,6 +152,23 @@
       if (err.kind === 'rejected') {
         return Promise.reject({ state: 'rejected', body: err.body || {}, status: err.status });
       }
+
+      /* Do NOT queue when the site has no endpoint configured.
+         flushOutbox() returns early while config.endpoint is empty, so a
+         queued envelope would never be sent — and telling someone it will go
+         "when the signal returns" would be false, because signal is not the
+         problem. It would also leave a photo and a signature in localStorage
+         indefinitely, which is sensitive personal information under RA 10173
+         sitting on a possibly shared phone for no purpose. */
+      if (err.kind === 'unconfigured') {
+        if (window.console && console.error) {
+          console.error('[PBB] window.PBB_SUPABASE_URL / _ANON_KEY are empty, so ' +
+                        'there is nowhere to send this submission. Set them in the ' +
+                        'page config block on every form page.');
+        }
+        return Promise.reject({ state: 'unconfigured', reason: err.kind });
+      }
+
       var queued = queueForRetry(envelope);
       return Promise.reject({ state: queued ? 'queued' : 'failed', reason: err.kind });
     });
@@ -235,6 +271,18 @@
         statusEl.textContent = fieldErrorMessage(ctx.body || {});
         return false;
 
+      /* The site is not connected to its backend. Say that plainly and give a
+         route that works today, instead of implying a retry that cannot
+         happen. Nothing has been stored, and the member should not be left
+         thinking they are registered. */
+      case 'unconfigured':
+        statusEl.className = 'form-status err';
+        statusEl.textContent =
+          'Hindi pa nakakonekta ang online na pagpapalista, kaya hindi naipadala ang detalye mo — ' +
+          'at hindi rin ito naka-save. Pasensiya na. Mag-text ng SUMALI sa ' + config.hotline +
+          ' o mag-message sa aming Facebook Page, at kami na ang magpapalista sa iyo.';
+        return false;
+
       default:
         statusEl.className = 'form-status err';
         statusEl.textContent =
@@ -298,39 +346,98 @@
      is the progressive-disclosure spine of the redesign.
      ====================================================================== */
 
+  /* Label and destination for each pillar, so the "Para sa'yo" strip does
+     not restate them per persona and drift out of step with the cards. */
+  var PILLARS = {
+    'basic-services':    { letter: 'B', label: 'Batayang Serbisyo',        href: 'bangon-basic-services.html' },
+    'alliance':          { letter: 'A', label: 'Alyansa at Partnership',   href: 'bangon-alliance.html' },
+    'natural-resources': { letter: 'N', label: 'Natural na Yaman',         href: 'bangon-natural-resources.html' },
+    'green-economy':     { letter: 'G', label: 'Green Economy',            href: 'bangon-green-economy.html' },
+    'open-governance':   { letter: 'O', label: 'Bukas na Pamahalaan',      href: 'bangon-open-governance.html' },
+    'peace':             { letter: 'N', label: 'Kapayapaan',               href: 'bangon-peace.html' }
+  };
+
   var PERSONAS = [
     {
       id: 'professional',
+      forYou: [
+        { p: 'open-governance', line: 'Meritokrasya sa pagkuha ng empleyado at bukas na badyet — trabahong nakukuha sa kakayahan, hindi sa koneksyon.' },
+        { p: 'green-economy', line: 'Green skills at Halal na industriya: mga trabahong bago sa rehiyon, at sinasanay dito mismo.' }
+      ],
+      headline: 'Trabahong nakukuha sa kakayahan — hindi sa apelyido.',
+      lede: 'Meritokrasya sa pagkuha ng empleyado, bukas na badyet, at green skills na may trabaho sa dulo. Ito ang platform para sa propesyonal at kabataan ng BARMM.',
+      ctaLabel: 'Sumali bilang propesyonal',
+      ctaHref: 'membership.html',
       label: 'Propesyonal / Kabataan',
       blurb: 'Trabaho batay sa kakayahan, hindi sa apelyido.',
       pillars: ['open-governance', 'basic-services', 'green-economy', 'alliance']
     },
     {
       id: 'provider',
+      forYou: [
+        { p: 'basic-services', line: 'Super Health Station sa munisipyo, libreng gamot at lab, at target na scholarship para sa mga anak.' },
+        { p: 'alliance', line: 'Bottom-up budgeting: ang barangay ang magsasabi kung saan mapupunta ang pondo — hindi ang Cotabato lamang.' }
+      ],
+      headline: '₱1,790 ang kulang bawat araw. May plano kami.',
+      lede: 'Bottom-up budgeting kung saan ang barangay ang nagsasabi kung saan mapupunta ang pondo, climate-smart na sakahan, at Super Health Station sa munisipyo.',
+      ctaLabel: 'Tingnan ang plano sa serbisyo',
+      ctaHref: 'bangon-basic-services.html',
       label: 'Magsasaka / Mangingisda',
       blurb: 'Konkretong tulong para sa pang-araw-araw na pamilya.',
       pillars: ['basic-services', 'alliance', 'natural-resources', 'green-economy']
     },
     {
       id: 'matriarch',
+      forYou: [
+        { p: 'basic-services', line: 'Kalusugan at eskuwela: espesyalisadong health station, libreng gamot, at scholarship na may target.' },
+        { p: 'peace', line: 'Komunidad na hindi natatakot — community dialogue at restorative justice, hindi armas.' }
+      ],
+      headline: 'Para sa pamilya: kalusugan, eskuwela, at kaligtasan.',
+      lede: 'Espesyalisadong health station na may libreng gamot, target na scholarship, at komunidad na hindi natatakot. Ito ang unang tatlong haligi para sa inyo.',
+      ctaLabel: 'Alamin ang para sa pamilya',
+      ctaHref: 'bangon-basic-services.html',
       label: 'Ina / Community Leader',
       blurb: 'Proteksyon, kalusugan, at scholarship para sa mga anak.',
       pillars: ['basic-services', 'peace', 'open-governance', 'alliance']
     },
     {
       id: 'peace',
+      forYou: [
+        { p: 'peace', line: 'Reintegrasyon ng dating kombatant at rehabilitasyon ng Marawi, na may kabuhayan sa likod ng bawat hakbang.' },
+        { p: 'alliance', line: 'Kasunduang nabubuo sa barangay pataas, kaya may nagbabantay dito sa lupa at hindi lang sa papel.' }
+      ],
+      headline: 'Kapayapaang may kabuhayan — hindi pangako lang.',
+      lede: 'Reintegrasyon ng dating kombatant, rehabilitasyon ng Marawi, at community-based na resolusyon ng alitan, na may kabuhayan sa likod ng bawat isa.',
+      ctaLabel: 'Basahin ang plano sa kapayapaan',
+      ctaHref: 'bangon-peace.html',
       label: 'Peace Advocate',
       blurb: 'Kapayapaan na may kabuhayan, hindi pangako lang.',
       pillars: ['peace', 'alliance', 'basic-services', 'open-governance']
     },
     {
       id: 'business',
+      forYou: [
+        { p: 'green-economy', line: 'Halal bilang teknikal na pamantayan: sertipikasyon, auditor, food technologist, at Shari’ah-compliant na pinansya.' },
+        { p: 'alliance', line: 'Partnership sa kooperatiba at civil society, na may kasunduang napipirmahan online.' }
+      ],
+      headline: 'Halal na handa sa pandaigdigang merkado.',
+      lede: 'Sertipikasyon, Shari’ah-compliant na pinansya, at sinanay na auditor at food technologist — para makipagkumpitensya ang produktong Bangsamoro sa labas.',
+      ctaLabel: 'Makipag-partner sa PBB',
+      ctaHref: 'partnership.html',
       label: 'Negosyante / Halal',
       blurb: 'Pandaigdigang merkado para sa produktong Bangsamoro.',
       pillars: ['green-economy', 'alliance', 'natural-resources', 'open-governance']
     },
     {
       id: 'elder',
+      forYou: [
+        { p: 'open-governance', line: 'Anti-korapsyon na may ngipin at badyet na nababasa ng kahit sino — pananagutan, hindi pangako.' },
+        { p: 'peace', line: 'Pagpaplanong kasama ang mga lider ng pananampalataya at ng komunidad, hindi sa ibabaw nila.' }
+      ],
+      headline: 'Malinis na pamamahala, may galang sa pananampalataya.',
+      lede: 'Anti-korapsyon na may ngipin, awtonomiyang iginagalang, at pagpaplanong kasama ang mga lider ng pananampalataya at ng komunidad.',
+      ctaLabel: 'Alamin kung sino kami',
+      ctaHref: 'about.html',
       label: 'Nakatatanda / Lider ng Pananampalataya',
       blurb: 'Malinis na pamamahala, pananampalataya, at awtonomiya.',
       pillars: ['open-governance', 'peace', 'alliance', 'natural-resources']
@@ -375,6 +482,98 @@
       note.hidden = !chosen;
     }
 
+    /* Rewrite the segment-aware hero. These four hooks are what turn a
+       choice into a page that is actually about the reader — before this,
+       picking a segment only re-sorted six cards and the headline, lede and
+       button stayed generic, so the page still read as written for nobody. */
+    var head = document.querySelector('[data-segment-headline]');
+    var lede = document.querySelector('[data-segment-lede]');
+    var cta  = document.querySelector('[data-segment-cta]');
+    if (head) {
+      head.textContent = chosen && chosen.headline
+        ? chosen.headline
+        : (head.dataset.segmentHeadlineDefault || head.textContent);
+    }
+    if (lede) {
+      lede.textContent = chosen && chosen.lede
+        ? chosen.lede
+        : (lede.dataset.segmentLedeDefault || lede.textContent);
+    }
+    if (cta && chosen && chosen.ctaHref) {
+      cta.textContent = chosen.ctaLabel;
+      cta.setAttribute('href', chosen.ctaHref);
+    } else if (cta && cta.dataset.segmentCtaDefault) {
+      /* Restore the generic wording from the data-*-default attributes.
+         Reading the element's own textContent here looked equivalent and was
+         not: by the time "Ipakita lahat" is pressed, textContent IS the
+         segment copy, so the page stayed stuck on the previous segment. */
+      var parts = cta.dataset.segmentCtaDefault.split('|');
+      cta.textContent = parts[0];
+      cta.setAttribute('href', parts[1] || 'join.html');
+    }
+
+    /* Mark the picker so the chosen card reads as chosen, and expose the
+       state on <html> so CSS can respond without another listener. */
+    Array.prototype.forEach.call(document.querySelectorAll('[data-segment]'), function (card) {
+      card.setAttribute('aria-pressed', String(card.dataset.segment === id));
+    });
+    document.documentElement.setAttribute('data-pbb-segment', id || '');
+
+    var reset = document.querySelector('[data-segment-reset]');
+    if (reset) reset.hidden = !chosen;
+
+    /* "Para sa'yo": the two pillars that matter most to this reader, in
+       words written for them rather than the generic card blurb.
+       This block is ADDITIONAL content that only exists once a segment is
+       known — it is not something removed from anyone. With no segment
+       chosen, and with JavaScript off, it stays hidden and the page reads
+       exactly as it did before. */
+    var strip = document.querySelector('[data-for-you]');
+    if (strip) {
+      var list = strip.querySelector('[data-for-you-list]');
+      var lead = strip.querySelector('[data-for-you-lead]');
+      if (!chosen || !chosen.forYou || !list) {
+        strip.hidden = true;
+      } else {
+        list.innerHTML = '';
+        chosen.forYou.forEach(function (item) {
+          var meta = PILLARS[item.p];
+          if (!meta) return;
+          var a = document.createElement('a');
+          a.className = 'foryou-card';
+          a.href = meta.href;
+
+          var head = document.createElement('span');
+          head.className = 'foryou-head';
+          var letter = document.createElement('span');
+          letter.className = 'foryou-letter';
+          letter.setAttribute('aria-hidden', 'true');
+          letter.textContent = meta.letter;
+          var title = document.createElement('span');
+          title.className = 'foryou-title';
+          title.textContent = meta.label;
+          head.appendChild(letter);
+          head.appendChild(title);
+
+          var line = document.createElement('span');
+          line.className = 'foryou-line';
+          line.textContent = item.line;
+
+          var more = document.createElement('span');
+          more.className = 'more';
+          more.textContent = 'Basahin ang haligi →';
+
+          a.appendChild(head);
+          a.appendChild(line);
+          a.appendChild(more);
+          list.appendChild(a);
+        });
+        if (lead) lead.textContent = 'Dalawa sa anim na haligi ang pinakamalapit sa ' +
+                                     chosen.label.toLowerCase() + ':';
+        strip.hidden = false;
+      }
+    }
+
     var containers = document.querySelectorAll('[data-pillar-grid]');
     Array.prototype.forEach.call(containers, function (grid) {
       var cards = Array.prototype.slice.call(grid.querySelectorAll('[data-pillar]'));
@@ -393,18 +592,51 @@
     });
   }
 
+  /* Short, typeable aliases for the ?para= deep link. A Facebook ad already
+     knows which segment it is targeting, so the click should not open with a
+     question the targeting has already answered. Tagalog aliases so the URL
+     is readable to the person who receives it. */
+  var SEGMENT_ALIASES = {
+    'propesyonal': 'professional', 'kabataan': 'professional', 'professional': 'professional',
+    'magsasaka': 'provider', 'mangingisda': 'provider', 'provider': 'provider',
+    'ina': 'matriarch', 'nanay': 'matriarch', 'matriarch': 'matriarch',
+    'kapayapaan': 'peace', 'peace': 'peace',
+    'negosyante': 'business', 'halal': 'business', 'business': 'business',
+    'nakatatanda': 'elder', 'ustadz': 'elder', 'elder': 'elder'
+  };
+
+  function segmentFromUrl() {
+    var raw = '';
+    try {
+      raw = new URLSearchParams(window.location.search).get('para') || '';
+    } catch (e) { return ''; }
+    return SEGMENT_ALIASES[raw.toLowerCase().trim()] || '';
+  }
+
   function initPersona() {
-    var chips = document.querySelectorAll('.persona-chip');
-    if (!chips.length) return;
+    var chips = document.querySelectorAll('.persona-chip, [data-segment]');
 
     Array.prototype.forEach.call(chips, function (chip) {
-      chip.addEventListener('click', function () {
-        var next = chip.dataset.persona === persona.get() ? '' : chip.dataset.persona;
-        persona.set(next);
+      var id = chip.dataset.segment || chip.dataset.persona;
+      chip.addEventListener('click', function (e) {
+        e.preventDefault();
+        persona.set(chip.dataset.segment === persona.get() || id === persona.get() ? '' : id);
       });
     });
 
-    applyPersona(persona.get());
+    var reset = document.querySelector('[data-segment-reset]');
+    if (reset) {
+      reset.addEventListener('click', function (e) { e.preventDefault(); persona.set(''); });
+    }
+
+    /* A ?para= link wins over whatever is remembered: the person following it
+       was just told this page is about them, and showing them a different
+       segment because of an older visit would be worse than not personalising
+       at all. The parameter is LEFT in the URL — unlike a membership number it
+       is not sensitive, and stripping it would break sharing the link on. */
+    var fromUrl = segmentFromUrl();
+    if (fromUrl && fromUrl !== persona.get()) persona.set(fromUrl);
+    else applyPersona(persona.get());
   }
 
   /* ======================================================================
