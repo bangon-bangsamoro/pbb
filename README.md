@@ -139,10 +139,38 @@ plus one page per BANGON pillar, a forms page, and a verification page.
 
 | Page | Size | Purpose |
 |---|---|---|
-| `home.html` | 19 KB | Persona selector + six pillar cards + leadership + CTA |
+| `home.html` | 23 KB | Persona selector + pillar cards + Messenger + CTA |
+| `bangon.html` | 20 KB | BANGON platform hub — six pillars, legislative wings, horizons |
+| `about.html` | 21 KB | Party history, leadership, values, comparative positioning |
+| `voter-education.html` | 20 KB | Election guide for 14 Sep 2026 (non-partisan) |
+| `faq.html` | 17 KB | Site-wide FAQ, 12 questions |
+| `contact.html` | 19 KB | Hotline, email, HQ, Messenger |
 | `bangon-*.html` (x6) | ~13 KB each | One BANGON domain each, detail behind `<details>` |
-| `join.html` | 30 KB | Membership + ID, volunteer, partnership |
+| `join.html` | 11 KB | Hub — routes to the three forms, keeps legacy links alive |
+| `membership.html` | 27 KB | Membership form + PBB ID generation |
+| `volunteer.html` | 22 KB | Volunteer sign-up |
+| `partnership.html` | 24 KB | Alliance & Partnership Agreement (RA 8792 e-signature) |
 | `verify.html` | 9 KB | Public membership-ID lookup (noindex) |
+
+### Why the forms are separate pages
+
+They began as one `join.html` with `#membership`, `#volunteer` and
+`#partnership` anchors. One `<title>`, one `<meta description>` and one
+canonical cannot rank for three unrelated queries — "paano maging miyembro ng
+PBB", "mag-volunteer BARMM 2026" and "partnership agreement kooperatiba" are
+different searchers with different objections. Each form now owns a page with
+its own title, description, canonical, H1, intent copy, and FAQ.
+
+Every page carries `BreadcrumbList` + `FAQPage` structured data (plus `HowTo`
+on `membership.html`). **The FAQ schema mirrors the visible `<details>` FAQ on
+each page, question for question** — structured data describing content a
+visitor cannot see is a manual-action risk, not a ranking trick. A CI check
+would be a reasonable next addition; for now the parity is verified manually.
+
+`join.html` survives as a hub so pre-split inbound links and printed QR codes
+still work. It carries no form markup, so there is no duplicate content, and a
+small script forwards the three legacy hashes to the page that now owns each
+form. A server-side 301 would be better if the host supports one.
 
 ### Persona routing
 
@@ -153,6 +181,44 @@ them.
 
 It reorders, it never hides. Hiding platform content from a voter because we
 guessed their segment would be both patronising and bad for search indexing.
+
+
+### Facebook Messenger
+
+Every page links to `m.me/914129215127738` — plain deep links, not the Customer
+Chat plugin. The reasoning is at the top of `assets/pbb-messenger.js`: the
+plugin loads ~200 KB of Facebook SDK before it renders, sets third-party
+cookies and reports the visit whether or not the visitor opens it, and fails
+inside in-app browsers — which is where much of this traffic arrives from. On a
+political party's site, where the visitor list is sensitive, "reports nothing
+until tapped" is the right default.
+
+Links carry a `ref` payload (`hero`, `menu_platform`, `web_volunteer`, …) so
+the Messenger team can see which page a conversation started from. The four
+chips on the site mirror the Persistent Menu in
+`docs/internal/facebook-messenger-automated-responses.md`; change one, change
+the other.
+
+### Keeping 22 pages consistent
+
+`scripts/sync-chrome.mjs` used to rewrite the nav, footer, runtime config and
+script tags on every page. **It was removed in August 2026** — it threw an
+error in the maintainers' environment, and a generator nobody can run is worse
+than no generator. Those blocks are hand-maintained now.
+
+What CI still enforces directly, because these were the failures worth
+catching rather than the formatting:
+
+* every page pairs `site-widgets.css` with `site-widgets.js`, so the cookie
+  banner cannot go missing from a page that collects personal data;
+* every page carries `pbb-hide-host-badge.js`;
+* every page that loads a form controller also carries the readiness guard,
+  so a controller that fails to load says so instead of leaving every button
+  inert;
+* `scripts/sync-figures.mjs --check` still manages the campaign figures.
+
+If you change a nav label, change it on all 22 pages. Nothing will stop you
+shipping one page that disagrees with the rest.
 
 ### Progressive disclosure
 
@@ -184,7 +250,7 @@ with no horizontal overflow at 320px, and `prefers-reduced-motion` /
 
 ## Membership IDs
 
-`join.html#membership` is a four-step form — details, photo, signature, ID —
+`membership.html` is a four-step form — details, photo, signature, ID —
 that ends with a downloadable PBB Membership ID.
 
 - **Card size** CR80, the ISO/IEC 7810 credit-card format (85.6 x 54 mm),
@@ -217,16 +283,20 @@ fields back would be a queryable directory of who supports whom.
 public/
   home.html               Slim persona-routing hub
   bangon-*.html           One page per BANGON pillar (6)
-  join.html               Membership + ID, volunteer, partnership
+  join.html               Hub — routes to the three form pages
+  membership.html         Membership form + PBB ID generation
+  volunteer.html          Volunteer sign-up
+  partnership.html        Alliance & Partnership Agreement
   verify.html             Public membership-ID lookup
   privacy.html, terms.html, cookies.html, accessibility.html
   robots.txt, sitemap.xml
   assets/
     pbb-tokens.css        Design system — single source of truth
     pbb-site.css          Page chrome (header, nav, hero, footer)
+    pbb-forms.css         Form-page styles (capture, signature, ID preview)
     pbb-app.js            window.PBB: transport, persona, lang, chrome
     pbb-id.js             Photo capture, signature pad, ID card renderer
-    join.js               join.html form controllers
+    join.js               Controllers for all three form pages
     site-widgets.js       Cookie + accessibility widget
 docs/
   internal/               Personas, Messenger scripts — NOT served publicly
