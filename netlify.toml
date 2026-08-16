@@ -38,12 +38,22 @@
 # Order matters: Netlify applies the first matching rule.
 
 # The campaign site owns the front door.
+#
+# force = true IS LOAD-BEARING, and leaving it out was a real bug: the live
+# site served the INFORM dashboard at "/" even with this rule in place.
+# Netlify does not apply a 200 rewrite when a file already exists at the
+# requested path — "by default, you can't shadow a URL that actually exists
+# within the site". "/" resolves to dist/index.html, which vite build emits
+# for the dashboard, so the existing file won and this rule never fired.
+# force = true is the documented override.
 [[redirects]]
   from   = "/"
   to     = "/home.html"
   status = 200          # rewrite, not a 301 — the URL stays bangonbangsamoro.com/
+  force  = true         # without this, dist/index.html shadows the rewrite
 
-# The dashboard, explicitly addressed.
+# The dashboard, explicitly addressed. No force needed here — nothing exists
+# at /inform, so there is no file to shadow.
 [[redirects]]
   from   = "/inform"
   to     = "/index.html"
