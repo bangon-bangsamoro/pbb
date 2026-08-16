@@ -14,6 +14,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/legal.css">
+<!-- Design tokens first: assets/site-widgets.css reads --pbb-* custom
+     properties for the cookie banner and accessibility toolbar. It has
+     inline fallbacks so it degrades safely, but with the tokens present
+     the widgets match the rest of the site exactly. -->
+<link rel="stylesheet" href="assets/pbb-tokens.css">
 <link rel="stylesheet" href="assets/site-widgets.css">
 </head>
 <body>
@@ -36,6 +41,24 @@
     <p>What we collect, why, and how you can control it.</p>
   </div>
 </section>
+
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/Banner.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ang patakarang ito ay nalalapat sa lahat ng datos na kinokolekta ng bangonbangsamoro.com.">
+      <img src="assets/images/Banner.jpg"
+           width="1536" height="1024"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Banner ng Partido Bangon Bangsamoro na may temang edukasyon, kalusugan, at kalikasan.">
+    </a>
+    <figcaption>Ang patakarang ito ay nalalapat sa lahat ng datos na kinokolekta ng bangonbangsamoro.com.</figcaption>
+  </figure>
+
+
+  
+
 
 <main id="main" class="doc-body">
   <div class="wrap">
@@ -78,6 +101,7 @@
     <h3>Information collected automatically</h3>
     <ul>
       <li><strong>Accessibility and cookie preferences:</strong> stored on your own device (not on our servers) so your settings persist between visits. See our <a href="cookies.html">Cookie Policy</a> for details.</li>
+      <li><strong>The sector you pick on the home page:</strong> if you tap one of the six choices ("Magsasaka / Mangingisda", "Propesyonal / Kabataan", and so on), that single word is stored on your own device so the page can lead with what is most relevant to you on your next visit. It is <em>not</em> sent to us, is not linked to your name, phone number or membership record, and is not used for advertising. Nothing is ever hidden from you because of it — the choice only changes the order and the wording, and "Ipakita lahat" clears it. Clearing your browser storage removes it entirely.</li>
       <li><strong>Basic technical data:</strong> if and when we enable analytics (see the Cookie Policy — not currently active on this Site), we would collect standard web analytics such as pages visited and general location at a country/region level.</li>
     </ul>
     <p>We do not knowingly collect sensitive personal information (such as health, religious affiliation, or political opinions beyond your voluntary interest in volunteering) through this Site.</p>
@@ -153,5 +177,6 @@
 
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 <script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
 </body>
 </html>

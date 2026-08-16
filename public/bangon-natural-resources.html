@@ -24,7 +24,8 @@
 
 <link rel="stylesheet" href="assets/pbb-tokens.css">
 <link rel="stylesheet" href="assets/pbb-site.css">
-</head>
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
 
 <body>
 
@@ -50,13 +51,12 @@
     <nav id="primary-nav" aria-label="Pangunahing nabigasyon">
       <ul>
         <li><a href="home.html">Simula</a></li>
-        <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
-        <li><a href="bangon-alliance.html">A — Alyansa</a></li>
-        <li><a href="bangon-natural-resources.html" aria-current="page">N — Kalikasan</a></li>
-        <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
-        <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
-        <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
-        <li class="nav-cta"><a href="join.html">Sumali sa Kilusan</a></li>
+        <li><a href="bangon.html" aria-current="page">BANGON Platform</a></li>
+        <li><a href="about.html">About PBB</a></li>
+        <li><a href="voter-education.html">Paano Bomoto?</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-cta"><a href="join.html">Sumali Ngayon</a></li>
       </ul>
     </nav>
   </div>
@@ -78,11 +78,29 @@
       <h1>Ang lupa at dagat ay hindi mana ng iilan</h1>
       <p class="lede">Ang Ligawasan Marsh, ang mga baybayin ng Tawi-Tawi at Basilan, at ang kabundukan ng Lanao ay ang tunay na kayamanan ng Bangsamoro. Iisa lang ang gawain: ipasa ito nang buo sa susunod na henerasyon.</p>
       <div class="hero-actions">
-        <a class="btn btn-gold" href="join.html?interest=natural_resources#volunteer">Maging Palaw Ranger Volunteer</a>
+        <a class="btn btn-gold" href="volunteer.html?interest=natural_resources">Maging Palaw Ranger Volunteer</a>
         <a class="btn btn-ghost" href="#detalye">Ang mga detalye</a>
       </div>
     </div>
   </section>
+
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/green-skills.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ang pangangalaga sa kalikasan ay trabaho — kailangan nito ng sinanay na manggagawa, hindi lamang deklarasyon.">
+      <img src="assets/images/green-skills.jpg"
+           width="1600" height="893"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Diagram ng &quot;Ecological Justice and Green Skills&quot;: renewable energy engineering, sustainable agriculture, at climate-resilient infrastructure bilang tatlong sangay ng isang &quot;green skills&quot; na manggagawa.">
+    </a>
+    <figcaption>Ang pangangalaga sa kalikasan ay trabaho — kailangan nito ng sinanay na manggagawa, hindi lamang deklarasyon.</figcaption>
+  </figure>
+
+
+  
+
 
   <!-- WHO THIS IS FOR — persona anchor, from PBB_User_Personas_2026.md -->
   <section class="band-tint">
@@ -161,12 +179,12 @@
         <h2 id="do-h">Tatlong paraan para makatulong dito</h2>
       </div>
       <div class="grid-auto">
-        <a class="card card-link pillar-card reveal" href="join.html?interest=natural_resources#volunteer">
+        <a class="card card-link pillar-card reveal" href="volunteer.html?interest=natural_resources">
           <span class="pillar-card-head"><span class="pillar-letter" aria-hidden="true">1</span><h3>Mag-volunteer dito</h3></span>
           <p>Reforestation, coastal at marine protection, forest patrol, climate-smart agriculture education, o waste management at community clean-up. Sabihin sa amin kung alin ang bagay sa iyong lugar.</p>
           <span class="more">Mag-sign up →</span>
         </a>
-        <a class="card card-link pillar-card reveal" href="join.html#membership">
+        <a class="card card-link pillar-card reveal" href="membership.html">
           <span class="pillar-card-head"><span class="pillar-letter" aria-hidden="true">2</span><h3>Maging miyembro</h3></span>
           <p>Kumuha ng PBB Membership ID na may lagda at litrato mo — patunay na kasama ka sa kilusan.</p>
           <span class="more">Pumunta sa form →</span>
@@ -186,8 +204,9 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <h5>Ang BANGON Platform</h5>
+        <h2 class="footer-h">Ang BANGON Platform</h2>
         <ul>
+          <li><a href="bangon.html">Buod ng platform</a></li>
           <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
           <li><a href="bangon-alliance.html">A — Alyansa</a></li>
           <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
@@ -197,25 +216,27 @@
         </ul>
       </div>
       <div>
-        <h5>Sumali</h5>
+        <h2 class="footer-h">Sumali</h2>
         <ul>
-          <li><a href="join.html#membership">Membership Form</a></li>
-          <li><a href="join.html#volunteer">Volunteer Sign-up</a></li>
-          <li><a href="join.html#partnership">Partnership Agreement</a></li>
+          <li><a href="membership.html">Membership Form</a></li>
+          <li><a href="volunteer.html">Volunteer Sign-up</a></li>
+          <li><a href="partnership.html">Partnership Agreement</a></li>
           <li><a href="verify.html">I-verify ang Membership ID</a></li>
         </ul>
       </div>
       <div>
-        <h5>Makipag-ugnayan</h5>
+        <h2 class="footer-h">Alamin</h2>
         <ul>
-          <li><a href="tel:+639663018777">0966 301 8777</a></li>
-          <li><a href="mailto:info@bangonbangsamoro.com">info@bangonbangsamoro.com</a></li>
-          <li><a href="https://www.facebook.com/profile.php?id=61588593370087" target="_blank" rel="noopener">Facebook Page</a></li>
-          <li>Cotabato City, BARMM</li>
+          <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a data-messenger="footer">Messenger</a></li>
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <h2 class="footer-h">Legal</h2>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
@@ -244,8 +265,24 @@
   window.PBB_SUPABASE_URL       = "";
   window.PBB_SUPABASE_ANON_KEY  = "";
   window.PBB_TURNSTILE_SITE_KEY = "";
+  window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
 </script>
 <script src="assets/pbb-app.js" defer></script>
+<script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
 <script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
+
 </body>
 </html>

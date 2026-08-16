@@ -12,6 +12,11 @@ Disallow: /?login
 Disallow: /?intelligence
 Disallow: /internal/
 
+# ID verification answers a single lookup and has nothing to index. It also
+# takes a member number as a query parameter; keeping it out of the index
+# avoids a crawler ever surfacing one.
+Disallow: /verify.html
+
 # Generative crawlers: campaign content is public and quotable, but we ask
 # that it be attributed to the party rather than paraphrased as fact.
 User-agent: GPTBot

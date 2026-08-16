@@ -35,7 +35,7 @@
 <link rel="stylesheet" href="assets/pbb-site.css">
 <link rel="stylesheet" href="assets/site-widgets.css">
 <link rel="stylesheet" href="assets/pbb-join-popup.css">
-<link rel="stylesheet" href="assets/legal.css">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -218,6 +218,24 @@
     </div>
   </section>
 
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/campaign-tactics.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ganito kami nangangampanya: sektoral na pag-oorganisa at town hall, hindi rally ng patron at kliyente.">
+      <img src="assets/images/campaign-tactics.jpg"
+           width="1600" height="893"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Diagram ng &quot;Campaign Tactics: Participatory Democracy&quot; na naghahambing ng top-down na makinaryang patron-client, na ekis, laban sa grassroots network ng sektoral na pag-oorganisa, propesyonal na forum, town hall, at participatory feedback loop.">
+    </a>
+    <figcaption>Ganito kami nangangampanya: sektoral na pag-oorganisa at town hall, hindi rally ng patron at kliyente.</figcaption>
+  </figure>
+
+
+  
+
+
   <section>
     <div class="wrap">
       <div class="faq-list">
@@ -304,13 +322,13 @@
           <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.3 2 2 6.2 2 11.7c0 3.1 1.4 5.9 3.7 7.7v3.8l3.4-1.9c.9.3 1.9.4 2.9.4 5.7 0 10-4.2 10-9.7S17.7 2 12 2zm1 13.1-2.6-2.7-5 2.7 5.5-5.8 2.6 2.7 4.9-2.7-5.4 5.8z"/></svg>
         </span>
         <div>
-          <h3 id="msgr-h">Mag-message sa amin</h3>
+          <h2 id="msgr-h">Mag-message sa amin</h2>
           <p>Wala rito ang tanong ninyo? Mag-message sa amin at sasagutin ito ng tunay na tao.</p>
           <div class="msgr-chips">
-            <a class="msgr-chip" data-messenger="menu_about">🕊️ About PBB</a>
+            <a class="msgr-chip" data-messenger="menu_about">🕊️ Tungkol sa PBB</a>
             <a class="msgr-chip" data-messenger="menu_platform">📋 BANGON Platform</a>
             <a class="msgr-chip" data-messenger="menu_volunteer">🙋 Mag-volunteer</a>
-            <a class="msgr-chip" data-messenger="menu_contact">📞 Contact Us</a>
+            <a class="msgr-chip" data-messenger="menu_contact">📞 Makipag-ugnayan</a>
           </div>
           <p class="form-note">
             Karaniwang sumasagot kami sa loob ng ilang oras. Para sa madalian —
@@ -329,9 +347,19 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
+        <h2 class="footer-h">Ang BANGON Platform</h2>
+        <ul>
+          <li><a href="bangon.html">Buod ng platform</a></li>
+          <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
+          <li><a href="bangon-alliance.html">A — Alyansa</a></li>
+          <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
+          <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
+          <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
+          <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
+        </ul>
       </div>
       <div>
-        <h5>Sumali</h5>
+        <h2 class="footer-h">Sumali</h2>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
@@ -340,17 +368,18 @@
         </ul>
       </div>
       <div>
-        <h5>Alamin</h5>
+        <h2 class="footer-h">Alamin</h2>
         <ul>
           <li><a href="about.html">About PBB</a></li>
-          <li><a href="voter-education.html">Paano Bomoto</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
           <li><a href="faq.html">FAQ</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-          <li><a data-messenger="footer">Message us in Messenger</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a data-messenger="footer">Messenger</a></li>
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <h2 class="footer-h">Legal</h2>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
@@ -380,11 +409,23 @@
   window.PBB_SUPABASE_ANON_KEY  = "";
   window.PBB_TURNSTILE_SITE_KEY = "";
   window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
 </script>
 <script src="assets/pbb-app.js" defer></script>
 <script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
 <script src="assets/site-widgets.js" defer></script>
-<script src="assets/pbb-join-popup.js" defer></script> 
+<script src="assets/pbb-hide-host-badge.js" defer></script>
 
 </body>
 </html>

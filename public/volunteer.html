@@ -39,6 +39,8 @@
 
 <link rel="stylesheet" href="assets/pbb-tokens.css">
 <link rel="stylesheet" href="assets/pbb-site.css">
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
 <link rel="stylesheet" href="assets/pbb-forms.css">
 
 <script type="application/ld+json">
@@ -117,11 +119,11 @@
     <nav id="primary-nav" aria-label="Pangunahing nabigasyon">
       <ul>
         <li><a href="home.html">Simula</a></li>
-        <li><a href="home.html#bangon">Ang BANGON Platform</a></li>
-        <li><a href="membership.html">Membership</a></li>
-        <li><a href="volunteer.html" aria-current="page">Volunteer</a></li>
-        <li><a href="partnership.html">Partnership</a></li>
-        <li><a href="verify.html">I-verify ang ID</a></li>
+        <li><a href="bangon.html">BANGON Platform</a></li>
+        <li><a href="about.html">About PBB</a></li>
+        <li><a href="voter-education.html">Paano Bomoto?</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
         <li class="nav-cta"><a href="#form">Sagutan ang Form</a></li>
       </ul>
     </nav>
@@ -150,6 +152,24 @@
       </div>
     </div>
   </section>
+
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/campaign-tactics.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ang volunteer ang grassroots network sa larawang ito. Walang makinarya kung walang tao sa lupa.">
+      <img src="assets/images/campaign-tactics.jpg"
+           width="1600" height="893"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Diagram ng &quot;Campaign Tactics: Participatory Democracy&quot; na naghahambing ng top-down na makinaryang patron-client laban sa grassroots network ng volunteer at sektoral na pag-oorganisa.">
+    </a>
+    <figcaption>Ang volunteer ang grassroots network sa larawang ito. Walang makinarya kung walang tao sa lupa.</figcaption>
+  </figure>
+
+
+  
+
 
   <section>
     <div class="wrap">
@@ -386,8 +406,9 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <h5>Ang BANGON Platform</h5>
+        <h2 class="footer-h">Ang BANGON Platform</h2>
         <ul>
+          <li><a href="bangon.html">Buod ng platform</a></li>
           <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
           <li><a href="bangon-alliance.html">A — Alyansa</a></li>
           <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
@@ -397,7 +418,7 @@
         </ul>
       </div>
       <div>
-        <h5>Sumali</h5>
+        <h2 class="footer-h">Sumali</h2>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
@@ -406,15 +427,18 @@
         </ul>
       </div>
       <div>
-        <h5>Makipag-ugnayan</h5>
+        <h2 class="footer-h">Alamin</h2>
         <ul>
-          <li><a href="tel:+639663018777">0966 301 8777</a></li>
-          <li><a href="mailto:info@bangonbangsamoro.com">info@bangonbangsamoro.com</a></li>
-          <li>Cotabato City, BARMM</li>
+          <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a data-messenger="footer">Messenger</a></li>
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <h2 class="footer-h">Legal</h2>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
@@ -438,8 +462,41 @@
   window.PBB_SUPABASE_URL       = "";
   window.PBB_SUPABASE_ANON_KEY  = "";
   window.PBB_TURNSTILE_SITE_KEY = "";
+  window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
 </script>
 <script src="assets/pbb-app.js"></script>
 <script src="assets/join.js"></script>
+<script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
+<script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
+<script>
+  window.addEventListener('load', function () {
+    if (window.PBB_FORMS_READY || window.PBB_VERIFY_READY) return;
+    if (window.console && console.error) {
+      console.error('[PBB] the form controller for this page never ran — every button on this form is inert. Check that it returns 200 and is not blocked by CSP.');
+    }
+    var form = document.querySelector('#memberForm, #joinForm, #apForm, #verifyForm');
+    if (!form || form.querySelector('[data-pbb-dead]')) return;
+    var p = document.createElement('p');
+    p.setAttribute('role', 'alert');
+    p.setAttribute('data-pbb-dead', '');
+    p.style.cssText = 'margin:0 0 1rem;padding:.85rem 1rem;border-radius:8px;background:#fdecea;color:#8a1a14;border:1px solid #b3261e;font:600 .95rem/1.5 system-ui,sans-serif';
+    p.textContent = 'Hindi gumagana ang form sa ngayon dahil may bahagi ng pahina na hindi na-load. Pakisubukan i-refresh. Kung magpatuloy ito, mag-message sa aming Facebook Page at tutulungan ka naming makapagpalista.';
+    form.insertBefore(p, form.firstChild);
+  });
+</script>
+
 </body>
 </html>

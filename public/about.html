@@ -33,6 +33,8 @@
 
 <link rel="stylesheet" href="assets/pbb-tokens.css">
 <link rel="stylesheet" href="assets/pbb-site.css">
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
 
 <script type="application/ld+json">
 {
@@ -107,7 +109,7 @@
           "name": "Ilan ang miyembro ng PBB?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Humigit-kumulang 71,000 sa anim na probinsya at tatlong komponent na lungsod ng BARMM, mula pa noong 2022. Puwede kang makadagdag sa bilang na iyon sa pamamagitan ng membership form."
+            "text": "Humigit-kumulang 71,000 sa limang lalawigan, tatlong komponent na lungsod, at sa Special Geographic Area ng BARMM, mula pa noong 2022. Puwede kang makadagdag sa bilang na iyon sa pamamagitan ng membership form."
           }
         },
         {
@@ -194,12 +196,30 @@
     </div>
   </section>
 
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/banner-playbook.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Tulay ang paraan ng pagtingin ng PBB sa pamamahala: hindi pangako kundi istrakturang itinatayo nang may plano.">
+      <img src="assets/images/banner-playbook.jpg"
+           width="1456" height="840"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Pabalat ng &quot;The PBB Political Playbook: Bridging the Bangsamoro to Economic Modernity&quot;, na nagpapakita ng tulay na ineengineer bilang simbolo ng paglipat mula sa kasalukuyan tungo sa modernong ekonomiya.">
+    </a>
+    <figcaption>Tulay ang paraan ng pagtingin ng PBB sa pamamahala: hindi pangako kundi istrakturang itinatayo nang may plano.</figcaption>
+  </figure>
+
+
+  
+
+
   <section class="band-tint">
     <div class="wrap">
       <div class="stat-row reveal">
         <div class="stat"><b>2022</b><span>itinatag sa Cotabato City</span></div>
         <div class="stat"><b>71,000+</b><span>miyembro sa buong BARMM</span></div>
-        <div class="stat"><b>6+3</b><span>probinsya at komponent na lungsod</span></div>
+        <div class="stat"><b>5+3</b><span>lalawigan at lungsod, kasama ang SGA</span></div>
         <div class="stat"><b>2026</b><span>rehistrado ng COMELEC</span></div>
       </div>
     </div>
@@ -259,7 +279,7 @@
             future-ready ang Bangsamoro, mula sa libreng internet at Super Health Stations
             hanggang sa Green Skills at Shari'ah-compliant na financing.
           </p>
-          <p style="color:var(--pbb-ink)"><strong>““Tapos na ang panahon ng paghihintay. Panahon na upang bumangon at makilahok sa makabagong politika para sa Bangsamoro.”</strong></p>
+          <p style="color:var(--pbb-ink)"><strong>“Tapos na ang panahon ng paghihintay. Panahon na ng pagtatayo.”</strong></p>
         </div>
       </div>
     </div>
@@ -340,7 +360,7 @@
         <details class="disclose">
           <summary>Ilan ang miyembro ng PBB?</summary>
           <div class="disclose-body">
-            <p style="margin:0">Humigit-kumulang 71,000 sa anim na probinsya at tatlong komponent na lungsod ng BARMM, mula pa noong 2022. Puwede kang makadagdag sa bilang na iyon sa pamamagitan ng membership form.</p>
+            <p style="margin:0">Humigit-kumulang 71,000 sa limang lalawigan, tatlong komponent na lungsod, at sa Special Geographic Area ng BARMM, mula pa noong 2022. Puwede kang makadagdag sa bilang na iyon sa pamamagitan ng membership form.</p>
           </div>
         </details>
         <details class="disclose">
@@ -397,9 +417,19 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
+        <h2 class="footer-h">Ang BANGON Platform</h2>
+        <ul>
+          <li><a href="bangon.html">Buod ng platform</a></li>
+          <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
+          <li><a href="bangon-alliance.html">A — Alyansa</a></li>
+          <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
+          <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
+          <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
+          <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
+        </ul>
       </div>
       <div>
-        <h5>Sumali</h5>
+        <h2 class="footer-h">Sumali</h2>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
@@ -408,9 +438,10 @@
         </ul>
       </div>
       <div>
-        <h5>Alamin</h5>
+        <h2 class="footer-h">Alamin</h2>
         <ul>
           <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
           <li><a href="voter-education.html">Paano Bomoto?</a></li>
           <li><a href="faq.html">FAQ</a></li>
           <li><a href="contact.html">Contact</a></li>
@@ -418,7 +449,7 @@
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <h2 class="footer-h">Legal</h2>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
@@ -448,10 +479,23 @@
   window.PBB_SUPABASE_ANON_KEY  = "";
   window.PBB_TURNSTILE_SITE_KEY = "";
   window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
 </script>
 <script src="assets/pbb-app.js" defer></script>
 <script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
 <script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
 
 </body>
 </html>
