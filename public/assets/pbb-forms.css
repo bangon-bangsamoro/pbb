@@ -115,3 +115,98 @@
 
 .faq-list { margin-top: var(--pbb-space-4); }
 .faq-list .disclose > summary { font-size: var(--pbb-text-base); }
+
+/* ==========================================================================
+   VERIFY RESULT — verify.html
+   --------------------------------------------------------------------------
+   Three outcomes a person acts on differently, so they must not look alike at
+   a glance: valid (accept the ID), warn (real card, but expired/pending/
+   inactive — do not accept without asking), err (no match — refuse it).
+   Colour alone does not carry that: each carries an icon and its own wording,
+   because a poll watcher checking IDs in daylight on a cheap screen is the
+   worst-case viewing condition and red/green is the commonest colour-vision
+   deficiency.
+   ========================================================================== */
+
+.verify-result {
+  margin-top: var(--pbb-space-5, 1.25rem);
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 2px solid;
+  background: #fff;
+}
+
+.verify-result:focus { outline: none; }
+.verify-result:focus-visible {
+  outline: 3px solid var(--pbb-gold, #c9a227);
+  outline-offset: 2px;
+}
+
+.verify-ok   { border-color: #0a6e2e; background: #f1f8f3; }
+.verify-warn { border-color: #b8860b; background: #fff8e6; }
+.verify-err  { border-color: #b3261e; background: #fdecea; }
+
+.verify-head {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin: 0 0 .75rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.verify-icon {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+}
+
+.verify-ok   .verify-icon { background: #0a6e2e; }
+.verify-warn .verify-icon { background: #b8860b; }
+.verify-err  .verify-icon { background: #b3261e; }
+
+.verify-facts { margin: 0 0 .75rem; }
+
+.verify-facts > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+
+.verify-facts > div:last-child { border-bottom: 0; }
+
+.verify-facts dt {
+  flex: 0 0 11rem;
+  margin: 0;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #4a5a50;
+}
+
+.verify-facts dd {
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.verify-note {
+  margin: .5rem 0 0;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+
+.verify-privacy { color: #4a5a50; font-size: .82rem; }
+
+.verify-scan video { max-height: 60vh; object-fit: cover; }
+
+@media (max-width: 480px) {
+  .verify-facts dt { flex-basis: 100%; }
+}
