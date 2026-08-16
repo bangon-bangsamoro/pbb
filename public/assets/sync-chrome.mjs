@@ -34,13 +34,16 @@ const SKIP = new Set([])
    rewriting their nav would break it. They are linked from every footer. */
 const LEGAL = new Set(['privacy.html', 'terms.html', 'cookies.html', 'accessibility.html'])
 
+/* Labels come from the party, not from this file. They were changed in the
+   August 2026 pass to the shorter set below; edit here and re-run so all 22
+   pages move together rather than drifting one page at a time. */
 const NAV = [
   ['home.html', 'Simula'],
-  ['bangon.html', 'Ang BANGON Platform'],
-  ['about.html', 'Tungkol sa PBB'],
-  ['voter-education.html', 'Botante'],
+  ['bangon.html', 'BANGON Platform'],
+  ['about.html', 'About PBB'],
+  ['voter-education.html', 'Paano Bomoto?'],
   ['faq.html', 'FAQ'],
-  ['contact.html', 'Makipag-ugnayan'],
+  ['contact.html', 'Contact'],
 ]
 
 /* Form pages get a nav CTA pointing at their own form rather than the hub. */
@@ -52,7 +55,7 @@ const CTA = {
 }
 
 function navBlock(slug) {
-  const [ctaHref, ctaLabel] = CTA[slug] || ['join.html', 'Sumali sa Kilusan']
+  const [ctaHref, ctaLabel] = CTA[slug] || ['join.html', 'Sumali Ngayon']
   const items = NAV.map(([href, label]) => {
     // A BANGON domain page marks the platform hub as its section.
     const current = href === slug || (href === 'bangon.html' && slug.startsWith('bangon-'))
@@ -92,11 +95,11 @@ const FOOTER_GRID = `<div class="footer-grid">
       <div>
         <h5>Alamin</h5>
         <ul>
-          <li><a href="about.html">Tungkol sa PBB</a></li>
+          <li><a href="about.html">About PBB</a></li>
           <li><a href="persona.html">Para kanino ang BANGON</a></li>
-          <li><a href="voter-education.html">Botante: Set. 14, 2026</a></li>
-          <li><a href="faq.html">Mga madalas itanong</a></li>
-          <li><a href="contact.html">Makipag-ugnayan</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
           <li><a data-messenger="footer">Messenger</a></li>
         </ul>
       </div>
@@ -128,6 +131,7 @@ const EXTRA_STYLES = {
   'volunteer.html': ['assets/pbb-forms.css'],
   'partnership.html': ['assets/pbb-forms.css'],
   'join.html': ['assets/pbb-forms.css'],
+  'verify.html': ['assets/pbb-forms.css'],
 }
 
 function styleBlock(slug) {
@@ -159,6 +163,10 @@ const EXTRA_SCRIPTS = {
   'membership.html': ['assets/pbb-id.js', 'assets/join.js'],
   'volunteer.html': ['assets/join.js'],
   'partnership.html': ['assets/join.js'],
+  // verify.html had a form, a button and a result container with nothing
+  // wired to any of them, and ignored the ?m= parameter its own printed QR
+  // codes point at. pbb-verify.js is that controller.
+  'verify.html': ['assets/pbb-verify.js'],
 }
 
 function scriptBlock(slug) {
@@ -210,11 +218,11 @@ function scriptBlock(slug) {
   if (extra.length) {
     lines.push(`<script>
   window.addEventListener('load', function () {
-    if (window.PBB_FORMS_READY) return;
+    if (window.PBB_FORMS_READY || window.PBB_VERIFY_READY) return;
     if (window.console && console.error) {
-      console.error('[PBB] assets/join.js never ran — every button on this form is inert. Check that it returns 200 and is not blocked by CSP.');
+      console.error('[PBB] the form controller for this page never ran — every button on this form is inert. Check that it returns 200 and is not blocked by CSP.');
     }
-    var form = document.querySelector('#memberForm, #joinForm, #apForm');
+    var form = document.querySelector('#memberForm, #joinForm, #apForm, #verifyForm');
     if (!form || form.querySelector('[data-pbb-dead]')) return;
     var p = document.createElement('p');
     p.setAttribute('role', 'alert');
