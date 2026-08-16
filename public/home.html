@@ -13,7 +13,7 @@
 <meta property="og:title" content="Partido Bangon Bangsamoro | Ang BANGON Platform para sa 2026">
 <meta property="og:description" content="Anim na simpleng pangako para sa bawat Bangsamoro. Alamin kung alin ang para sa'yo.">
 <meta property="og:url" content="https://www.bangonbangsamoro.com/">
-<meta property="og:image" content="assets/images/Banner.jpg">
+<meta property="og:image" content="https://www.bangonbangsamoro.com/assets/images/professionalizing-patrimony.jpg">
 <meta property="og:image:width" content="1600">
 <meta property="og:image:height" content="893">
 <meta name="twitter:card" content="summary_large_image">
@@ -77,27 +77,95 @@
   </div>
 </header>
 <main id="main">
-  <!-- ==================== HERO ==================== -->
-  <section class="hero">
+  <!-- ==================== SEGMENT PICKER + HERO ====================
+       CHOOSER-FIRST, NOT GATE-FIRST.
+
+       The question is the first thing in the viewport, so a visitor arriving
+       from a boosted post does not have to scroll 1,350px to find it — which
+       is where it used to sit, 1.6 screens down on a 390px phone.
+
+       But it does NOT block anything. Every section below stays in the DOM
+       and is served to crawlers, to no-JS visitors, and to anyone who ignores
+       the question. Choosing REORDERS and REWRITES; it never hides. Hiding
+       platform content from a voter because we guessed their segment would be
+       patronising, and would throw away the SEO work on all 22 pages.
+
+       The headline, lede and button below carry data-segment-* defaults so
+       they can always be restored to the generic wording.
+  -->
+  <section class="hero segment-hero" aria-label="Piliin ang sektor mo, at ang panimula ng PBB">
     <div class="wrap">
       <p class="eyebrow">Setyembre 14, 2026 · Bangsamoro Parliamentary Elections</p>
-      <h1>Babangon tayo — nang magkasama</h1>
-      <p class="lede">
+      <!-- Deliberately a <p>, not an <h2>.
+           The picker is visually first, but a heading here would put an h2
+           ahead of the page's h1 in the document outline: a screen-reader
+           user navigating by heading would meet a sub-heading before the
+           page's own title, and a crawler would read a page whose first
+           heading is not its subject. The role="group" below carries its own
+           accessible name, so nothing is lost. -->
+      <p class="segment-q" id="seg-q">Sino ka sa mga ito?</p>
+      <p class="segment-sub">
+        I-tap ang pinakamalapit sa’yo at ito ang unang lalabas sa pahinang ito.
+        Puwede mong palitan anumang oras — walang itinatago.
+      </p>
+
+      <div class="segment-grid" role="group" aria-labelledby="seg-q">
+        <button class="segment-card" type="button" data-segment="provider" aria-pressed="false">
+          <span class="segment-card-title">Magsasaka / Mangingisda</span>
+          <span class="segment-card-sub">Konkretong tulong araw-araw</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="professional" aria-pressed="false">
+          <span class="segment-card-title">Propesyonal / Kabataan</span>
+          <span class="segment-card-sub">Trabaho batay sa kakayahan</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="matriarch" aria-pressed="false">
+          <span class="segment-card-title">Ina / Community Leader</span>
+          <span class="segment-card-sub">Kalusugan at eskuwela ng anak</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="business" aria-pressed="false">
+          <span class="segment-card-title">Negosyante / Halal</span>
+          <span class="segment-card-sub">Merkado sa labas ng rehiyon</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="peace" aria-pressed="false">
+          <span class="segment-card-title">Peace Advocate</span>
+          <span class="segment-card-sub">Kapayapaang may kabuhayan</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="elder" aria-pressed="false">
+          <span class="segment-card-title">Nakatatanda / Pananampalataya</span>
+          <span class="segment-card-sub">Malinis at magalang na pamamahala</span>
+        </button>
+      </div>
+
+      <p class="segment-reset-row">
+        <button type="button" class="segment-reset" data-segment-reset hidden>
+          ← Ipakita lahat (alisin ang pinili)
+        </button>
+      </p>
+
+      <hr class="segment-rule">
+
+      <h1 data-segment-headline
+          data-segment-headline-default="Babangon tayo — nang magkasama">Babangon tayo — nang magkasama</h1>
+      <p class="lede" data-segment-lede
+         data-segment-lede-default="Ang PBB ay bagong grupo ng mga lider sa BARMM — malinis, may alam, at handang magsilbi. Anim na simpleng pangako ang BANGON platform namin, at bawat isa ay para sa’yo.">
         Ang PBB ay bagong grupo ng mga lider sa BARMM — malinis, may alam, at handang magsilbi.
-        Anim na simpleng pangako ang BANGON platform namin, at bawat isa ay para sa'yo:
+        Anim na simpleng pangako ang BANGON platform namin, at bawat isa ay para sa’yo:
         magsasaka man, propesyonal, negosyante, nanay, beterano ng kapayapaan, o nakatatanda.
       </p>
       <div class="hero-actions">
-        <a class="btn btn-gold" href="join.html">Sumali Ngayon</a>
+        <a class="btn btn-gold" href="join.html"
+           data-segment-cta data-segment-cta-default="Sumali Ngayon|join.html">Sumali Ngayon</a>
         <a class="btn btn-ghost" href="bangon.html">Alamin ang BANGON Platform</a>
         <a class="btn btn-ghost" data-messenger="hero">💬 Mag-message sa Messenger</a>
       </div>
+      <p class="form-note" id="personaNote" role="status" aria-live="polite" hidden></p>
     </div>
   </section>
 
   <!-- PBB:FIGURE:START:banner (generated by scripts/sync-figures.mjs — do not edit by hand) -->
   <figure class="page-figure page-figure--full page-figure--lede">
-    <a class="banner" href="assets/images/Banner.jpg"
+    <a class="page-figure__zoom" href="assets/images/Banner.jpg"
+       data-zoom-label="Buksan nang buo"
        aria-label="Buksan nang buo ang larawan: Tatlong bagay na nararamdaman ng bawat pamilya: edukasyon, kalusugan, at kalikasan.">
       <picture>
         <source type="image/webp" sizes="(max-width: 1600px) 100vw, 1600px" srcset="assets/images/derived/Banner-480.webp 480w, assets/images/derived/Banner-768.webp 768w, assets/images/derived/Banner-1024.webp 1024w, assets/images/derived/Banner-1280.webp 1280w, assets/images/derived/Banner-1536.webp 1536w">
@@ -115,37 +183,6 @@
   </figure>
   <!-- PBB:FIGURE:END:banner -->
 
-  <!-- ==================== PERSONA SELECTOR ====================
-       This is the progressive-disclosure spine of the site. Instead of asking
-       every visitor to read 2,000 lines of platform detail, they tell us who
-       they are in one tap and the six pillar cards below REORDER so the two
-       most relevant to them come first.
-       Note it reorders, it never hides. Hiding platform content from a voter
-       because we guessed their segment would be both patronising and bad for
-       search indexing. See docs/internal/PBB_User_Personas_2026.md.
-  -->
-  <section class="band-tint" aria-labelledby="persona-h">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Para kanino ka?</p>
-        <h2 id="persona-h">Sino ka sa mga ito?</h2>
-        <p>
-          Hindi kami nangangako sa lahat nang pareho. I-tap ang pinakamalapit sa'yo at
-          aayusin namin ang pahinang ito para sa iyong sitwasyon. Puwede mong palitan
-          anumang oras.
-        </p>
-      </div>
-      <div class="persona-row" role="group" aria-label="Piliin ang pinakamalapit sa'yo">
-        <button class="persona-chip" type="button" data-persona="professional" aria-pressed="false">Propesyonal / Kabataan</button>
-        <button class="persona-chip" type="button" data-persona="provider"     aria-pressed="false">Magsasaka / Mangingisda</button>
-        <button class="persona-chip" type="button" data-persona="matriarch"    aria-pressed="false">Ina / Community Leader</button>
-        <button class="persona-chip" type="button" data-persona="peace"        aria-pressed="false">Peace Advocate</button>
-        <button class="persona-chip" type="button" data-persona="business"     aria-pressed="false">Negosyante / Halal</button>
-        <button class="persona-chip" type="button" data-persona="elder"        aria-pressed="false">Nakatatanda / Lider ng Pananampalataya</button>
-      </div>
-      <p class="form-note" id="personaNote" role="status" aria-live="polite" hidden></p>
-    </div>
-  </section>
   <!-- ==================== BANGON PLATFORM ==================== -->
   <section id="bangon" aria-labelledby="bangon-h">
     <div class="wrap">
@@ -225,7 +262,7 @@
       <div class="stat-row reveal">
         <div class="stat"><b>71,000+</b><span>miyembro sa buong BARMM</span></div>
         <div class="stat"><b>2022</b><span>itinatag sa Cotabato City</span></div>
-        <div class="stat"><b>6+3</b><span>probinsya at komponent na lungsod</span></div>
+        <div class="stat"><b>5+3</b><span>lalawigan at lungsod, kasama ang SGA</span></div>
         <div class="stat"><b>Set. 14</b><span>araw ng eleksyon, 2026</span></div>
       </div>
     </div>
@@ -379,7 +416,7 @@
   <section aria-labelledby="learn-h">
     <div class="wrap">
       <div class="section-head reveal">
-        <p class="eyebrow">Alamin ang Sitwasyon</p>
+        <p class="eyebrow">Alamin pa</p>
         <h2 id="learn-h">Bago ka magdesisyon</h2>
       </div>
       <div class="grid-auto">
@@ -394,14 +431,14 @@
           <span class="more">Tingnan ang platform →</span>
         </a>
         <a class="card card-link pillar-card reveal" href="voter-education.html">
-          <h3>Paano Bomoto?</h3>
+          <h3>Botante: Set. 14, 2026</h3>
           <p>Paano maghanda, saan bumoto, at paano gumagana ang parliamentaryong sistema.</p>
           <span class="more">Basahin ang gabay →</span>
         </a>
         <a class="card card-link pillar-card reveal" href="faq.html">
           <h3>Mga madalas itanong</h3>
           <p>Magkano ang membership? Kaugnay ba kayo ng MILF? Sagot sa 12 tanong.</p>
-          <span class="more">FAQ →</span>
+          <span class="more">Tingnan ang FAQ →</span>
         </a>
       </div>
     </div>
@@ -411,19 +448,19 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <h5>Ang BANGON Platform</h5>
+        <h2 class="footer-h">Ang BANGON Platform</h2>
         <ul>
           <li><a href="bangon.html">Buod ng platform</a></li>
-          <li><a href="bangon-basic-services.html">B — Basic Services</a></li>
-          <li><a href="bangon-alliance.html">A — Aliance</a></li>
-          <li><a href="bangon-natural-resources.html">N — Nature</a></li>
+          <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
+          <li><a href="bangon-alliance.html">A — Alyansa</a></li>
+          <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
           <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
-          <li><a href="bangon-open-governance.html">O — Open Governance</a></li>
-          <li><a href="bangon-peace.html">N — Non-Violence/Conflict-Sensitive Approaches </a></li>
+          <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
+          <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
         </ul>
       </div>
       <div>
-        <h5>Sumali</h5>
+        <h2 class="footer-h">Sumali</h2>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
@@ -432,7 +469,7 @@
         </ul>
       </div>
       <div>
-        <h5>Alamin</h5>
+        <h2 class="footer-h">Alamin</h2>
         <ul>
           <li><a href="about.html">About PBB</a></li>
           <li><a href="persona.html">Para kanino ang BANGON</a></li>
@@ -443,7 +480,7 @@
         </ul>
       </div>
       <div>
-        <h5>Legal</h5>
+        <h2 class="footer-h">Legal</h2>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
