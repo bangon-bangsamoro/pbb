@@ -571,3 +571,187 @@ section { padding-block: var(--pbb-space-7); }
   .card, .disclose { box-shadow: none; border: 1px solid #999; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
 }
+
+/* --------------------------------------------------------------------------
+   9. HOST-INJECTED ATTRIBUTION BADGE
+   --------------------------------------------------------------------------
+   The Bolt hosting layer injects a "Made in Bolt" link into the bottom-right
+   of every page served on a Free plan. Nothing in this repository links to
+   bolt.new — verified with a full-tree grep — so an anchor pointing there can
+   only have come from the host, and these two selectors cannot match any of
+   our own UI. That is the whole reason they are written this way.
+
+   This deliberately does NOT bring back the shape-based block that used to
+   live in src/index.css. Rules like [style*="position: fixed"][style*="bottom"]
+   also hide cookie banners, toasts, dialogs, and the ACAPS/INFORM data credits
+   that the dashboard is obliged to display. See the note in src/index.css.
+
+   TWO LIMITS, both real:
+     * If the badge renders inside a shadow root or a same-origin iframe, page
+       CSS does not reach it and these rules do nothing. That is the likely
+       case: the served HTML for pbb.bolt.host contains no badge markup, so it
+       is injected at the edge or at runtime.
+     * Whether the badge may be removed is a Bolt terms-of-service question,
+       not a CSS one. Bolt's own documentation says upgrading to any Pro plan
+       removes it from previews and published projects. That is the supported
+       route; this rule is a fallback, not a substitute for it.
+   -------------------------------------------------------------------------- */
+
+a[href^="https://bolt.new"],
+a[href^="https://www.bolt.new"] {
+  display: none !important;
+}
+
+/* ==========================================================================
+   10. PAGE FIGURES — full-width, uncropped, readable on a phone
+   --------------------------------------------------------------------------
+   Almost every image in public/assets/images is a DIAGRAM: the BANGON
+   platform grid, the halal flywheel, the legislative architecture, the 2026
+   roadmap. Each carries its meaning in small coloured text inside the
+   picture. Two consequences drove this section.
+
+   1. NEVER CROP. A hero pattern with `object-fit: cover` and a fixed
+      aspect-ratio — the usual way to make a picture look "full width" —
+      slices the left and right thirds off a 16:9 diagram on a phone,
+      removing labelled nodes and captions. Every figure here is
+      width:100% / height:auto, so the whole artwork is always visible.
+
+   2. TEXT INSIDE A PICTURE IS NOT ON THE PAGE. Neither Google nor a screen
+      reader can read the words baked into these JPEGs. That is why the
+      markup pairs each figure with a real <figcaption> and substantive
+      alt text, and why the figure links to the full-size file so a voter
+      on a 360px screen can open and pinch-zoom to actually read it.
+
+   The aspect-ratio below is set per-figure inline from the real intrinsic
+   size, together with width/height attributes, so the space is reserved
+   before the image arrives and the page does not jump (CLS).
+   ========================================================================== */
+
+.page-figure {
+  /* Figures are inserted between sections, OUTSIDE the .wrap container, so
+     they have to hold their own column width. Without this they stretched to
+     the full viewport on desktop — a diagram rendered at 1440px from a 1600px
+     source, which is exactly the soft, unreadable result section 10 warns
+     about. Only the modifiers below are meant to break out. */
+  margin: var(--space-6, 1.5rem) auto;
+  padding: 0;
+  max-width: 1120px;
+}
+
+.page-figure--bleed {
+  /* Full-bleed on phones, where the diagrams need every pixel of width.
+     Falls back to the content column at wider sizes. */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  max-width: 100vw;
+}
+
+@media (min-width: 800px) {
+  .page-figure--bleed {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    max-width: 1120px;
+  }
+}
+
+.page-figure a.page-figure__zoom {
+  display: block;
+  position: relative;
+  border-radius: var(--radius-md, 10px);
+  overflow: hidden;
+  background: var(--pbb-surface-2, #f4f6f5);
+  line-height: 0;
+}
+
+.page-figure--bleed a.page-figure__zoom {
+  border-radius: 0;
+}
+
+@media (min-width: 800px) {
+  .page-figure--bleed a.page-figure__zoom {
+    border-radius: var(--radius-md, 10px);
+  }
+}
+
+.page-figure img {
+  display: block;
+  width: 100%;
+  height: auto;          /* the whole picture, never a crop */
+  max-width: 100%;
+}
+
+/* "Tap to enlarge" affordance. It is a plain link to the full-size file:
+   no lightbox script, so it works with JS disabled, in a Facebook in-app
+   browser, and on a 2015 Android phone — and the browser's own pinch-zoom
+   is better than any lightbox we would write. */
+.page-figure__zoom::after {
+  content: attr(data-zoom-label);
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 6px 10px;
+  font: 600 0.75rem/1.2 var(--font-body, system-ui, sans-serif);
+  color: #fff;
+  background: rgba(6, 61, 27, 0.86);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.page-figure figcaption {
+  margin-top: 0.5rem;
+  padding: 0 var(--space-4, 1rem);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pbb-text-muted, #4a5a50);
+}
+
+@media (min-width: 800px) {
+  .page-figure figcaption { padding: 0; }
+}
+
+/* Edge-to-edge at EVERY width, not just on phones.
+   Reserved for designed artwork — the campaign banner — where the composition
+   is built to run full width. It is wrong for the diagrams: a 1600px
+   infographic stretched across a 2560px monitor is soft, and the labels that
+   carry its meaning are the first thing to go. Those keep .page-figure--bleed,
+   which returns to the content column above 800px. */
+.page-figure--full {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  max-width: 100vw;
+}
+
+/* Past 1600px the banner is being upscaled past its own resolution, and a
+   3:2 image at 2560px wide is over 1700px tall — the whole first screen and
+   then some. Cap it there and centre; below 1600px nothing changes. */
+@media (min-width: 1600px) {
+  .page-figure--full {
+    width: 1600px;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .page-figure--full a.page-figure__zoom { border-radius: var(--radius-md, 10px); }
+}
+
+.page-figure--full a.page-figure__zoom { border-radius: 0; }
+
+.page-figure--full figcaption {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-4, 1rem);
+  padding-right: var(--space-4, 1rem);
+}
+
+/* The banner at the very top of a page sits flush under the header. */
+.page-figure--lede { margin-top: 0; }
+
+@media print {
+  /* The zoom pill is a screen affordance and prints as a floating blob. */
+  .page-figure__zoom::after { display: none; }
+  .page-figure img { max-width: 100%; }
+}
