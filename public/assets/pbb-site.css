@@ -406,6 +406,11 @@ footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline;
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-align: center;
+  /* Labels are the header's verbatim wording, so two of the four wrap to a
+     second line on a 380px screen. Wrapping is correct here; truncating or
+     shortening them would recreate the drift this bar is meant to avoid. */
+  line-height: 1.15;
+  hyphens: none;
   color: var(--pbb-ink-soft);
   text-decoration: none;
 }
@@ -423,9 +428,9 @@ footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline;
 /* Reserve the bar's height so it never covers the last line of the footer,
    including the COMELEC disclosure. */
 @media (max-width: 719.98px) {
-  body { padding-bottom: calc(var(--pbb-tap) + env(safe-area-inset-bottom, 0px)); }
+  body { padding-bottom: calc(var(--pbb-tap) + 12px + env(safe-area-inset-bottom, 0px)); }
   /* back-to-top is fixed at bottom:16px and would sit under the bar. */
-  .back-to-top { bottom: calc(var(--pbb-tap) + 16px + env(safe-area-inset-bottom, 0px)); }
+  .back-to-top { bottom: calc(var(--pbb-tap) + 28px + env(safe-area-inset-bottom, 0px)); }
 }
 
 @media (min-width: 720px) {
