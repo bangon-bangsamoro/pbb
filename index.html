@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/assets/pbb-logo-256.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INFORM | BARMM Data &amp; Intelligence Dashboard — PBB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-900 text-slate-100 antialiased">
+    <!--
+      No global nav bar here on purpose. Header.tsx (Dashboard) and the
+      "Back to PBB Portal" link (LoginForm) already provide this per-page,
+      in brand-correct style — a hardcoded bar here duplicated both of them
+      on every screen. If you want a persistent shell nav again, build it as
+      a proper React component reading from the same design tokens as
+      Header.tsx, not inline styles in this file.
+    -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
