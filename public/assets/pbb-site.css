@@ -298,7 +298,14 @@ footer.site {
   color: var(--pbb-ink-soft);
   padding-block: var(--pbb-space-6) var(--pbb-space-5);
 }
-footer.site h5 {
+/* Heading selector covers BOTH the legacy `h5` emitted by sync-chrome and the
+   `h2.footer-h` the pages were hand-migrated to in Aug 2026. `.footer-h` had
+   no rule anywhere, so 16 pages were rendering four full-size <h2> headings
+   inside the footer — the single largest contributor to the footer looking
+   "overpopulated" on a phone. Keep both selectors until sync-chrome is
+   re-run and the markup is uniform again. */
+footer.site h5,
+footer.site .footer-h {
   font-family: var(--pbb-font-label);
   font-size: 0.72rem;
   letter-spacing: 0.1em;
@@ -312,7 +319,142 @@ footer.site li { margin-bottom: var(--pbb-space-2); }
 footer.site a { color: var(--pbb-ink-soft); text-decoration: none; }
 footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline; }
 .footer-grid { display: grid; gap: var(--pbb-space-5); grid-template-columns: 1fr; }
-@media (min-width: 720px) { .footer-grid { grid-template-columns: repeat(4, 1fr); } }
+/* auto-fit rather than a fixed 4: home.html now ships three groups (the six
+   BANGON letter pages moved to the hub), the other pages still ship four.
+   Both lay out without a dead column during the migration. */
+@media (min-width: 720px) {
+  .footer-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+}
+
+/* --- Collapsible footer groups (mobile) ---------------------------------
+   The footer carries ~21 links. Stacked on a 380px phone that is roughly a
+   full extra screen of scroll below the content, which reads as a wall and
+   pushes the legal/COMELEC disclosure out of reach.
+
+   `<details>` is used rather than a JS accordion because the links stay in
+   the DOM (crawlable, findable with Ctrl+F, and Chrome auto-expands the
+   group on in-page find), and keyboard + screen-reader behaviour is native.
+
+   On >=720px the disclosure control is hidden and every group is forced
+   open, so desktop keeps the four-column layout it has today. */
+.foot-group > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pbb-space-3);
+  min-height: var(--pbb-tap);
+  padding-block: var(--pbb-space-2);
+  border-bottom: 1px solid #ffffff14;
+}
+.foot-group > summary::-webkit-details-marker { display: none; }
+.foot-group > summary::after {
+  content: "";
+  width: 8px; height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 160ms ease;
+  flex: none;
+}
+.foot-group[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.foot-group > summary:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: 2px;
+}
+.foot-group > ul { padding-block: var(--pbb-space-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .foot-group > summary::after { transition: none; }
+}
+
+@media (min-width: 720px) {
+  .foot-group > summary { display: none; }
+  .foot-group > ul { display: block; padding-block: 0; }
+  /* Groups ship without `open`, so the UA collapses them. Desktop overrides
+     that with `display` on the content. Verified in current Chrome, Firefox
+     and Safari; if a future UA stops honouring it, ship `<details open>` and
+     strip the attribute below 720px instead. */
+}
+
+/* --- Persistent bottom action bar (mobile only) -------------------------
+   The conversion links (Sumali / membership / volunteer) previously lived
+   only in the footer, i.e. below every other link on the page. This lifts
+   them to a always-reachable bar and is what actually produces the "app"
+   feel — not a shorter footer.
+
+   Hidden at >=720px, where the sticky header nav already carries the CTA. */
+.bottom-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  background: var(--pbb-forest-deep);
+  border-top: 1px solid #ffffff1f;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-bar a {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pbb-tap);
+  padding: var(--pbb-space-2) var(--pbb-space-1);
+  font-family: var(--pbb-font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--pbb-ink-soft);
+  text-decoration: none;
+}
+.bottom-bar a[aria-current="page"] { color: var(--pbb-gold-bright); }
+.bottom-bar a.bar-cta {
+  background-image: var(--pbb-gold-metal);
+  color: var(--pbb-ink-dark);
+  font-weight: 700;
+}
+.bottom-bar a:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: -3px;
+}
+
+/* Reserve the bar's height so it never covers the last line of the footer,
+   including the COMELEC disclosure. */
+@media (max-width: 719.98px) {
+  body { padding-bottom: calc(var(--pbb-tap) + env(safe-area-inset-bottom, 0px)); }
+  /* back-to-top is fixed at bottom:16px and would sit under the bar. */
+  .back-to-top { bottom: calc(var(--pbb-tap) + 16px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (min-width: 720px) {
+  .bottom-bar { display: none; }
+}
+
+@media print {
+  .bottom-bar { display: none; }
+}
+/* A control that must look like body text but behave like a button — used for
+   "Cookie Preferences". Replaces a long inline style="" attribute, which would
+   have needed a CSP hash or 'unsafe-inline' once vercel.json's CSP tightens. */
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-btn:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: 2px;
+}
+
+.footer-legal-line { margin: 0 0 0.5em; }
+.footer-legal-last { margin: 0; }
+
 .footer-legal {
   margin-top: var(--pbb-space-5);
   padding-top: var(--pbb-space-4);
