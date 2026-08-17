@@ -70,49 +70,107 @@ ${items}
     </nav>`
 }
 
-const FOOTER_GRID = `<div class="footer-grid">
-      <div>
-        <h5>Ang BANGON Platform</h5>
-        <ul>
-          <li><a href="bangon.html">Buod ng platform</a></li>
-          <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
-          <li><a href="bangon-alliance.html">A — Alyansa</a></li>
-          <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
-          <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
-          <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
-          <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Sumali</h5>
+/* The WHOLE footer, not just the link columns.
+ *
+ * This script used to own only <div class="footer-grid">. The legal strip
+ * below it was hand-copied per page, and it drifted: join, membership,
+ * volunteer and partnership — the four pages that collect a name, phone,
+ * photo and e-signature — had lost the "Cookie Preferences" control, and
+ * verify.html had lost the COMELEC disclosure entirely. Those are the pages
+ * where RA 10173 and COMELEC disclosure matter MOST, and the omission was
+ * invisible in a browser.
+ *
+ * Owning the whole <footer> makes both structurally impossible to lose.
+ *
+ * Groups are <details> so a phone shows three tap targets rather than ~21
+ * stacked links. The links stay in the DOM — crawlable, findable with
+ * Ctrl+F, and Chrome auto-expands a group on in-page find. CSS forces every
+ * group open at >=720px, so desktop keeps its columns.
+ *
+ * The six BANGON letter pages are deliberately NOT listed. bangon.html links
+ * all six and all six are in sitemap.xml, so nothing is orphaned; the footer
+ * just stops duplicating the hub.
+ */
+const FOOTER = `<footer class="site">
+  <div class="wrap">
+    <h2 class="sr-only">Footer</h2>
+    <div class="footer-grid">
+      <details class="foot-group">
+        <summary class="footer-h">Sumali</summary>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
           <li><a href="partnership.html">Partnership Agreement</a></li>
           <li><a href="verify.html">I-verify ang Membership ID</a></li>
         </ul>
-      </div>
-      <div>
-        <h5>Alamin</h5>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Alamin</summary>
         <ul>
+          <li><a href="bangon.html">BANGON Platform</a></li>
           <li><a href="about.html">About PBB</a></li>
           <li><a href="persona.html">Para kanino ang BANGON</a></li>
           <li><a href="voter-education.html">Paano Bomoto?</a></li>
           <li><a href="faq.html">FAQ</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a data-messenger="footer">Messenger</a></li>
+          <!-- A real href, not a bare <a>: without one the element is not
+               focusable and screen readers do not announce it. The Messenger
+               script overwrites this with the m.me deep link at runtime, so
+               the Page ID is not duplicated here and contact.html is the
+               no-JS fallback. -->
+          <li><a href="contact.html" data-messenger="footer">Messenger</a></li>
         </ul>
-      </div>
-      <div>
-        <h5>Legal</h5>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Legal</summary>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
           <li><a href="cookies.html">Cookie Policy</a></li>
           <li><a href="accessibility.html">Accessibility</a></li>
         </ul>
-      </div>
-    </div>`
+      </details>
+    </div>
+    <div class="footer-legal">
+      <p class="footer-legal-line">
+        &copy; <span id="year">2026</span> Partido Bangon Bangsamoro. Lahat ng karapatan ay nakalaan.
+      </p>
+      <p class="footer-legal-last">
+        Paid for by Partido Bangon Bangsamoro &middot; Subject to COMELEC campaign finance and
+        fair-election disclosure rules. &middot;
+        <button type="button" class="link-btn" data-cookie-prefs>Cookie Preferences</button>
+      </p>
+    </div>
+  </div>
+</footer>`
+
+/* Persistent bottom action bar.
+ *
+ * Generated from the SAME NAV and CTA constants the header uses, so the two
+ * menus cannot drift into different wording for the same destination. Four
+ * items is what fits a 380px screen; About PBB, Paano Bomoto? and FAQ stay in
+ * the header menu and the footer.
+ *
+ * The legal pages get it too. They have no header nav by design, which would
+ * otherwise leave someone reading the privacy policy with no route back to
+ * the campaign.
+ */
+const BAR = ['home.html', 'bangon.html', 'contact.html']
+
+function barBlock(slug) {
+  const label = Object.fromEntries(NAV)
+  const [ctaHref, ctaLabel] = CTA[slug] || ['join.html', 'Sumali Ngayon']
+  const items = BAR.map((href) => {
+    const current = href === slug ? ' aria-current="page"' : ''
+    return `  <a href="${href}"${current}>${label[href]}</a>`
+  }).join('\n')
+
+  return `<nav class="bottom-bar no-print" aria-label="Mabilisang nabigasyon">
+${items}
+  <a href="${ctaHref}" class="bar-cta">${ctaLabel}</a>
+</nav>`
+}
+
 
 /* Stylesheets, in cascade order. site-widgets.css was previously linked only
    from the four legal pages, so the cookie banner and the accessibility
@@ -243,9 +301,29 @@ function scriptBlock(slug) {
 
 const STYLES_RE = /<link rel="stylesheet" href="assets\/pbb-tokens\.css">[\s\S]*?(?=\n\n|\n<script)/
 const NAV_RE = /<nav id="primary-nav"[\s\S]*?<\/nav>/
-const FOOTER_RE = /<div class="footer-grid">[\s\S]*?\n    <\/div>/
+const FOOTER_RE = /<footer class="site">[\s\S]*?<\/footer>/
+/* NB: the rendered class is "bottom-bar no-print", so this must not anchor
+   on a closing quote straight after bottom-bar — that mismatch made the
+   rewrite non-idempotent and appended a second bar on every run. */
+const BAR_RE = /\n?<nav class="bottom-bar[^"]*"[\s\S]*?<\/nav>/g
 const CONFIG_RE = /<script>\s*\n\s*window\.PBB_SUPABASE_URL[\s\S]*?<\/script>/
 const SCRIPTS_RE = /<script src="assets\/pbb-app\.js"[\s\S]*?(?=\n<\/body>)/
+
+/* Insert or replace the bottom bar. It sits after </footer>, outside it, so
+   it is not swallowed when the footer is regenerated. */
+function applyBar(text, slug) {
+  const bar = barBlock(slug)
+  BAR_RE.lastIndex = 0
+  if (BAR_RE.test(text)) {
+    // Replace the first occurrence, drop any others. A duplicate bar is
+    // invisible on desktop (the whole component is hidden >=720px) and would
+    // otherwise survive unnoticed.
+    let seen = false
+    return text.replace(BAR_RE, () => (seen ? '' : ((seen = true), '\n' + bar)))
+  }
+  if (text.includes('</footer>')) return text.replace('</footer>', '</footer>\n' + bar)
+  return text
+}
 
 let changed = []
 let checked = 0
@@ -260,7 +338,8 @@ for (const file of readdirSync(PUBLIC).filter((f) => f.endsWith('.html')).sort()
 
   if (STYLES_RE.test(after)) after = after.replace(STYLES_RE, styleBlock(file))
   if (NAV_RE.test(after)) after = after.replace(NAV_RE, navBlock(file))
-  if (FOOTER_RE.test(after)) after = after.replace(FOOTER_RE, FOOTER_GRID)
+  if (FOOTER_RE.test(after)) after = after.replace(FOOTER_RE, FOOTER)
+  after = applyBar(after, file)
   if (CONFIG_RE.test(after)) after = after.replace(CONFIG_RE, CONFIG_BLOCK)
   if (SCRIPTS_RE.test(after)) after = after.replace(SCRIPTS_RE, scriptBlock(file) + '\n')
 
@@ -291,16 +370,27 @@ const WIDGETS_TAG_RE = /<script src="assets\/site-widgets\.js"[^>]*><\/script>/
 for (const file of LEGAL) {
   const path = join(PUBLIC, file)
   const before = readFileSync(path, 'utf8')
-  if (before.includes('assets/pbb-hide-host-badge.js')) { checked++; continue }
-  const m = before.match(WIDGETS_TAG_RE)
-  if (!m) {
-    console.error(`${file}: no site-widgets.js tag to anchor to — fix by hand`)
-    process.exit(1)
+  let after = before
+
+  if (!after.includes('assets/pbb-hide-host-badge.js')) {
+    const m = after.match(WIDGETS_TAG_RE)
+    if (!m) {
+      console.error(`${file}: no site-widgets.js tag to anchor to — fix by hand`)
+      process.exit(1)
+    }
+    after = after.replace(WIDGETS_TAG_RE, `${m[0]}\n${BADGE_TAG}`)
   }
-  const after = before.replace(WIDGETS_TAG_RE, `${m[0]}\n${BADGE_TAG}`)
+
+  /* The bar is the only route back to the campaign from these pages, which
+     carry no header nav. Its CSS lives in site-widgets.css — loaded here —
+     and NOT in pbb-site.css, which these pages deliberately do not load. */
+  after = applyBar(after, file)
+
   checked++
-  changed.push(file)
-  if (!CHECK) writeFileSync(path, after, 'utf8')
+  if (after !== before) {
+    changed.push(file)
+    if (!CHECK) writeFileSync(path, after, 'utf8')
+  }
 }
 
 if (CHECK) {
