@@ -204,55 +204,62 @@
 
 <footer class="site">
   <div class="wrap">
+    <h2 class="sr-only">Footer</h2>
     <div class="footer-grid">
-      <div>
-        <h2 class="footer-h">Ang BANGON Platform</h2>
-        <ul>
-          <li><a href="bangon.html">Buod ng platform</a></li>
-          <li><a href="bangon-basic-services.html">B — Batayang Serbisyo</a></li>
-          <li><a href="bangon-alliance.html">A — Alyansa</a></li>
-          <li><a href="bangon-natural-resources.html">N — Kalikasan</a></li>
-          <li><a href="bangon-green-economy.html">G — Green Economy</a></li>
-          <li><a href="bangon-open-governance.html">O — Bukas na Pamahalaan</a></li>
-          <li><a href="bangon-peace.html">N — Kapayapaan</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2 class="footer-h">Sumali</h2>
+      <details class="foot-group">
+        <summary class="footer-h">Sumali</summary>
         <ul>
           <li><a href="membership.html">Membership Form</a></li>
           <li><a href="volunteer.html">Volunteer Sign-up</a></li>
           <li><a href="partnership.html">Partnership Agreement</a></li>
           <li><a href="verify.html">I-verify ang Membership ID</a></li>
         </ul>
-      </div>
-      <div>
-        <h2 class="footer-h">Alamin</h2>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Alamin</summary>
         <ul>
+          <li><a href="bangon.html">BANGON Platform</a></li>
           <li><a href="about.html">About PBB</a></li>
           <li><a href="persona.html">Para kanino ang BANGON</a></li>
           <li><a href="voter-education.html">Paano Bomoto?</a></li>
           <li><a href="faq.html">FAQ</a></li>
           <li><a href="contact.html">Contact</a></li>
-          <li><a data-messenger="footer">Messenger</a></li>
+          <!-- A real href, not a bare <a>: without one the element is not
+               focusable and screen readers do not announce it. The Messenger
+               script overwrites this with the m.me deep link at runtime, so
+               the Page ID is not duplicated here and contact.html is the
+               no-JS fallback. -->
+          <li><a href="contact.html" data-messenger="footer">Messenger</a></li>
         </ul>
-      </div>
-      <div>
-        <h2 class="footer-h">Legal</h2>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Legal</summary>
         <ul>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms of Use</a></li>
           <li><a href="cookies.html">Cookie Policy</a></li>
           <li><a href="accessibility.html">Accessibility</a></li>
         </ul>
-      </div>
+      </details>
     </div>
     <div class="footer-legal">
-      <p style="margin-bottom:.5em">© <span id="year">2026</span> Partido Bangon Bangsamoro.</p>
-      <p style="margin:0">Paid for by Partido Bangon Bangsamoro · Subject to COMELEC campaign finance and fair-election disclosure rules.</p>
+      <p class="footer-legal-line">
+        &copy; <span id="year">2026</span> Partido Bangon Bangsamoro. Lahat ng karapatan ay nakalaan.
+      </p>
+      <p class="footer-legal-last">
+        Paid for by Partido Bangon Bangsamoro &middot; Subject to COMELEC campaign finance and
+        fair-election disclosure rules. &middot;
+        <button type="button" class="link-btn" data-cookie-prefs>Cookie Preferences</button>
+      </p>
     </div>
   </div>
 </footer>
+<nav class="bottom-bar no-print" aria-label="Mabilisang nabigasyon">
+  <a href="home.html">Simula</a>
+  <a href="bangon.html">BANGON Platform</a>
+  <a href="contact.html">Contact</a>
+  <a href="join.html" class="bar-cta">Sumali Ngayon</a>
+</nav>
 
 <button class="back-to-top no-print" id="backToTop" type="button" aria-label="Bumalik sa itaas">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
