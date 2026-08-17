@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="tl" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Partido Bangon Bangsamoro | Ang BANGON Platform 2026</title>
+<meta name="description" content="Anim na simpleng pangako ng PBB para sa bawat Bangsamoro: Batayang Serbisyo, Alyansa, Kalikasan, Green Economy, Bukas na Pamahalaan, Kapayapaan.">
+<meta name="keywords" content="Partido Bangon Bangsamoro, PBB, BANGON, BARMM, Bangsamoro, 2026 Parliamentary Elections, Bangsamoro parliament, Mindanao politics">
+<meta name="theme-color" content="#063D1B">
+<link rel="canonical" href="https://www.bangonbangsamoro.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Partido Bangon Bangsamoro">
+<meta property="og:title" content="Partido Bangon Bangsamoro | Ang BANGON Platform para sa 2026">
+<meta property="og:description" content="Anim na simpleng pangako para sa bawat Bangsamoro. Alamin kung alin ang para sa'yo.">
+<meta property="og:url" content="https://www.bangonbangsamoro.com/">
+<meta property="og:image" content="https://www.bangonbangsamoro.com/assets/images/professionalizing-patrimony.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="893">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Partido Bangon Bangsamoro | Ang BANGON Platform para sa 2026">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/pbb-logo-256.png">
+<!-- Fonts: preconnect then a single stylesheet link. Deliberately NOT an
+     @import inside CSS — that serialises an extra round trip, which is
+     expensive on the connections most of BARMM actually has. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/pbb-tokens.css">
+<link rel="stylesheet" href="assets/pbb-site.css">
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "PoliticalParty",
+  "name": "Partido Bangon Bangsamoro",
+  "alternateName": "PBB",
+  "url": "https://www.bangonbangsamoro.com/",
+  "logo": "https://www.bangonbangsamoro.com/assets/pbb-logo-256.png",
+  "description": "A regional political party in the Bangsamoro Autonomous Region in Muslim Mindanao (BARMM) contesting the 2026 Bangsamoro Parliamentary Elections on the BANGON platform of government.",
+  "areaServed": "Bangsamoro Autonomous Region in Muslim Mindanao",
+  "telephone": "+63-966-301-8777",
+  "email": "info@bangonbangsamoro.com"
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Laktawan papunta sa nilalaman</a>
+<div class="outbox-banner no-print" id="outboxBanner" hidden>
+  May naka-queue kang sign-up na hindi pa naipapadala. Awtomatiko itong susubukan ulit pagbalik ng signal.
+</div>
+<header class="site">
+  <div class="wrap header-inner">
+    <a class="brand" href="home.html">
+      <img src="assets/pbb-logo-128.png" width="38" height="38" alt="">
+      <span class="brand-text">
+        <strong>Partido Bangon Bangsamoro</strong>
+        <small>Babangon Tayo · 2026</small>
+      </span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button"
+            aria-expanded="false" aria-controls="primary-nav" aria-label="Buksan ang menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" aria-label="Pangunahing nabigasyon">
+      <ul>
+        <li><a href="home.html" aria-current="page">Simula</a></li>
+        <li><a href="bangon.html">BANGON Platform</a></li>
+        <li><a href="about.html">About PBB</a></li>
+        <li><a href="voter-education.html">Paano Bomoto?</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-cta"><a href="join.html">Sumali Ngayon</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <!-- ==================== SEGMENT PICKER + HERO ====================
+       CHOOSER-FIRST, NOT GATE-FIRST.
+
+       The question is the first thing in the viewport, so a visitor arriving
+       from a boosted post does not have to scroll 1,350px to find it — which
+       is where it used to sit, 1.6 screens down on a 390px phone.
+
+       But it does NOT block anything. Every section below stays in the DOM
+       and is served to crawlers, to no-JS visitors, and to anyone who ignores
+       the question. Choosing REORDERS and REWRITES; it never hides. Hiding
+       platform content from a voter because we guessed their segment would be
+       patronising, and would throw away the SEO work on all 22 pages.
+
+       The headline, lede and button below carry data-segment-* defaults so
+       they can always be restored to the generic wording.
+  -->
+  <section class="hero segment-hero" aria-label="Piliin ang sektor mo, at ang panimula ng PBB">
+    <div class="wrap">
+      <p class="eyebrow">Setyembre 14, 2026 · Bangsamoro Parliamentary Elections</p>
+      <!-- Deliberately a <p>, not an <h2>.
+           The picker is visually first, but a heading here would put an h2
+           ahead of the page's h1 in the document outline: a screen-reader
+           user navigating by heading would meet a sub-heading before the
+           page's own title, and a crawler would read a page whose first
+           heading is not its subject. The role="group" below carries its own
+           accessible name, so nothing is lost. -->
+      <p class="segment-q" id="seg-q">Sino ka sa mga ito?</p>
+      <p class="segment-sub">
+        I-tap ang pinakamalapit sa’yo at ito ang unang lalabas sa pahinang ito.
+        Puwede mong palitan anumang oras — walang itinatago.
+      </p>
+
+      <div class="segment-grid" role="group" aria-labelledby="seg-q">
+        <button class="segment-card" type="button" data-segment="provider" aria-pressed="false">
+          <span class="segment-card-title">Magsasaka / Mangingisda</span>
+          <span class="segment-card-sub">Konkretong tulong araw-araw</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="professional" aria-pressed="false">
+          <span class="segment-card-title">Propesyonal / Kabataan</span>
+          <span class="segment-card-sub">Trabaho batay sa kakayahan</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="matriarch" aria-pressed="false">
+          <span class="segment-card-title">Ina / Community Leader</span>
+          <span class="segment-card-sub">Kalusugan at eskuwela ng anak</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="business" aria-pressed="false">
+          <span class="segment-card-title">Negosyante / Halal</span>
+          <span class="segment-card-sub">Merkado sa labas ng rehiyon</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="peace" aria-pressed="false">
+          <span class="segment-card-title">Peace Advocate</span>
+          <span class="segment-card-sub">Kapayapaang may kabuhayan</span>
+        </button>
+        <button class="segment-card" type="button" data-segment="elder" aria-pressed="false">
+          <span class="segment-card-title">Nakatatanda / Pananampalataya</span>
+          <span class="segment-card-sub">Malinis at magalang na pamamahala</span>
+        </button>
+      </div>
+
+      <p class="segment-reset-row">
+        <button type="button" class="segment-reset" data-segment-reset hidden>
+          ← Ipakita lahat (alisin ang pinili)
+        </button>
+      </p>
+
+      <hr class="segment-rule">
+
+      <h1 data-segment-headline
+          data-segment-headline-default="Babangon tayo — nang magkasama">Babangon tayo — nang magkasama</h1>
+      <p class="lede" data-segment-lede
+         data-segment-lede-default="Ang PBB ay bagong grupo ng mga lider sa BARMM — malinis, may alam, at handang magsilbi. Anim na simpleng pangako ang BANGON platform namin, at bawat isa ay para sa’yo.">
+        Ang PBB ay bagong grupo ng mga lider sa BARMM — malinis, may alam, at handang magsilbi.
+        Anim na simpleng pangako ang BANGON platform namin, at bawat isa ay para sa’yo:
+        magsasaka man, propesyonal, negosyante, nanay, beterano ng kapayapaan, o nakatatanda.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="join.html"
+           data-segment-cta data-segment-cta-default="Sumali Ngayon|join.html">Sumali Ngayon</a>
+        <a class="btn btn-ghost" href="bangon.html">Alamin ang BANGON Platform</a>
+        <a class="btn btn-ghost" data-messenger="hero">💬 Mag-message sa Messenger</a>
+      </div>
+      <p class="form-note" id="personaNote" role="status" aria-live="polite" hidden></p>
+    </div>
+  </section>
+
+  <figure class="page-figure page-figure--full page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/Banner.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Tatlong bagay na nararamdaman ng bawat pamilya: edukasyon, kalusugan, at kalikasan.">
+      <img src="assets/images/Banner.jpg"
+           width="1536" height="1024"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Banner ng Partido Bangon Bangsamoro: &quot;Para sa isang progresibo, malusog at luntiang Bangsamoro.&quot; Nakalarawan ang mga mag-aaral, isang doktor at nakatatanda, at isang magsasakang nagtatanim, kasama ang tatlong pangunahing larangan — Edukasyon, Kalusugan, at Kalikasan.">
+    </a>
+    <figcaption>Tatlong bagay na nararamdaman ng bawat pamilya: edukasyon, kalusugan, at kalikasan.</figcaption>
+  </figure>
+
+  <!-- ==================== PARA SA'YO ====================
+       Populated by pbb-app.js only once a segment is known. Hidden by
+       default and with JavaScript off, so nothing is ever taken away from a
+       visitor who has not answered — this is content ADDED for those who
+       have, not content withheld from those who have not. -->
+  <section class="band-tint foryou-band" data-for-you hidden aria-labelledby="foryou-h">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Para sa’yo</p>
+        <h2 id="foryou-h">Ito ang unang dapat mong basahin</h2>
+        <p data-for-you-lead></p>
+      </div>
+      <div class="foryou-list" data-for-you-list></div>
+    </div>
+  </section>
+
+  <!-- ==================== BANGON PLATFORM ==================== -->
+  <section id="bangon" aria-labelledby="bangon-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ang platform of government</p>
+        <h2 id="bangon-h">Anim na pangako. Isang salita: BANGON.</h2>
+        <p>
+          Bawat letra ay isang haligi ng pamamahala — may sariling pahina, may konkretong
+          panukalang batas, at may paraan para sumali ka.
+        </p>
+        <p style="margin-bottom:0">
+          <a href="bangon.html"><strong>Tingnan ang buong platform, ang legislative agenda, at ang tatlong yugto →</strong></a>
+        </p>
+      </div>
+      <div class="grid-auto" data-pillar-grid>
+        <a class="card card-link pillar-card reveal" href="bangon-basic-services.html" data-pillar="basic-services">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">B</span>
+            <h3>Basic Services</h3>
+          </span>
+          <p>₱8,000 household subsidy, Super Health Stations na may libreng gamot at lab, at libreng internet sa paaralan.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon-alliance.html" data-pillar="alliance">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">A</span>
+            <h3>Alyansa at Partnership</h3>
+          </span>
+          <p>Bottom-Up Budgeting: ang barangay ang magsasabi kung saan mapupunta ang pondo, hindi ang Cotabato lang.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon-natural-resources.html" data-pillar="natural-resources">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">N</span>
+            <h3>Natural Resources</h3>
+          </span>
+          <p>Palaw Rangers, reforestation, proteksyon ng karagatan, at climate-smart na sakahan para sa susunod na henerasyon.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon-green-economy.html" data-pillar="green-economy">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">G</span>
+            <h3>Green Economy</h3>
+          </span>
+          <p>Halal bilang pandaigdigang pamantayan, Shari'ah-compliant na financing, at Green Skills na may trabaho sa dulo.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon-open-governance.html" data-pillar="open-governance">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">O</span>
+            <h3>Open Governance</h3>
+          </span>
+          <p>Meritokrasya sa pagkuha ng empleyado, bukas na badyet, at anti-korapsyon na may ngipin.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon-peace.html" data-pillar="peace">
+          <span class="persona-flag" data-persona-flag hidden></span>
+          <span class="pillar-card-head">
+            <span class="pillar-letter" aria-hidden="true">N</span>
+            <h3>Non-Violent Approaches</h3>
+          </span>
+          <p>Reintegrasyon ng dating kombatant, rehabilitasyon ng Marawi, at community-based na resolusyon ng alitan.</p>
+          <span class="more">LEARN MORE →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- ==================== PROOF ==================== -->
+  <section class="band-tint" aria-labelledby="numbers-h">
+    <div class="wrap">
+      <h2 id="numbers-h" class="sr-only">Ang PBB sa mga numero</h2>
+      <div class="stat-row reveal">
+        <div class="stat"><b>71,000+</b><span>miyembro sa buong BARMM</span></div>
+        <div class="stat"><b>2022</b><span>itinatag sa Cotabato City</span></div>
+        <div class="stat"><b>5+3</b><span>lalawigan at lungsod, kasama ang SGA</span></div>
+        <div class="stat"><b>Set. 14</b><span>araw ng eleksyon, 2026</span></div>
+      </div>
+    </div>
+  </section>
+  <!-- ==================== LEADERSHIP ==================== -->
+
+  <figure class="page-figure">
+    <a class="page-figure__zoom" href="assets/images/engine-of-reform.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Doktor, guro, inhinyero, abogado, at kabataan — sila ang makina ng repormang ito.">
+      <img src="assets/images/engine-of-reform.jpg"
+           width="1600" height="893"
+           loading="lazy"
+           decoding="async"
+           alt="Diagram ng &quot;The Engine of Reform: Youth and Professionals&quot;, na nagpapakita ng edukadong kabataan at civil society bilang batayan ng elektoral na kapangyarihan, na may hinihinging meritokrasya at transparency.">
+    </a>
+    <figcaption>Doktor, guro, inhinyero, abogado, at kabataan — sila ang makina ng repormang ito.</figcaption>
+  </figure>
+<section id="lideratura" class="band-navy" aria-labelledby="lead-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Lideratura</p>
+        <h2 id="lead-h">Propesyonal ang pinuno, hindi padrino</h2>
+      </div>
+      <div class="grid-auto">
+        <figure class="showcase reveal-figure" style="margin:0">
+          <div class="showcase-frame">
+            <img src="assets/leadership/nashrudin-kusain.jpg" width="1200" height="900" loading="lazy"
+                 alt="Si Nashrudin Piang Kusain, Regional President ng Partido Bangon Bangsamoro.">
+          </div>
+        </figure>
+        <div class="reveal">
+          <h3 style="color:var(--pbb-white)">Nashrudin Piang Kusain</h3>
+          <p style="color:var(--pbb-gold-bright);font-family:var(--pbb-font-label);font-weight:600">Regional President · Founding leader, 2022</p>
+          <p>
+            Itinatag ni Kusain ang PBB bilang <em>professional-led alternative</em> sa tradisyunal
+            na pulitika ng BARMM. Hindi siya galing sa political clan, at hindi rin siya dating
+            miyembro ng MILF o MNLF. Ang paniniwala niya: kaya umunlad ang Bangsamoro sa
+            meritokrasya, transparency, at maayos na pagpaplano — hindi sa padrino o barilan.
+          </p>
+          <p style="color:var(--pbb-ink)"><strong>“Tapos na ang panahon ng paghihintay. Panahon na upang bumangon at makilahok sa makabagong politika para sa Bangsamoro.”</strong></p>
+          <a class="btn btn-gold btn-responsive" href="join.html">Makipag-ugnayan</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ==================== CTA ==================== -->
+
+  <figure class="page-figure">
+    <a class="page-figure__zoom" href="assets/images/hotline.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Walang internet? May tao sa kabilang linya. Para sa agarang panganib, tumawag muna sa lokal na pulisya at emergency services.">
+      <img src="assets/images/hotline.jpg"
+           width="1536" height="1024"
+           loading="lazy"
+           decoding="async"
+           alt="Anunsyo ng BARMM READi Hotline: 0966 3018 777 at 0939 3395 221, Lunes hanggang Biyernes 8:00 AM – 5:00 PM, kompidensyal at libre, para sa kaligtasan at seguridad, serbisyong panlipunan, edukasyon, kalusugan, at pamamahala.">
+    </a>
+    <figcaption>Walang internet? May tao sa kabilang linya. Para sa agarang panganib, tumawag muna sa lokal na pulisya at emergency services.</figcaption>
+  </figure>
+<section id="sumali" aria-labelledby="cta-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Sumali sa amin</p>
+        <h2 id="cta-h">Kailangan ka namin</h2>
+        <p>
+          Kaya mo bang mangampanya sa bahay-bahay, mag-organisa sa sektor mo, o basta
+          i-share lang ang aming mensahe? May lugar ka sa kilusang ito.
+        </p>
+      </div>
+      <div class="grid-auto">
+        <a class="card card-link pillar-card reveal" href="membership.html">
+          <span class="pillar-card-head"><span class="pillar-letter" aria-hidden="true">1</span><h3>Maging miyembro</h3></span>
+          <p>Sagutan ang membership form, kumuha ng PBB Membership ID na may lagda at litrato mo.</p>
+          <span class="more">Pumunta sa form →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="volunteer.html">
+          <span class="pillar-card-head"><span class="pillar-letter" aria-hidden="true">2</span><h3>Mag-volunteer</h3></span>
+          <p>Ground at precinct work, digital campaign, sectoral organizing — piliin ang bagay sa'yo.</p>
+          <span class="more">Mag-sign up →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="partnership.html">
+          <span class="pillar-card-head"><span class="pillar-letter" aria-hidden="true">3</span><h3>Makipag-partner</h3></span>
+          <p>Para sa organisasyon, kooperatiba, at civil society — may e-signature na kasunduan.</p>
+          <span class="more">Pumirma ng partnership →</span>
+        </a>
+      </div>
+      <div class="callout reveal" style="margin-top:var(--pbb-space-5)">
+        <p style="margin-bottom:.4em"><strong>Walang internet? Tumawag o mag-text.</strong></p>
+        <p style="margin:0">
+          Hotline: <a href="tel:+639663018777"><strong>0966 301 8777</strong></a> — bukas para sa
+          katanungan ng volunteer at tulong sa araw ng eleksyon. Puwede ring i-text ang
+          <strong>SUMALI</strong> sa parehong numero.
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- ==================== MESSENGER ====================
+       The four chips mirror the Persistent Menu configured in Meta Business
+       Suite (docs/internal/facebook-messenger-automated-responses.md), so the
+       site and the bot offer the same four doors and the same wording. If the
+       menu changes there, change it here too.
+       These are plain m.me deep links, not the Customer Chat plugin — see the
+       reasoning at the top of assets/pbb-messenger.js. -->
+  <section class="band-tint" aria-labelledby="msgr-h">
+    <div class="wrap">
+      <div class="msgr-card reveal">
+        <span class="msgr-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.3 2 2 6.2 2 11.7c0 3.1 1.4 5.9 3.7 7.7v3.8l3.4-1.9c.9.3 1.9.4 2.9.4 5.7 0 10-4.2 10-9.7S17.7 2 12 2zm1 13.1-2.6-2.7-5 2.7 5.5-5.8 2.6 2.7 4.9-2.7-5.4 5.8z"/></svg>
+        </span>
+        <div>
+          <h3 id="msgr-h">Mag-message sa amin sa Messenger</h3>
+          <p>
+            Ito ang pinakamabilis naming nasasagot. May agarang sagot sa karaniwang tanong,
+            at may tunay na taong humahawak ng iba.
+          </p>
+          <div class="msgr-chips">
+            <a class="msgr-chip" data-messenger="menu_about">🕊️ Tungkol sa PBB</a>
+            <a class="msgr-chip" data-messenger="menu_platform">📋 BANGON Platform</a>
+            <a class="msgr-chip" data-messenger="menu_volunteer">🙋 Mag-volunteer</a>
+            <a class="msgr-chip" data-messenger="menu_contact">📞 Opisina at hotline</a>
+          </div>
+          <p class="form-note">
+            Para sa insidente, reklamo, o usaping pangkaligtasan — tumawag sa
+            <a href="tel:+639663018777"><strong>0966 301 8777</strong></a>. May taong sasagot,
+            hindi awtomatikong mensahe.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ==================== LEARN MORE ==================== -->
+  <section aria-labelledby="learn-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Alamin!</p>
+        <h2 id="learn-h">Bago ka magdesisyon</h2>
+      </div>
+      <div class="grid-auto">
+        <a class="card card-link pillar-card reveal" href="about.html">
+          <h3>Tungkol sa PBB</h3>
+          <p>Sino kami, saan kami nagmula, at bakit kami naiiba sa ibang partido sa BARMM.</p>
+          <span class="more">Basahin →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="bangon.html">
+          <h3>BANGON Platform</h3>
+          <p>Anim na haligi, tatlong pakpak ng panukalang batas, at tatlong yugto.</p>
+          <span class="more">Tingnan ang platform →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="voter-education.html">
+          <h3>Paano Bomoto?</h3>
+          <p>Paano maghanda, saan bumoto, at paano gumagana ang parliamentaryong sistema.</p>
+          <span class="more">Basahin ang gabay →</span>
+        </a>
+        <a class="card card-link pillar-card reveal" href="faq.html">
+          <h3>Mga madalas itanong</h3>
+          <p>Magkano ang membership? Kaugnay ba kayo ng MILF? Sagot sa 12 tanong.</p>
+          <span class="more"> Explore FAQ →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <h2 class="sr-only">Footer</h2>
+    <div class="footer-grid">
+      <details class="foot-group">
+        <summary class="footer-h">Sumali</summary>
+        <ul>
+          <li><a href="membership.html">Membership Form</a></li>
+          <li><a href="volunteer.html">Volunteer Sign-up</a></li>
+          <li><a href="partnership.html">Partnership Agreement</a></li>
+          <li><a href="verify.html">I-verify ang Membership ID</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Alamin</summary>
+        <ul>
+          <li><a href="bangon.html">BANGON Platform</a></li>
+          <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <!-- A real href, not a bare <a>: without one the element is not
+               focusable and screen readers do not announce it. The Messenger
+               script overwrites this with the m.me deep link at runtime, so
+               the Page ID is not duplicated here and contact.html is the
+               no-JS fallback. -->
+          <li><a href="contact.html" data-messenger="footer">Messenger</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Legal</summary>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="cookies.html">Cookie Policy</a></li>
+          <li><a href="accessibility.html">Accessibility</a></li>
+        </ul>
+      </details>
+    </div>
+    <div class="footer-legal">
+      <p class="footer-legal-line">
+        &copy; <span id="year">2026</span> Partido Bangon Bangsamoro. Lahat ng karapatan ay nakalaan.
+      </p>
+      <p class="footer-legal-last">
+        Paid for by Partido Bangon Bangsamoro &middot; Subject to COMELEC campaign finance and
+        fair-election disclosure rules. &middot;
+        <button type="button" class="link-btn" data-cookie-prefs>Cookie Preferences</button>
+      </p>
+    </div>
+  </div>
+</footer>
+<!--
+  Persistent bottom action bar. The campaign CTA used to be reachable only
+  from the sticky header or the bottom of the footer; this keeps it one tap
+  away at any scroll position. Hidden at >=720px where the header nav
+  already carries it. body gets matching padding-bottom in pbb-site.css so
+  the bar never covers the COMELEC disclosure.
+-->
+<nav class="bottom-bar no-print" aria-label="Mabilisang nabigasyon">
+  <a href="home.html" aria-current="page">Simula</a>
+  <a href="bangon.html">BANGON Platform</a>
+  <a href="contact.html">Contact</a>
+  <a href="join.html" class="bar-cta">Sumali Ngayon</a>
+</nav>
+<button class="back-to-top no-print" id="backToTop" type="button" aria-label="Bumalik sa itaas">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+<!--
+  ============================================================================
+  RUNTIME CONFIGURATION
+  ----------------------------------------------------------------------------
+  All three values are PUBLIC by design and safe to ship in page source:
+    * the Supabase project URL is just an API host;
+    * the anon key is scoped by Row Level Security and, since migration
+      20260813000000, cannot INSERT into any table — every public write goes
+      through the submit-lead Edge Function;
+    * the Turnstile SITE key is meant to be rendered client-side; its SECRET
+      key lives only in Supabase Edge Function secrets.
+  NEVER put a service_role key here.
+  Left empty, the forms degrade honestly: submissions queue locally and the
+  user is pointed at the hotline, rather than shown a false success message.
+  ============================================================================
+-->
+<script>
+  window.PBB_SUPABASE_URL       = "";
+  window.PBB_SUPABASE_ANON_KEY  = "";
+  window.PBB_TURNSTILE_SITE_KEY = "";
+  window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
+</script>
+<script src="assets/pbb-app.js" defer></script>
+<script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
+<script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
+
+</body>
+</html>
