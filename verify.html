@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="tl" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I-verify ang PBB Membership ID</title>
+<meta name="description" content="Suriin kung tunay ang isang PBB Membership ID. Ilagay ang member number o i-scan ang QR code sa harap ng ID.">
+<meta name="theme-color" content="#063D1B">
+<link rel="canonical" href="https://www.bangonbangsamoro.com/verify.html">
+<!-- Not indexed: this page exists to answer a specific ID lookup, and search
+     results for it would be noise. It is linked from every ID card's QR. -->
+<meta name="robots" content="noindex, follow">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/pbb-tokens.css">
+<link rel="stylesheet" href="assets/pbb-site.css">
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
+<link rel="stylesheet" href="assets/pbb-forms.css">
+
+<style>
+  .verdict { border-radius: var(--pbb-radius); padding: var(--pbb-space-5); margin-top: var(--pbb-space-4); }
+  .verdict-ok      { background: #E8F3EA; border: 2px solid var(--pbb-forest); }
+  .verdict-unknown { background: #FDECEA; border: 2px solid #B3261E; }
+  .verdict-pending { background: #FFF4D6; border: 2px solid var(--pbb-gold); }
+  .verdict h3 { margin-bottom: var(--pbb-space-2); }
+  .verdict dl { display: grid; grid-template-columns: auto 1fr; gap: var(--pbb-space-2) var(--pbb-space-4); margin: 0; }
+  .verdict dt { font-family: var(--pbb-font-label); font-weight: 700; font-size: var(--pbb-text-sm); color: var(--pbb-ink-dark-soft); }
+  .verdict dd { margin: 0; font-weight: 600; }
+</style>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Laktawan papunta sa nilalaman</a>
+
+<header class="site">
+  <div class="wrap header-inner">
+    <a class="brand" href="home.html">
+      <img src="assets/pbb-logo-128.png" width="38" height="38" alt="">
+      <span class="brand-text">
+        <strong>Partido Bangon Bangsamoro</strong>
+        <small>Babangon Tayo · 2026</small>
+      </span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button"
+            aria-expanded="false" aria-controls="primary-nav" aria-label="Buksan ang menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" aria-label="Pangunahing nabigasyon">
+      <ul>
+        <li><a href="home.html">Simula</a></li>
+        <li><a href="bangon.html">BANGON Platform</a></li>
+        <li><a href="about.html">About PBB</a></li>
+        <li><a href="voter-education.html">Paano Bomoto?</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-cta"><a href="membership.html">Maging Miyembro</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero hero-compact">
+    <div class="wrap">
+      <ol class="breadcrumb">
+        <li><a href="home.html">Simula</a></li>
+        <li>I-verify ang ID</li>
+      </ol>
+      <h1>I-verify ang Membership ID</h1>
+      <p class="lede">
+        Ilagay ang member number na nakasulat sa harap ng ID, o i-scan ang QR code. Sasabihin
+        namin kung tunay ito at aktibo pa — pero hindi namin ipapakita ang buong personal na
+        detalye ng miyembro.
+      </p>
+    </div>
+  </section>
+
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/Banner.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ilagay ang numero ng membership ID upang tingnan kung ito ay tunay at aktibo.">
+      <img src="assets/images/Banner.jpg"
+           width="1536" height="1024"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Banner ng Partido Bangon Bangsamoro na may temang edukasyon, kalusugan, at kalikasan.">
+    </a>
+    <figcaption>Ilagay ang numero ng membership ID upang tingnan kung ito ay tunay at aktibo.</figcaption>
+  </figure>
+
+
+  
+
+
+  <section>
+    <div class="wrap" style="max-width:640px">
+      <form class="card" id="verifyForm" novalidate>
+        <div class="field">
+          <label for="memberNo">Member Number</label>
+          <input id="memberNo" name="memberNo" type="text" required maxlength="32"
+                 autocomplete="off" spellcheck="false" placeholder="Hal: PBB-2026-MDN-004821">
+        </div>
+        <button class="btn btn-gold btn-block" type="submit" id="verifySubmit">I-verify</button>
+
+        <!-- QR scanner. pbb-verify.js hides this entirely where BarcodeDetector
+             is unavailable, rather than offering a button that does nothing.
+             A poll watcher checking IDs at a precinct should not be typing
+             twenty characters per person. -->
+        <div id="verifyScan" class="verify-scan" hidden>
+          <p class="form-note" style="margin:.75rem 0 .5rem">O i-scan ang QR code sa likod ng ID:</p>
+          <button class="btn btn-outline btn-block" type="button" id="scanStart">I-scan ang QR code</button>
+          <button class="btn btn-outline btn-block" type="button" id="scanStop" hidden>Itigil ang pag-scan</button>
+          <video id="scanVideo" playsinline muted hidden
+                 style="width:100%;margin-top:.75rem;border-radius:10px;background:#000"></video>
+        </div>
+        <p class="form-status" id="verifyStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div id="verifyResult" hidden></div>
+
+      <div class="callout" style="margin-top:var(--pbb-space-6)">
+        <p style="margin-bottom:.4em"><strong>Bakit limitado ang ipinapakita?</strong></p>
+        <p style="margin:0">
+          Ang membership sa isang partido ay <em>sensitive personal information</em> sa ilalim ng
+          Data Privacy Act (RA 10173). Kinukumpirma lang namin na totoo ang ID at kung saang
+          chapter ito nakatala. Hindi namin ibinibigay ang numero, address, o litrato ng miyembro
+          sa sinumang nag-verify.
+        </p>
+      </div>
+
+      <p class="form-note" style="margin-top:var(--pbb-space-5)">
+        May problema? Tumawag sa <a href="tel:+639663018777"><strong>0966 301 8777</strong></a>
+        o mag-email sa <a href="mailto:info@bangonbangsamoro.com">info@bangonbangsamoro.com</a>.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <h2 class="sr-only">Footer</h2>
+    <div class="footer-grid">
+      <details class="foot-group">
+        <summary class="footer-h">Sumali</summary>
+        <ul>
+          <li><a href="membership.html">Membership Form</a></li>
+          <li><a href="volunteer.html">Volunteer Sign-up</a></li>
+          <li><a href="partnership.html">Partnership Agreement</a></li>
+          <li><a href="verify.html">I-verify ang Membership ID</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Alamin</summary>
+        <ul>
+          <li><a href="bangon.html">BANGON Platform</a></li>
+          <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <!-- A real href, not a bare <a>: without one the element is not
+               focusable and screen readers do not announce it. The Messenger
+               script overwrites this with the m.me deep link at runtime, so
+               the Page ID is not duplicated here and contact.html is the
+               no-JS fallback. -->
+          <li><a href="contact.html" data-messenger="footer">Messenger</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Legal</summary>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="cookies.html">Cookie Policy</a></li>
+          <li><a href="accessibility.html">Accessibility</a></li>
+        </ul>
+      </details>
+    </div>
+    <div class="footer-legal">
+      <p class="footer-legal-line">
+        &copy; <span id="year">2026</span> Partido Bangon Bangsamoro. Lahat ng karapatan ay nakalaan.
+      </p>
+      <p class="footer-legal-last">
+        Paid for by Partido Bangon Bangsamoro &middot; Subject to COMELEC campaign finance and
+        fair-election disclosure rules. &middot;
+        <button type="button" class="link-btn" data-cookie-prefs>Cookie Preferences</button>
+      </p>
+    </div>
+  </div>
+</footer>
+<nav class="bottom-bar no-print" aria-label="Mabilisang nabigasyon">
+  <a href="home.html">Simula</a>
+  <a href="bangon.html">BANGON Platform</a>
+  <a href="contact.html">Contact</a>
+  <a href="membership.html" class="bar-cta">Maging Miyembro</a>
+</nav>
+
+<script>
+  window.PBB_SUPABASE_URL       = "";
+  window.PBB_SUPABASE_ANON_KEY  = "";
+  window.PBB_TURNSTILE_SITE_KEY = "";
+  window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
+</script>
+<script src="assets/pbb-app.js"></script>
+<script src="assets/pbb-verify.js"></script>
+<script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
+<script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
+<script>
+  window.addEventListener('load', function () {
+    if (window.PBB_FORMS_READY || window.PBB_VERIFY_READY) return;
+    if (window.console && console.error) {
+      console.error('[PBB] the form controller for this page never ran — every button on this form is inert. Check that it returns 200 and is not blocked by CSP.');
+    }
+    var form = document.querySelector('#memberForm, #joinForm, #apForm, #verifyForm');
+    if (!form || form.querySelector('[data-pbb-dead]')) return;
+    var p = document.createElement('p');
+    p.setAttribute('role', 'alert');
+    p.setAttribute('data-pbb-dead', '');
+    p.style.cssText = 'margin:0 0 1rem;padding:.85rem 1rem;border-radius:8px;background:#fdecea;color:#8a1a14;border:1px solid #b3261e;font:600 .95rem/1.5 system-ui,sans-serif';
+    p.textContent = 'Hindi gumagana ang form sa ngayon dahil may bahagi ng pahina na hindi na-load. Pakisubukan i-refresh. Kung magpatuloy ito, mag-message sa aming Facebook Page at tutulungan ka naming makapagpalista.';
+    form.insertBefore(p, form.firstChild);
+  });
+</script>
+
+</body>
+</html>

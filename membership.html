@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="tl" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- ============================================================================
+     SEO
+     Each of the three form pages targets a distinct search intent, so each has
+     its own title, description, canonical, H1 and FAQ set. They were one page
+     (join.html) with three anchors, which meant one title competing for three
+     different queries and no way for Google to send "paano maging miyembro ng
+     PBB" to anything more specific than the top of a long document.
+
+     The FAQPage schema below mirrors the VISIBLE FAQ near the bottom of this
+     page, question for question. Structured data that describes content the
+     visitor cannot see is a manual-action risk, not a ranking trick.
+     ============================================================================ -->
+
+<title>Membership Form — Maging Miyembro ng PBB | PBB</title>
+<meta name="description" content="Sagutan ang opisyal na PBB membership form at kumuha ng Membership ID na may litrato at lagda. Libre, mga 3 minuto, kaya sa cellphone.">
+<meta name="keywords" content="PBB membership form, maging miyembro ng Partido Bangon Bangsamoro, PBB membership ID, BARMM political party membership, sumali sa PBB">
+<meta name="theme-color" content="#063D1B">
+<link rel="canonical" href="https://www.bangonbangsamoro.com/membership.html">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Partido Bangon Bangsamoro">
+<meta property="og:locale" content="tl_PH">
+<meta property="og:title" content="Membership Form — Maging Miyembro ng PBB">
+<meta property="og:description" content="Apat na hakbang, mga 3 minuto. May Membership ID ka agad na may litrato at lagda mo, na puwedeng i-print at i-verify.">
+<meta property="og:url" content="https://www.bangonbangsamoro.com/membership.html">
+<meta property="og:image" content="https://www.bangonbangsamoro.com/assets/images/bangon-platform.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="893">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Membership Form — Maging Miyembro ng PBB">
+<meta name="twitter:description" content="Apat na hakbang, mga 3 minuto. May Membership ID ka agad.">
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/pbb-logo-256.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/pbb-tokens.css">
+<link rel="stylesheet" href="assets/pbb-site.css">
+<link rel="stylesheet" href="assets/site-widgets.css">
+<link rel="stylesheet" href="assets/pbb-join-popup.css">
+<link rel="stylesheet" href="assets/pbb-forms.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Simula", "item": "https://www.bangonbangsamoro.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Sumali", "item": "https://www.bangonbangsamoro.com/join.html" },
+        { "@type": "ListItem", "position": 3, "name": "Membership Form", "item": "https://www.bangonbangsamoro.com/membership.html" }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Paano maging miyembro ng Partido Bangon Bangsamoro",
+      "description": "Apat na hakbang para maging opisyal na miyembro ng PBB at kumuha ng Membership ID.",
+      "totalTime": "PT3M",
+      "supply": [
+        { "@type": "HowToSupply", "name": "Cellphone number" },
+        { "@type": "HowToSupply", "name": "Litrato (camera o upload)" },
+        { "@type": "HowToSupply", "name": "Precinct number (opsyonal)" }
+      ],
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Ilagay ang iyong detalye", "text": "Buong pangalan, cellphone number, petsa ng kapanganakan, probinsya, munisipyo, barangay, at precinct number kung alam mo." },
+        { "@type": "HowToStep", "position": 2, "name": "Kunan ng litrato", "text": "Gamitin ang camera ng cellphone, o mag-upload ng litratong nasa telepono mo." },
+        { "@type": "HowToStep", "position": 3, "name": "Lagdaan", "text": "Lagdaan gamit ang daliri sa screen, o ang mouse kung nasa computer ka." },
+        { "@type": "HowToStep", "position": 4, "name": "I-download ang iyong ID", "text": "Awtomatikong gagawin ang iyong PBB Membership ID. Puwedeng i-download bilang PDF para i-print, o bilang larawan." }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Magkano ang bayad para maging miyembro ng PBB?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Wala. Libre ang membership sa Partido Bangon Bangsamoro, at libre rin ang Membership ID. Walang sinuman ang dapat maningil sa'yo para dito. Kung may humingi ng bayad, iulat ito sa hotline na 0966 301 8777." }
+        },
+        {
+          "@type": "Question",
+          "name": "Sino ang puwedeng maging miyembro ng PBB?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Bukas ang membership sa sinumang residente ng BARMM na naniniwala sa BANGON platform — sa lima nitong probinsya, tatlong komponent na lungsod, at sa Special Geographic Area. Puwede ring sumali ang mga Bangsamoro na nasa labas ng rehiyon. Ang wala pang 18 anyos ay kailangang may pahintulot ng magulang o guardian." }
+        },
+        {
+          "@type": "Question",
+          "name": "Kailangan ko bang malaman ang precinct number ko?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hindi kinakailangan. Opsyonal ang precinct number — puwede mong laktawan at tutulungan ka ng coordinator na hanapin ito. Nasa voter's ID mo ito, o sa precinct finder ng COMELEC." }
+        },
+        {
+          "@type": "Question",
+          "name": "Ano ang gagawin sa litrato at lagda ko?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sa iyong Membership ID lang ito gagamitin. Hindi ito ipapakita sa publiko, hindi ipinapasa sa ibang organisasyon, at hindi lumalabas sa verification page. Kung magbitiw ka sa membership, buburahin ang litrato at lagda pagkalipas ng 90 araw." }
+        },
+        {
+          "@type": "Question",
+          "name": "Government ID ba ang PBB Membership ID?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Hindi. Patunay lang ito ng membership sa partido. Hindi ito kapalit ng voter's ID, national ID, o anumang opisyal na pagkakakilanlan ng gobyerno." }
+        },
+        {
+          "@type": "Question",
+          "name": "Paano kung mahina ang signal habang nag-si-sign up ako?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Naka-save ang iyong sagot sa browser at awtomatikong ipapadala pagbalik ng signal. Sasabihin sa'yo na naka-queue ito — hindi kami magsasabing natanggap na namin kung hindi pa. Ang ID ay may markang PENDING hangga't hindi pa ito nakakarating sa amin." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Laktawan papunta sa nilalaman</a>
+
+<div class="outbox-banner no-print" id="outboxBanner" hidden>
+  May naka-queue kang sign-up na hindi pa naipapadala. Awtomatiko itong susubukan ulit pagbalik ng signal.
+</div>
+
+<header class="site">
+  <div class="wrap header-inner">
+    <a class="brand" href="home.html">
+      <img src="assets/pbb-logo-128.png" width="38" height="38" alt="">
+      <span class="brand-text">
+        <strong>Partido Bangon Bangsamoro</strong>
+        <small>Babangon Tayo · 2026</small>
+      </span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button"
+            aria-expanded="false" aria-controls="primary-nav" aria-label="Buksan ang menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="primary-nav" aria-label="Pangunahing nabigasyon">
+      <ul>
+        <li><a href="home.html">Simula</a></li>
+        <li><a href="bangon.html">BANGON Platform</a></li>
+        <li><a href="about.html">About PBB</a></li>
+        <li><a href="voter-education.html">Paano Bomoto?</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li class="nav-cta"><a href="#form">Sagutan ang Form</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero hero-compact">
+    <div class="wrap">
+      <ol class="breadcrumb">
+        <li><a href="home.html">Simula</a></li>
+        <li><a href="join.html">Sumali</a></li>
+        <li>Membership Form</li>
+      </ol>
+      <h1>Maging miyembro ng Partido Bangon Bangsamoro</h1>
+      <p class="lede">
+        Ito ang opisyal na membership form ng PBB. Libre, mga tatlong minuto, at kayang
+        gawin sa cellphone. Sa dulo, may <strong>PBB Membership ID</strong> ka na may litrato
+        at lagda mo — puwedeng i-download, i-print, at i-verify.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="#form">Simulan ang form</a>
+        <a class="btn btn-ghost" href="#faq">Mga madalas itanong</a>
+      </div>
+    </div>
+  </section>
+
+  <figure class="page-figure page-figure--lede">
+    <a class="page-figure__zoom" href="assets/images/engine-of-reform.jpg"
+       data-zoom-label="Buksan nang buo"
+       aria-label="Buksan nang buo ang larawan: Ang miyembro ang makina ng repormang ito — doktor, guro, inhinyero, at kabataan ng BARMM.">
+      <img src="assets/images/engine-of-reform.jpg"
+           width="1600" height="893"
+           loading="eager"
+           decoding="async"
+           fetchpriority="high"
+           alt="Diagram ng &quot;The Engine of Reform: Youth and Professionals&quot;, na nagpapakita ng edukadong kabataan at civil society bilang batayan ng elektoral na kapangyarihan, na may hinihinging meritokrasya at transparency.">
+    </a>
+    <figcaption>Ang miyembro ang makina ng repormang ito — doktor, guro, inhinyero, at kabataan ng BARMM.</figcaption>
+  </figure>
+
+
+  
+
+
+  <section>
+    <div class="wrap">
+      <nav class="form-tabs" aria-label="Mga form ng PBB">
+        <a class="form-tab" href="membership.html" aria-current="page">Membership + ID</a>
+        <a class="form-tab" href="volunteer.html">Volunteer</a>
+        <a class="form-tab" href="partnership.html">Partnership</a>
+      </nav>
+
+      <!-- Search-intent copy: someone landing from "paano maging miyembro ng
+           PBB" wants these four facts before they will start a form. -->
+      <div class="section-head">
+        <p class="eyebrow">Bago ka magsimula</p>
+        <h2>Apat na bagay na dapat mong malaman</h2>
+      </div>
+
+      <div class="grid-auto" style="margin-bottom:var(--pbb-space-6)">
+        <div class="card">
+          <h3>Libre ang lahat</h3>
+          <p style="margin:0">Walang bayad ang membership at walang bayad ang ID. Kung may
+             maningil sa'yo, iulat sa <a href="tel:+639663018777">0966 301 8777</a>.</p>
+        </div>
+        <div class="card">
+          <h3>Mga 3 minuto</h3>
+          <p style="margin:0">Apat na hakbang: detalye, litrato, lagda, ID. Puwedeng ipagpatuloy
+             kung maputol — naka-save ang sagot mo sa cellphone.</p>
+        </div>
+        <div class="card">
+          <h3>Kailangan lang: numero at litrato</h3>
+          <p style="margin:0">Cellphone number at litrato. Opsyonal ang email at ang precinct
+             number — puwede mong laktawan ang huli.</p>
+        </div>
+        <div class="card">
+          <h3>Ligtas ang detalye mo</h3>
+          <p style="margin:0">Sensitive personal information ang pagiging kasapi sa partido sa
+             ilalim ng RA 10173. Hindi namin ito ibinebenta, ipinapasa, o inilalathala.</p>
+        </div>
+      </div>
+
+      <!-- ================= THE FORM ================= -->
+      <div id="form">
+        <div class="section-head">
+          <h2>PBB Membership Form</h2>
+          <p>Apat na hakbang. Makikita mo sa itaas kung nasaan ka na.</p>
+        </div>
+
+        <ol class="steps" id="memberSteps">
+          <li aria-current="step" data-step="1">1. Detalye</li>
+          <li data-step="2">2. Litrato</li>
+          <li data-step="3">3. Lagda</li>
+          <li data-step="4">4. Iyong ID</li>
+        </ol>
+
+        <form class="card" id="memberForm" novalidate>
+
+          <div class="step-panel" data-panel="1">
+            <h3>Ang iyong detalye</h3>
+
+            <div class="field">
+              <label for="mFullName">Buong pangalan</label>
+              <input id="mFullName" name="mFullName" type="text" autocomplete="name" required maxlength="120"
+                     placeholder="Hal: Aminah T. Macapagal">
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="mPhone">Cellphone number</label>
+                <input id="mPhone" name="mPhone" type="tel" inputmode="tel" autocomplete="tel"
+                       required maxlength="20" placeholder="0917 123 4567">
+              </div>
+              <div class="field">
+                <label for="mBirth">Petsa ng kapanganakan</label>
+                <input id="mBirth" name="mBirth" type="date" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="mEmail">Email address <span style="font-weight:400;color:var(--pbb-ink-dark-soft)">(opsyonal)</span></label>
+              <input id="mEmail" name="mEmail" type="email" autocomplete="email" maxlength="254">
+            </div>
+
+            <div class="field">
+              <label for="mProvince">Probinsya</label>
+              <select id="mProvince" name="mProvince" required>
+                <option value="" disabled selected>Piliin ang probinsya</option>
+                <option value="maguindanao_norte">Maguindanao del Norte</option>
+                <option value="maguindanao_sur">Maguindanao del Sur</option>
+                <option value="lanao_del_sur">Lanao del Sur</option>
+                <option value="basilan">Basilan (maliban sa Isabela City)</option>
+                <option value="tawi_tawi">Tawi-Tawi</option>
+                <option value="cotabato_city">Cotabato City</option>
+                <option value="lamitan_city">Lamitan City</option>
+                <option value="marawi_city">Marawi City</option>
+                <option value="sga_cotabato">Special Geographic Area (8 bagong munisipyo)</option>
+                <option value="outside_barmm">Labas ng BARMM</option>
+              </select>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="mMunicipality">Munisipyo / Lungsod</label>
+                <input id="mMunicipality" name="mMunicipality" type="text" required maxlength="120"
+                       autocomplete="address-level2" placeholder="Hal: Sultan Kudarat">
+              </div>
+              <div class="field">
+                <label for="mBarangay">Barangay</label>
+                <input id="mBarangay" name="mBarangay" type="text" required maxlength="120"
+                       autocomplete="address-level3" placeholder="Hal: Poblacion">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="mPrecinct">Precinct No. <span style="font-weight:400;color:var(--pbb-ink-dark-soft)">(opsyonal)</span></label>
+              <input id="mPrecinct" name="mPrecinct" type="text" inputmode="numeric" maxlength="20"
+                     placeholder="Hal: 0123A">
+              <p class="form-note">
+                Nasa voter's ID mo ito, o sa precinct finder ng COMELEC. Kung hindi mo alam ngayon,
+                laktawan lang — matutulungan ka ng coordinator.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="mLang">Anong wika ang gusto mong gamitin namin?</label>
+              <select id="mLang" name="mLang">
+                <option value="tl">Tagalog / Filipino</option>
+                <option value="mdh">Maguindanaon</option>
+                <option value="mrw">Maranao</option>
+                <option value="tsg">Tausug</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-check">
+                <input type="checkbox" id="mConsent" name="mConsent" required>
+                <span>
+                  Sumasang-ayon ako na maging miyembro ng Partido Bangon Bangsamoro at gamitin ang
+                  aking detalye para sa membership at coordination. Naiintindihan kong ang
+                  impormasyon tungkol sa political affiliation ay <em>sensitive personal information</em>
+                  sa ilalim ng RA 10173, at maaari akong tumigil anumang oras sa pag-text ng STOP.
+                </span>
+              </label>
+            </div>
+
+            <div class="field pbb-captcha" hidden>
+              <div class="cf-turnstile" data-sitekey="" data-theme="light" data-size="flexible"></div>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="button" data-next="2">Susunod: Litrato →</button>
+          </div>
+
+          <div class="step-panel" data-panel="2" hidden>
+            <h3>Iyong litrato</h3>
+            <p class="form-note" style="margin-bottom:var(--pbb-space-4)">
+              Para sa iyong ID. Harap ang mukha, maliwanag na lugar. Hindi ito lalabas sa publiko.
+            </p>
+
+            <div class="capture-box">
+              <video id="photoVideo" playsinline muted hidden></video>
+              <img class="preview" id="photoPreview" alt="Preview ng iyong litrato" hidden>
+              <canvas id="photoCanvas" hidden></canvas>
+
+              <div class="capture-actions">
+                <button class="btn btn-outline" type="button" id="photoStart">Buksan ang camera</button>
+                <button class="btn btn-primary" type="button" id="photoShoot" hidden>Kunan ng litrato</button>
+                <button class="btn btn-outline" type="button" id="photoUploadBtn">Mag-upload ng litrato</button>
+                <button class="btn btn-outline" type="button" id="photoClear" hidden>Ulitin</button>
+              </div>
+              <input type="file" id="photoFile" accept="image/*" capture="user" hidden>
+              <p class="form-status" id="photoStatus" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="step-actions">
+              <button class="btn btn-outline" type="button" data-prev="1">← Bumalik</button>
+              <button class="btn btn-primary" type="button" data-next="3">Susunod: Lagda →</button>
+            </div>
+          </div>
+
+          <div class="step-panel" data-panel="3" hidden>
+            <h3>Iyong lagda</h3>
+            <p class="form-note" style="margin-bottom:var(--pbb-space-4)">
+              Gamitin ang daliri mo sa cellphone, o ang mouse sa computer. Ito ang lalabas sa iyong ID.
+            </p>
+
+            <canvas id="signaturePad" aria-label="Lagdaan dito gamit ang daliri o mouse"></canvas>
+            <div class="sign-hint">
+              <span class="form-note" style="margin:0">Lagdaan sa loob ng kahon sa itaas.</span>
+              <button class="btn btn-outline" type="button" id="signClear">Burahin</button>
+            </div>
+            <p class="form-status" id="signStatus" role="status" aria-live="polite"></p>
+
+            <div class="step-actions">
+              <button class="btn btn-outline" type="button" data-prev="2">← Bumalik</button>
+              <button class="btn btn-gold" type="submit" id="memberSubmit">Isumite at gawin ang ID</button>
+            </div>
+            <p class="form-status" id="memberStatus" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="step-panel" data-panel="4" hidden>
+            <h3>Handa na ang iyong PBB Membership ID</h3>
+            <p class="form-note" id="idSummary" style="margin-bottom:var(--pbb-space-4)"></p>
+
+            <div class="id-preview">
+              <figure style="margin:0">
+                <canvas id="idFront" width="1011" height="638" role="img"
+                        aria-label="Harap ng iyong PBB Membership ID"></canvas>
+                <figcaption class="form-note">Harap</figcaption>
+              </figure>
+              <figure style="margin:0">
+                <canvas id="idBack" width="1011" height="638" role="img"
+                        aria-label="Likod ng iyong PBB Membership ID"></canvas>
+                <figcaption class="form-note">Likod</figcaption>
+              </figure>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:var(--pbb-space-3);margin-top:var(--pbb-space-5)">
+              <button class="btn btn-gold" type="button" id="idDownloadPdf">⬇ I-download bilang PDF (para i-print)</button>
+              <button class="btn btn-outline" type="button" id="idDownloadPng">⬇ I-download bilang larawan</button>
+              <a class="btn btn-outline" href="verify.html" id="idVerifyLink">I-verify ang ID na ito</a>
+            </div>
+
+            <div class="callout" style="margin-top:var(--pbb-space-5)">
+              <p style="margin:0">
+                <strong>Paano i-print:</strong> piliin ang PDF, i-print sa <em>actual size</em> o 100% scale
+                (huwag "fit to page"), sa PVC card o makapal na papel. Ang sukat ay CR80 — kapareho ng ATM card.
+              </p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- ================= FAQ =================
+           Mirrors the FAQPage schema in <head>, question for question. -->
+      <div id="faq" style="margin-top:var(--pbb-space-8)">
+        <div class="section-head">
+          <p class="eyebrow">Mga madalas itanong</p>
+          <h2>Tungkol sa PBB membership</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="disclose">
+            <summary>Magkano ang bayad para maging miyembro ng PBB?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Wala. Libre ang membership sa Partido Bangon Bangsamoro, at libre rin
+              ang Membership ID. Walang sinuman ang dapat maningil sa'yo para dito. Kung may humingi ng
+              bayad, iulat ito sa hotline na <a href="tel:+639663018777">0966 301 8777</a>.</p>
+            </div>
+          </details>
+
+          <details class="disclose">
+            <summary>Sino ang puwedeng maging miyembro ng PBB?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Bukas ang membership sa sinumang residente ng BARMM na naniniwala sa
+              BANGON platform — sa lima nitong probinsya, tatlong komponent na lungsod, at sa Special
+              Geographic Area. Puwede ring sumali ang mga Bangsamoro na nasa labas ng rehiyon. Ang wala
+              pang 18 anyos ay kailangang may pahintulot ng magulang o guardian.</p>
+            </div>
+          </details>
+
+          <details class="disclose">
+            <summary>Kailangan ko bang malaman ang precinct number ko?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Hindi kinakailangan. Opsyonal ang precinct number — puwede mong
+              laktawan at tutulungan ka ng coordinator na hanapin ito. Nasa voter's ID mo ito, o sa
+              precinct finder ng COMELEC.</p>
+            </div>
+          </details>
+
+          <details class="disclose">
+            <summary>Ano ang gagawin sa litrato at lagda ko?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Sa iyong Membership ID lang ito gagamitin. Hindi ito ipapakita sa
+              publiko, hindi ipinapasa sa ibang organisasyon, at hindi lumalabas sa
+              <a href="verify.html">verification page</a>. Kung magbitiw ka sa membership, buburahin
+              ang litrato at lagda pagkalipas ng 90 araw.</p>
+            </div>
+          </details>
+
+          <details class="disclose">
+            <summary>Government ID ba ang PBB Membership ID?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Hindi. Patunay lang ito ng membership sa partido. Hindi ito kapalit
+              ng voter's ID, national ID, o anumang opisyal na pagkakakilanlan ng gobyerno.</p>
+            </div>
+          </details>
+
+          <details class="disclose">
+            <summary>Paano kung mahina ang signal habang nag-si-sign up ako?</summary>
+            <div class="disclose-body">
+              <p style="margin:0">Naka-save ang iyong sagot sa browser at awtomatikong ipapadala pagbalik
+              ng signal. Sasabihin sa'yo na naka-queue ito — hindi kami magsasabing natanggap na namin
+              kung hindi pa. Ang ID ay may markang <strong>PENDING</strong> hangga't hindi pa ito
+              nakakarating sa amin.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:var(--pbb-space-6)">
+        <p style="margin-bottom:.4em"><strong>Gusto mo ring tumulong sa kampanya?</strong></p>
+        <p style="margin:0">
+          Magkaiba ang membership at volunteering — puwede mong gawin pareho.
+          <a href="volunteer.html">Mag-sign up bilang volunteer</a>, o kung kumakatawan ka sa isang
+          organisasyon, <a href="partnership.html">tingnan ang partnership agreement</a>.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <h2 class="sr-only">Footer</h2>
+    <div class="footer-grid">
+      <details class="foot-group">
+        <summary class="footer-h">Sumali</summary>
+        <ul>
+          <li><a href="membership.html">Membership Form</a></li>
+          <li><a href="volunteer.html">Volunteer Sign-up</a></li>
+          <li><a href="partnership.html">Partnership Agreement</a></li>
+          <li><a href="verify.html">I-verify ang Membership ID</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Alamin</summary>
+        <ul>
+          <li><a href="bangon.html">BANGON Platform</a></li>
+          <li><a href="about.html">About PBB</a></li>
+          <li><a href="persona.html">Para kanino ang BANGON</a></li>
+          <li><a href="voter-education.html">Paano Bomoto?</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <!-- A real href, not a bare <a>: without one the element is not
+               focusable and screen readers do not announce it. The Messenger
+               script overwrites this with the m.me deep link at runtime, so
+               the Page ID is not duplicated here and contact.html is the
+               no-JS fallback. -->
+          <li><a href="contact.html" data-messenger="footer">Messenger</a></li>
+        </ul>
+      </details>
+      <details class="foot-group">
+        <summary class="footer-h">Legal</summary>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="cookies.html">Cookie Policy</a></li>
+          <li><a href="accessibility.html">Accessibility</a></li>
+        </ul>
+      </details>
+    </div>
+    <div class="footer-legal">
+      <p class="footer-legal-line">
+        &copy; <span id="year">2026</span> Partido Bangon Bangsamoro. Lahat ng karapatan ay nakalaan.
+      </p>
+      <p class="footer-legal-last">
+        Paid for by Partido Bangon Bangsamoro &middot; Subject to COMELEC campaign finance and
+        fair-election disclosure rules. &middot;
+        <button type="button" class="link-btn" data-cookie-prefs>Cookie Preferences</button>
+      </p>
+    </div>
+  </div>
+</footer>
+<nav class="bottom-bar no-print" aria-label="Mabilisang nabigasyon">
+  <a href="home.html">Simula</a>
+  <a href="bangon.html">BANGON Platform</a>
+  <a href="contact.html">Contact</a>
+  <a href="#form" class="bar-cta">Sagutan ang Form</a>
+</nav>
+
+<button class="back-to-top no-print" id="backToTop" type="button" aria-label="Bumalik sa itaas">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script>
+  window.PBB_SUPABASE_URL       = "";
+  window.PBB_SUPABASE_ANON_KEY  = "";
+  window.PBB_TURNSTILE_SITE_KEY = "";
+  window.PBB_MESSENGER_ID       = "914129215127738";
+
+  /* "Sumali sa PBB" popup. Set enabled:false to switch it off site-wide.
+     It never auto-opens on the form pages, never before both the dwell time
+     and the scroll depth are met, and never while the cookie banner is up. */
+  window.PBB_JOIN_POPUP = {
+    enabled: true,
+    delaySeconds: 25,
+    scrollPercent: 45,
+    cooldownDays: 14,
+    exitIntent: true
+  };
+</script>
+<script src="assets/pbb-app.js"></script>
+<script src="assets/pbb-id.js"></script>
+<script src="assets/join.js"></script>
+<script src="assets/pbb-messenger.js" defer></script>
+<script src="assets/pbb-join-popup.js" defer></script>
+<script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-hide-host-badge.js" defer></script>
+<script>
+  window.addEventListener('load', function () {
+    if (window.PBB_FORMS_READY || window.PBB_VERIFY_READY) return;
+    if (window.console && console.error) {
+      console.error('[PBB] the form controller for this page never ran — every button on this form is inert. Check that it returns 200 and is not blocked by CSP.');
+    }
+    var form = document.querySelector('#memberForm, #joinForm, #apForm, #verifyForm');
+    if (!form || form.querySelector('[data-pbb-dead]')) return;
+    var p = document.createElement('p');
+    p.setAttribute('role', 'alert');
+    p.setAttribute('data-pbb-dead', '');
+    p.style.cssText = 'margin:0 0 1rem;padding:.85rem 1rem;border-radius:8px;background:#fdecea;color:#8a1a14;border:1px solid #b3261e;font:600 .95rem/1.5 system-ui,sans-serif';
+    p.textContent = 'Hindi gumagana ang form sa ngayon dahil may bahagi ng pahina na hindi na-load. Pakisubukan i-refresh. Kung magpatuloy ito, mag-message sa aming Facebook Page at tutulungan ka naming makapagpalista.';
+    form.insertBefore(p, form.firstChild);
+  });
+</script>
+
+</body>
+</html>
