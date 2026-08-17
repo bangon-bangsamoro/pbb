@@ -1,0 +1,771 @@
+/* ==========================================================================
+   PBB CAMPAIGN SITE — page chrome
+   --------------------------------------------------------------------------
+   Header, navigation, hero, footer, and the handful of page-level patterns
+   shared by home.html, the six BANGON domain pages, join.html and verify.html.
+
+   Depends on pbb-tokens.css (load that first).
+   Mobile-first: the base rules describe a 360px phone; min-width queries add
+   the larger layouts.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   HEADER + NAV
+   -------------------------------------------------------------------------- */
+
+header.site {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--pbb-forest-deep);
+  border-bottom: 1px solid #ffffff1a;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--pbb-space-3);
+  min-height: 64px;
+  padding-block: var(--pbb-space-2);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--pbb-space-3);
+  text-decoration: none;
+  color: var(--pbb-white);
+  margin-right: auto;
+}
+.brand img {
+  width: 38px; height: 38px;
+  flex: none;
+  border-radius: 50%;
+  transition: transform 0.3s var(--pbb-ease-out);
+}
+.brand:hover img { transform: rotate(-6deg) scale(1.05); }
+.brand-text strong {
+  display: block;
+  font-family: var(--pbb-font-display);
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+.brand-text small {
+  display: block;
+  font-family: var(--pbb-font-label);
+  font-weight: 600;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pbb-gold-bright);
+}
+
+.nav-toggle {
+  width: var(--pbb-tap);
+  height: var(--pbb-tap);
+  flex: none;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid #ffffff40;
+  border-radius: var(--pbb-radius-sm);
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px; height: 2px;
+  background: var(--pbb-white);
+  transition: transform 0.25s var(--pbb-ease-out), opacity 0.25s var(--pbb-ease-out);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+nav#primary-nav {
+  position: fixed;
+  inset: 64px 0 0 auto;
+  width: min(86vw, 340px);
+  background: var(--pbb-forest-deep);
+  border-left: 1px solid #ffffff1a;
+  transform: translateX(100%);
+  transition: transform 0.32s var(--pbb-ease-out);
+  overflow-y: auto;
+  padding: var(--pbb-space-4);
+}
+nav#primary-nav.open { transform: translateX(0); }
+
+nav#primary-nav ul {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pbb-space-1);
+}
+nav#primary-nav a {
+  display: flex;
+  align-items: center;
+  min-height: var(--pbb-tap);
+  padding: var(--pbb-space-2) var(--pbb-space-3);
+  border-radius: var(--pbb-radius-sm);
+  color: var(--pbb-ink);
+  font-family: var(--pbb-font-label);
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+nav#primary-nav a:hover,
+nav#primary-nav a[aria-current="page"] {
+  background: #ffffff14;
+  color: var(--pbb-gold-bright);
+}
+nav#primary-nav .nav-cta a {
+  justify-content: center;
+  margin-top: var(--pbb-space-3);
+  background-image: var(--pbb-gold-metal);
+  color: var(--pbb-forest-deep);
+  font-weight: 700;
+}
+
+@media (min-width: 1080px) {
+  .nav-toggle { display: none; }
+  nav#primary-nav {
+    position: static;
+    width: auto;
+    transform: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  nav#primary-nav ul { flex-direction: row; align-items: center; gap: var(--pbb-space-1); }
+  nav#primary-nav .nav-cta a { margin-top: 0; padding-inline: var(--pbb-space-4); }
+}
+
+/* --------------------------------------------------------------------------
+   HERO
+   -------------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--pbb-forest-deep);
+  background-image:
+    radial-gradient(900px 420px at 15% -10%, rgba(201, 162, 39, 0.16), transparent),
+    linear-gradient(180deg, #063D1B 0%, #0A4A22 100%);
+  color: var(--pbb-ink);
+  padding-block: var(--pbb-space-7);
+}
+.hero h1 { color: var(--pbb-white); }
+.hero .lede {
+  font-size: var(--pbb-text-lg);
+  color: var(--pbb-ink-soft);
+  max-width: 60ch;
+}
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pbb-space-3);
+  margin-top: var(--pbb-space-5);
+}
+@media (min-width: 620px) {
+  .hero-actions { flex-direction: row; flex-wrap: wrap; }
+}
+
+.hero-compact { padding-block: var(--pbb-space-6); }
+
+/* --------------------------------------------------------------------------
+   PAGE PATTERNS
+   -------------------------------------------------------------------------- */
+
+.section-head { max-width: 68ch; margin-bottom: var(--pbb-space-5); }
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pbb-space-2);
+  list-style: none;
+  margin: 0 0 var(--pbb-space-4);
+  padding: 0;
+  font-family: var(--pbb-font-label);
+  font-size: var(--pbb-text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.breadcrumb a { color: var(--pbb-gold-bright); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb li + li::before { content: "› "; color: var(--pbb-ink-soft); }
+
+.pillar-card { display: flex; flex-direction: column; gap: var(--pbb-space-3); height: 100%; }
+.pillar-card-head { display: flex; align-items: center; gap: var(--pbb-space-3); }
+.pillar-card h3 { margin: 0; font-size: var(--pbb-text-lg); }
+.pillar-card p { margin: 0; font-size: 0.95rem; color: var(--pbb-ink-dark-soft); }
+.pillar-card .more {
+  margin-top: auto;
+  font-family: var(--pbb-font-label);
+  font-weight: 700;
+  font-size: var(--pbb-text-sm);
+  color: var(--pbb-forest);
+}
+
+.persona-flag {
+  align-self: flex-start;
+  font-family: var(--pbb-font-label);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* NOT --pbb-gold-deep here: #8B6914 on this tinted chip is 4.42:1, just
+     under AA. #7E5F12 on the same background is 5.16:1. The chip is small
+     uppercase text, which is exactly where the shortfall would be felt. */
+  color: #7E5F12;
+  background: #F7EFD3;
+  border-radius: var(--pbb-radius-pill);
+  padding: 3px 10px;
+}
+
+.stat-row { display: grid; gap: var(--pbb-space-3); grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 720px) { .stat-row { grid-template-columns: repeat(4, 1fr); } }
+.stat {
+  background: var(--pbb-white);
+  border: 1px solid var(--pbb-forest-line);
+  border-radius: var(--pbb-radius);
+  padding: var(--pbb-space-4);
+}
+.stat b {
+  display: block;
+  font-family: var(--pbb-font-display);
+  font-size: var(--pbb-text-2xl);
+  color: var(--pbb-forest);
+  line-height: 1.1;
+}
+.stat span { font-size: var(--pbb-text-sm); color: var(--pbb-ink-dark-soft); }
+
+.showcase-frame {
+  border-radius: var(--pbb-radius);
+  overflow: hidden;
+  box-shadow: var(--pbb-shadow-lg);
+  background: var(--pbb-forest-deep);
+}
+figure.showcase { margin: 0 0 var(--pbb-space-5); }
+figure.showcase figcaption {
+  margin-top: var(--pbb-space-2);
+  font-size: var(--pbb-text-sm);
+  color: var(--pbb-ink-dark-soft);
+}
+
+.callout {
+  border-left: 4px solid var(--pbb-gold);
+  background: var(--pbb-forest-tint);
+  border-radius: 0 var(--pbb-radius) var(--pbb-radius) 0;
+  padding: var(--pbb-space-4);
+  margin-bottom: var(--pbb-space-4);
+}
+.callout > :last-child { margin-bottom: 0; }
+
+.lang-switch { display: flex; gap: var(--pbb-space-2); flex-wrap: wrap; margin-bottom: var(--pbb-space-4); }
+.lang-btn {
+  min-height: 40px;
+  padding: var(--pbb-space-2) var(--pbb-space-4);
+  border: 1.5px solid var(--pbb-forest);
+  border-radius: var(--pbb-radius-pill);
+  background: transparent;
+  color: var(--pbb-forest);
+  font-family: var(--pbb-font-label);
+  font-weight: 600;
+  font-size: var(--pbb-text-sm);
+  cursor: pointer;
+}
+.lang-btn[aria-pressed="true"] { background: var(--pbb-forest); color: var(--pbb-white); }
+
+.outbox-banner {
+  background: #FFF4D6;
+  border-bottom: 1px solid var(--pbb-gold);
+  color: #4A3B10;
+  font-family: var(--pbb-font-label);
+  font-size: var(--pbb-text-sm);
+  font-weight: 600;
+  padding: var(--pbb-space-3) var(--pbb-space-4);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   FOOTER
+   -------------------------------------------------------------------------- */
+
+footer.site {
+  background: var(--pbb-forest-deep);
+  color: var(--pbb-ink-soft);
+  padding-block: var(--pbb-space-6) var(--pbb-space-5);
+}
+/* Heading selector covers BOTH the legacy `h5` emitted by sync-chrome and the
+   `h2.footer-h` the pages were hand-migrated to in Aug 2026. `.footer-h` had
+   no rule anywhere, so 16 pages were rendering four full-size <h2> headings
+   inside the footer — the single largest contributor to the footer looking
+   "overpopulated" on a phone. Keep both selectors until sync-chrome is
+   re-run and the markup is uniform again. */
+footer.site h5,
+footer.site .footer-h {
+  font-family: var(--pbb-font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pbb-gold-bright);
+  margin: 0 0 var(--pbb-space-3);
+  font-weight: 700;
+}
+footer.site ul { list-style: none; margin: 0; padding: 0; }
+footer.site li { margin-bottom: var(--pbb-space-2); }
+footer.site a { color: var(--pbb-ink-soft); text-decoration: none; }
+footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline; }
+.footer-grid { display: grid; gap: var(--pbb-space-5); grid-template-columns: 1fr; }
+/* auto-fit rather than a fixed 4: home.html now ships three groups (the six
+   BANGON letter pages moved to the hub), the other pages still ship four.
+   Both lay out without a dead column during the migration. */
+@media (min-width: 720px) {
+  .footer-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+}
+
+/* --- Collapsible footer groups (mobile) ---------------------------------
+   The footer carries ~21 links. Stacked on a 380px phone that is roughly a
+   full extra screen of scroll below the content, which reads as a wall and
+   pushes the legal/COMELEC disclosure out of reach.
+
+   `<details>` is used rather than a JS accordion because the links stay in
+   the DOM (crawlable, findable with Ctrl+F, and Chrome auto-expands the
+   group on in-page find), and keyboard + screen-reader behaviour is native.
+
+   On >=720px the disclosure control is hidden and every group is forced
+   open, so desktop keeps the four-column layout it has today. */
+.foot-group > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pbb-space-3);
+  min-height: var(--pbb-tap);
+  padding-block: var(--pbb-space-2);
+  border-bottom: 1px solid #ffffff14;
+}
+.foot-group > summary::-webkit-details-marker { display: none; }
+.foot-group > summary::after {
+  content: "";
+  width: 8px; height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 160ms ease;
+  flex: none;
+}
+.foot-group[open] > summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+.foot-group > summary:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: 2px;
+}
+.foot-group > ul { padding-block: var(--pbb-space-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .foot-group > summary::after { transition: none; }
+}
+
+@media (min-width: 720px) {
+  .foot-group > summary { display: none; }
+  .foot-group > ul { display: block; padding-block: 0; }
+  /* Groups ship without `open`, so the UA collapses them. Desktop overrides
+     that with `display` on the content. Verified in current Chrome, Firefox
+     and Safari; if a future UA stops honouring it, ship `<details open>` and
+     strip the attribute below 720px instead. */
+}
+
+/* --- Persistent bottom action bar (mobile only) -------------------------
+   The conversion links (Sumali / membership / volunteer) previously lived
+   only in the footer, i.e. below every other link on the page. This lifts
+   them to a always-reachable bar and is what actually produces the "app"
+   feel — not a shorter footer.
+
+   Hidden at >=720px, where the sticky header nav already carries the CTA. */
+.bottom-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  background: var(--pbb-forest-deep);
+  border-top: 1px solid #ffffff1f;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-bar a {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pbb-tap);
+  padding: var(--pbb-space-2) var(--pbb-space-1);
+  font-family: var(--pbb-font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  /* Labels are the header's verbatim wording, so two of the four wrap to a
+     second line on a 380px screen. Wrapping is correct here; truncating or
+     shortening them would recreate the drift this bar is meant to avoid. */
+  line-height: 1.15;
+  hyphens: none;
+  color: var(--pbb-ink-soft);
+  text-decoration: none;
+}
+.bottom-bar a[aria-current="page"] { color: var(--pbb-gold-bright); }
+.bottom-bar a.bar-cta {
+  background-image: var(--pbb-gold-metal);
+  color: var(--pbb-ink-dark);
+  font-weight: 700;
+}
+.bottom-bar a:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: -3px;
+}
+
+/* Reserve the bar's height so it never covers the last line of the footer,
+   including the COMELEC disclosure. */
+@media (max-width: 719.98px) {
+  body { padding-bottom: calc(var(--pbb-tap) + 12px + env(safe-area-inset-bottom, 0px)); }
+  /* back-to-top is fixed at bottom:16px and would sit under the bar. */
+  .back-to-top { bottom: calc(var(--pbb-tap) + 28px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (min-width: 720px) {
+  .bottom-bar { display: none; }
+}
+
+@media print {
+  .bottom-bar { display: none; }
+}
+/* A control that must look like body text but behave like a button — used for
+   "Cookie Preferences". Replaces a long inline style="" attribute, which would
+   have needed a CSP hash or 'unsafe-inline' once vercel.json's CSP tightens. */
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-btn:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: 2px;
+}
+
+.footer-legal-line { margin: 0 0 0.5em; }
+.footer-legal-last { margin: 0; }
+
+.footer-legal {
+  margin-top: var(--pbb-space-5);
+  padding-top: var(--pbb-space-4);
+  border-top: 1px solid #ffffff1a;
+  font-size: var(--pbb-text-xs);
+  line-height: 1.7;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 16px; bottom: 16px;
+  z-index: 50;
+  width: var(--pbb-tap); height: var(--pbb-tap);
+  border-radius: 50%;
+  background-image: var(--pbb-gold-metal);
+  color: var(--pbb-forest-deep);
+  border: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--pbb-shadow);
+  cursor: pointer;
+}
+.back-to-top.show { display: flex; }
+
+/* --------------------------------------------------------------------------
+   MESSENGER
+   Floating action button + inline Messenger cards. Rendered by
+   assets/pbb-messenger.js; styles live here so they sit with the rest of the
+   page chrome and are cached with it.
+   -------------------------------------------------------------------------- */
+
+.msgr-fab {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.msgr-fab[hidden] { display: none; }
+
+.msgr-fab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--pbb-space-2);
+  min-height: var(--pbb-tap);
+  padding: 0 var(--pbb-space-4);
+  border-radius: var(--pbb-radius-pill);
+  /* Messenger brand gradient. Using it here is honest signposting — the link
+     really does open Messenger — rather than decoration. */
+  background: linear-gradient(135deg, #00B2FF 0%, #006AFF 50%, #A033FF 100%);
+  color: #fff;
+  font-family: var(--pbb-font-label);
+  font-weight: 700;
+  font-size: var(--pbb-text-sm);
+  text-decoration: none;
+  box-shadow: var(--pbb-shadow-lg);
+}
+.msgr-fab-btn:hover { filter: brightness(1.06); color: #fff; }
+
+.msgr-fab-close {
+  width: 30px;
+  height: 30px;
+  align-self: flex-start;
+  border-radius: 50%;
+  border: 1px solid #ffffff59;
+  background: var(--pbb-forest-deep);
+  color: var(--pbb-white);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Keep the Messenger button and the back-to-top button off each other on the
+   narrowest phones — they occupy opposite corners, but the label makes the
+   Messenger one wide. */
+@media (max-width: 380px) {
+  .msgr-fab-btn span { display: none; }
+  .msgr-fab-btn { padding: 0; width: var(--pbb-tap); justify-content: center; }
+}
+
+.msgr-card {
+  display: flex;
+  gap: var(--pbb-space-4);
+  align-items: flex-start;
+  background: var(--pbb-white);
+  border: 1px solid var(--pbb-forest-line);
+  border-left: 4px solid #006AFF;
+  border-radius: var(--pbb-radius);
+  padding: var(--pbb-space-5);
+  box-shadow: var(--pbb-shadow);
+}
+.msgr-card .msgr-icon {
+  flex: none;
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: grid;
+  place-content: center;
+  background: linear-gradient(135deg, #00B2FF 0%, #006AFF 50%, #A033FF 100%);
+  color: #fff;
+}
+.msgr-card h3 { margin-bottom: var(--pbb-space-2); }
+.msgr-card > div:last-child > :last-child { margin-bottom: 0; }
+
+/* Quick-reply chips that mirror the Messenger Persistent Menu, so the site
+   and the bot offer the same four doors. */
+.msgr-chips { display: flex; flex-wrap: wrap; gap: var(--pbb-space-2); margin-top: var(--pbb-space-3); }
+.msgr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: var(--pbb-space-2) var(--pbb-space-4);
+  border-radius: var(--pbb-radius-pill);
+  border: 1.5px solid #006AFF;
+  color: #0B4C9E;
+  background: #F2F7FF;
+  font-family: var(--pbb-font-label);
+  font-weight: 600;
+  font-size: var(--pbb-text-sm);
+  text-decoration: none;
+}
+.msgr-chip:hover { background: #E4EFFF; color: #0B4C9E; }
+
+/* ==========================================================================
+   SEGMENT PICKER — the first thing in the viewport on home.html
+   --------------------------------------------------------------------------
+   The question used to sit 1,350px down: 1.6 screens on a 390px phone, below
+   a hero and a full-bleed banner. Most visitors arriving from a boosted post
+   never reached it. It is now the first thing they see.
+
+   Deliberately NOT a modal or a gate. Everything below stays in the DOM, so
+   crawlers, no-JS visitors and anyone who ignores the question still get the
+   whole page. The picker degrades to six inert buttons and a normal hero.
+
+   Two cards per row on a phone. Six full-width rows would push the headline
+   off-screen and undo the point of moving the picker up.
+   ========================================================================== */
+
+.segment-hero .segment-q {
+  /* Looks like a heading, is not one — see the note in home.html. */
+  font-family: var(--pbb-font-display, inherit);
+  font-weight: 800;
+  margin: 0 0 .35rem;
+  font-size: clamp(1.35rem, 5.4vw, 1.9rem);
+  line-height: 1.2;
+  color: var(--pbb-white, #fff);
+}
+
+.segment-hero .segment-sub {
+  margin: 0 0 1rem;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: var(--pbb-cream, #f7efd3);
+  max-width: 46ch;
+}
+
+.segment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
+  margin: 0 0 .75rem;
+}
+
+@media (min-width: 700px) {
+  .segment-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+}
+
+.segment-card {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-height: 64px;              /* comfortably over the 48px touch target */
+  padding: .7rem .8rem;
+  text-align: left;
+  border: 2px solid rgba(255, 255, 255, .28);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--pbb-white, #fff);
+  font: inherit;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.segment-card:hover { background: rgba(255, 255, 255, .14); }
+
+.segment-card:focus-visible {
+  outline: 3px solid var(--pbb-gold-bright, #f0c420);
+  outline-offset: 2px;
+}
+
+/* The chosen card must be readable as chosen without relying on colour
+   alone — aria-pressed carries it for assistive tech, the check mark for
+   everyone else. */
+.segment-card[aria-pressed="true"] {
+  background: var(--pbb-gold, #c9a227);
+  border-color: var(--pbb-gold-bright, #f0c420);
+  color: var(--pbb-ink, #122016);
+}
+
+.segment-card[aria-pressed="true"] .segment-card-title::after {
+  content: " ✓";
+}
+
+.segment-card-title {
+  font-family: var(--pbb-font-label, inherit);
+  font-weight: 700;
+  font-size: .95rem;
+  line-height: 1.25;
+}
+
+.segment-card-sub {
+  font-size: .78rem;
+  line-height: 1.3;
+  opacity: .85;
+}
+
+.segment-card[aria-pressed="true"] .segment-card-sub { opacity: .95; }
+
+.segment-reset-row { margin: 0 0 .5rem; min-height: 1.5rem; }
+
+.segment-reset {
+  background: none;
+  border: 0;
+  padding: .25rem 0;
+  color: var(--pbb-gold-bright, #f0c420);
+  font: 600 .85rem/1.4 var(--pbb-font-label, inherit);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.segment-rule {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, .22);
+  margin: 1rem 0 1.1rem;
+}
+
+/* The headline and lede are rewritten in place when a segment is chosen.
+   Without this the swap is a jarring jump on a slow phone. */
+.segment-hero h1,
+.segment-hero .lede { transition: opacity .18s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .segment-card,
+  .segment-hero h1,
+  .segment-hero .lede { transition: none; }
+}
+
+/* ==========================================================================
+   "PARA SA'YO" — the two pillars nearest the chosen segment
+   --------------------------------------------------------------------------
+   Added content, not withheld content. The band is hidden until a segment is
+   known and stays hidden with JavaScript off, so a visitor who never answers
+   sees exactly the page they saw before. Nothing is removed from anyone.
+   ========================================================================== */
+
+.foryou-list {
+  display: grid;
+  gap: .85rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .foryou-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.foryou-card {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--pbb-gold, #c9a227);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--pbb-ink, #122016);
+  text-decoration: none;
+}
+
+.foryou-card:hover { background: var(--pbb-tint, #e8f3ea); }
+
+.foryou-card:focus-visible {
+  outline: 3px solid var(--pbb-forest, #0a6e2e);
+  outline-offset: 3px;
+}
+
+.foryou-head { display: flex; align-items: center; gap: .6rem; }
+
+.foryou-letter {
+  flex: 0 0 auto;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--pbb-forest-deep, #063d1b);
+  color: var(--pbb-gold-bright, #f0c420);
+  font-family: var(--pbb-font-display, inherit);
+  font-weight: 800;
+}
+
+.foryou-title {
+  font-family: var(--pbb-font-label, inherit);
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+.foryou-line { font-size: .95rem; line-height: 1.55; }
