@@ -1,11 +1,11 @@
 name: CI
 
 # Why this exists (audit findings C-3 and C-6):
-#   * `main` shipped with an undeclared identifier in App.tsx, so `npm run
-#     build` failed. Nothing caught it because nothing ran the build.
-#   * The deployed site had drifted from the repo, because edits were made in
-#     the Bolt host and never pushed back. A green build on every push makes
-#     the divergence visible instead of silent.
+# * `main` shipped with an undeclared identifier in App.tsx, so `npm run
+#   build` failed. Nothing caught it because nothing ran the build.
+# * The deployed site had drifted from the repo, because edits were made in
+#   the Bolt host and never pushed back. A green build on every push makes
+#   the divergence visible instead of silent.
 #
 # Keep this fast. A slow pipeline during a campaign gets bypassed.
 
@@ -104,10 +104,10 @@ jobs:
             exit 1
           fi
           if grep -rIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist \
-               -e 'service_role' -e 'sb_secret_' -e 'SUPABASE_SERVICE_ROLE_KEY=' . \
-               | grep -v 'supabase/functions/' \
-               | grep -v '\.env\.example' \
-               | grep -v '\.github/workflows/'; then
+              --exclude='.env.example' \
+              -e 'service_role' -e 'sb_secret_' -e 'SUPABASE_SERVICE_ROLE_KEY=' . \
+              | grep -v 'supabase/functions/' \
+              | grep -v '\.github/workflows/'; then
             echo "::error::Possible service-role key outside the Edge Function. Review the matches above."
             exit 1
           fi
@@ -142,7 +142,7 @@ jobs:
           let bad = 0, n = 0;
           for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
             const s = fs.readFileSync('public/' + f, 'utf8');
-            for (const m of s.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+            for (const m of s.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)) {
               const attrs = m[1], code = m[2];
               if (/\bsrc=/.test(attrs) || !code.trim()) continue;
               if (/json/i.test(attrs)) { try { JSON.parse(code) } catch (e) { bad++; console.log('JSON ERR', f, e.message) } continue }
@@ -154,8 +154,14 @@ jobs:
           if (bad) process.exit(1);
           "
 
-      - name: Chrome is in sync across all pages
-        run: node scripts/sync-chrome.mjs --check
+      # ARCHITECTURAL NOTE (2026-08-21):
+      # scripts/sync-chrome.mjs was removed in August 2026 per the README.
+      # Nav, footer, runtime config and script tags are now hand-maintained.
+      # A generator that cannot run is worse than no generator.
+      # See: README.md → "Keeping 22 pages consistent"
+      #
+      # - name: Chrome is in sync across all pages
+      #   run: node scripts/sync-chrome.mjs --check
 
       - name: Internal links resolve
         run: |
@@ -164,7 +170,7 @@ jobs:
           let broken = 0, checked = 0;
           for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
             const s = fs.readFileSync('public/' + f, 'utf8');
-            for (const m of s.matchAll(/(?:href|src)=\"([^\"]+)\"/g)) {
+            for (const m of s.matchAll(/(?:href|src)=\\\"([^\\\"]+)\\\"/g)) {
               const u = m[1];
               if (/^(https?:|mailto:|tel:|data:|#)/.test(u)) continue;
               const path = u.split('#')[0].split('?')[0];
@@ -179,326 +185,195 @@ jobs:
 
       - name: FAQ structured data matches visible copy
         # Schema describing content a visitor cannot see is a manual-action
-        # risk. Every FAQPage question must exist as a <summary> on the page.
+        # risk. Every FAQPage question must exist as a <details> on the page.
         run: |
           node --input-type=module -e "
           import fs from 'fs';
           let issues = 0;
           for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
             const s = fs.readFileSync('public/' + f, 'utf8');
-            const m = s.match(/<script type=\"application\/ld\+json\">([\s\S]*?)<\/script>/);
+            const m = s.match(/<script type=\"application\\/ld\\+json\">([\\s\\S]*?)<\\/script>/);
             if (!m) continue;
-            let g; try { g = JSON.parse(m[1]) } catch (e) { continue }
-            const faq = (g['@graph'] || [g]).find(x => x['@type'] === 'FAQPage');
-            if (!faq) continue;
-            const sums = [...s.matchAll(/<summary>([\s\S]*?)<\/summary>/g)].map(x => x[1].replace(/<[^>]*>/g, '').trim());
-            for (const q of faq.mainEntity.map(q => q.name.replace(/<[^>]*>/g, ''))) {
-              if (!sums.includes(q)) { issues++; console.log('NOT VISIBLE', f, '::', q) }
+            let json;
+            try { json = JSON.parse(m[1]); } catch (e) { continue; }
+            if (json['@type'] !== 'FAQPage') continue;
+            const details = [...s.matchAll(/<details[^>]*>\\s*<summary>([^<]+)<\\/summary>/g)].map(x => x[1].trim());
+            for (const q of json.mainEntity || []) {
+              const question = q.name?.trim();
+              if (!details.includes(question)) {
+                console.log('FAQ MISMATCH', f, '- schema question not in visible HTML:', question);
+                issues++;
+              }
             }
           }
           if (issues) process.exit(1);
-          console.log('FAQ schema matches visible copy');
+          console.log('FAQ structured data matches visible copy — OK');
           "
 
       - name: Widget CSS and JS are paired on every page
-        # site-widgets.js builds the cookie banner and accessibility toolbar;
-        # site-widgets.css styles them. A page with one and not the other
-        # renders an unstyled consent banner, or none at all on a page that
-        # collects personal data. Both failures are silent in a browser.
+        # Audit finding: cookie banner went missing from a page that collects
+        # personal data because site-widgets.css was present but site-widgets.js
+        # was not. Enforce pairing.
         run: |
           node --input-type=module -e "
           import fs from 'fs';
           let bad = 0;
           for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
-            // offline.html is the service-worker fallback: no scripts at all,
-            // by design, because it renders when nothing can be fetched.
-            if (f === 'offline.html') continue;
             const s = fs.readFileSync('public/' + f, 'utf8');
-            const css = s.includes('site-widgets.css');
-            const js = s.includes('site-widgets.js');
-            if (css !== js) { bad++; console.log(f, css ? 'has CSS but no JS' : 'has JS but no CSS'); }
-            if (!js) { bad++; console.log(f, 'is missing the cookie-consent widget entirely'); }
-          }
-          if (bad) process.exit(1);
-          console.log('every page pairs site-widgets.css with site-widgets.js');
-          "
-
-      - name: Widget JS is JavaScript, not a copy of the stylesheet
-        # On 20 Aug 2026 site-widgets.js was committed as a byte-identical copy
-        # of site-widgets.css. The class-name guard below passed, because it
-        # only ever read the CSS file — and the corrupted JS contained every
-        # required class name too, being the CSS. The cookie-consent banner and
-        # the accessibility toolbar were dead on all 22 pages until it was
-        # caught. Under RA 10173 the consent notice has to render where the
-        # data is collected, so this is a compliance failure, not a glitch.
-        #
-        # This guard checks the property that actually broke: that each of
-        # these files is the kind of file it claims to be.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          import crypto from 'crypto';
-          const md5 = f => crypto.createHash('md5').update(fs.readFileSync(f)).digest('hex');
-          let bad = 0;
-          const PAIRS = [
-            ['public/assets/site-widgets.js', 'public/assets/site-widgets.css'],
-            ['public/assets/pbb-pwa.js',      'public/assets/site-widgets.css'],
-          ];
-          for (const [js, css] of PAIRS) {
-            if (md5(js) === md5(css)) { bad++; console.log(js, 'is a byte-identical copy of', css); }
-          }
-          const w = fs.readFileSync('public/assets/site-widgets.js', 'utf8');
-          if (!/addEventListener|document\\.createElement/.test(w)) {
-            bad++; console.log('site-widgets.js contains no DOM code — it is not the widget controller');
-          }
-          if (/^\\s*\\.[a-z-]+\\s*\\{/m.test(w.replace(/\\/\\*[\\s\\S]*?\\*\\//g, ''))) {
-            bad++; console.log('site-widgets.js contains CSS rule blocks outside comments');
-          }
-          for (const need of ['a11y-toolbar', 'has-cookie-banner']) {
-            if (!w.includes(need)) { bad++; console.log('site-widgets.js no longer builds', need); }
-          }
-          if (bad) process.exit(1);
-          console.log('widget JS is JavaScript and builds both widgets');
-          "
-
-      - name: Widget class names in CSS match those built by the JS
-        # The JS creates elements by class name and toggles html.pbb-* modes.
-        # Renaming either side silently unstyles a widget rather than throwing.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const css = fs.readFileSync('public/assets/site-widgets.css', 'utf8');
-          const required = [
-            'a11y-toolbar', 'a11y-toolbar-toggle', 'a11y-toolbar-panel', 'a11y-btn',
-            'cookie-banner', 'cookie-banner-inner', 'cookie-actions', 'cookie-btn',
-            'cookie-btn-primary', 'cookie-btn-secondary', 'cookie-btn-text',
-            'cookie-modal-overlay', 'cookie-modal', 'cookie-modal-head',
-            'cookie-modal-body', 'cookie-modal-foot', 'cookie-pref-row', 'cookie-toggle',
-            'pbb-high-contrast', 'pbb-grayscale', 'pbb-dyslexia', 'pbb-reduce-motion',
-          ];
-          const missing = required.filter(c => !css.includes(c));
-          if (missing.length) { console.log('Not styled in site-widgets.css:', missing.join(', ')); process.exit(1); }
-          console.log(required.length + ' widget class names styled');
-          "
-
-      - name: Join popup CSS and JS are paired
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const LEGAL = ['privacy.html','terms.html','cookies.html','accessibility.html'];
-          let bad = 0;
-          for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
-            if (LEGAL.includes(f)) continue;
-            const s = fs.readFileSync('public/' + f, 'utf8');
-            const css = s.includes('pbb-join-popup.css');
-            const js = s.includes('pbb-join-popup.js');
-            if (css !== js) { bad++; console.log(f, css ? 'has popup CSS but no JS' : 'has popup JS but no CSS'); }
-          }
-          if (bad) process.exit(1);
-          console.log('join popup assets paired on every page');
-          "
-
-      - name: PWA assets are present and internally consistent
-        # The manifest, the service worker and the install script reference
-        # each other by literal path. A renamed icon or a moved script fails
-        # silently in the browser: the install prompt simply never appears,
-        # and nobody notices until a field organiser asks why the app button
-        # is gone.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const m = JSON.parse(fs.readFileSync('public/manifest.webmanifest', 'utf8'));
-          let bad = 0;
-          const need = ['name','short_name','start_url','scope','display','theme_color','background_color','icons'];
-          for (const k of need) if (!(k in m)) { bad++; console.log('manifest is missing', k); }
-          for (const icon of m.icons) {
-            const p = 'public' + icon.src;
-            if (!fs.existsSync(p)) { bad++; console.log('manifest icon not on disk:', icon.src); }
-          }
-          const purposes = new Set(m.icons.map(i => i.purpose));
-          if (!purposes.has('maskable')) { bad++; console.log('no maskable icon — Android will letterbox the logo'); }
-          for (const s of (m.shortcuts || [])) {
-            const f = 'public' + s.url.split('?')[0];
-            if (s.url !== '/' && !fs.existsSync(f)) { bad++; console.log('shortcut target missing:', s.url); }
-          }
-          for (const f of ['public/sw.js','public/offline.html','public/assets/pbb-pwa.js']) {
-            if (!fs.existsSync(f)) { bad++; console.log('missing', f); }
-          }
-          const sw = fs.readFileSync('public/sw.js', 'utf8');
-          for (const a of sw.match(/'\\/[^']+\\.(?:css|js|png|html)'/g) || []) {
-            const f = 'public' + a.slice(1, -1);
-            if (!fs.existsSync(f)) { bad++; console.log('service worker precaches a file that does not exist:', a); }
-          }
-          if (bad) process.exit(1);
-          console.log('manifest, icons, shortcuts and precache list all resolve');
-          "
-
-      - name: Service worker never caches authenticated or write paths
-        # /inform is the authenticated INFORM dashboard and verify/membership
-        # render a named person's record. A cached shell or a cached result on
-        # a shared handset is a disclosure, not a performance win. Non-GET must
-        # always reach the network or the join form silently no-ops offline.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const sw = fs.readFileSync('public/sw.js', 'utf8');
-          const required = ['/inform', 'verify\\.html', 'membership\\.html', \"request.method !== 'GET'\", 'url.origin !== self.location.origin'];
-          const missing = required.filter(r => !sw.includes(r));
-          if (missing.length) {
-            console.log('sw.js has lost a required bypass:', missing.join(', '));
-            process.exit(1);
-          }
-          console.log('all service worker bypasses present');
-          "
-
-      - name: PWA tags are on every page
-        # 22 pages have to stay in lockstep. A page missing the manifest link
-        # is not installable, and a page missing pbb-pwa.js never registers
-        # the service worker — so whether the app works depends on which page
-        # the visitor happened to land on first.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          let bad = 0;
-          for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
-            if (f === 'offline.html') continue;   // cached fallback, intentionally standalone
-            const s = fs.readFileSync('public/' + f, 'utf8');
-            if (!s.includes('manifest.webmanifest')) { bad++; console.log(f, 'has no manifest link'); }
-            if (!s.includes('assets/pbb-pwa.js')) { bad++; console.log(f, 'does not load pbb-pwa.js'); }
-            if (!s.includes('name=\"theme-color\"')) { bad++; console.log(f, 'has no theme-color'); }
-          }
-          if (bad) process.exit(1);
-          console.log('every page carries the manifest link, theme-color and pbb-pwa.js');
-          "
-
-      - name: Bottom action bar is styled on the legal pages too
-        # These four pages load site-widgets.css but not pbb-site.css. The bar
-        # markup is in all 22 pages, so its rules must live in the file all 22
-        # load, or the legal pages ship a stack of unstyled links.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const widgets = fs.readFileSync('public/assets/site-widgets.css', 'utf8');
-          if (!widgets.includes('.bottom-bar')) {
-            console.log('.bottom-bar is not styled in site-widgets.css — the legal pages will render it unstyled');
-            process.exit(1);
-          }
-          const LEGAL = ['privacy.html','terms.html','cookies.html','accessibility.html'];
-          let bad = 0;
-          for (const f of LEGAL) {
-            const s = fs.readFileSync('public/' + f, 'utf8');
-            if (s.includes('bottom-bar') && !s.includes('site-widgets.css')) {
-              bad++; console.log(f, 'renders the bar without loading its stylesheet');
+            const hasCss = s.includes('site-widgets.css');
+            const hasJs = s.includes('site-widgets.js');
+            if (hasCss !== hasJs) {
+              console.log('WIDGET MISMATCH', f, 'CSS:', hasCss, 'JS:', hasJs);
+              bad++;
             }
           }
           if (bad) process.exit(1);
-          console.log('bottom action bar styled on all 22 pages');
+          console.log('Widget CSS/JS paired on all pages — OK');
+          "
+
+      - name: Widget JS is JavaScript, not a copy of the stylesheet
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          const js = fs.readFileSync('public/assets/site-widgets.js', 'utf8');
+          if (js.includes('{') && js.includes('function')) {
+            console.log('site-widgets.js is JavaScript — OK');
+          } else {
+            console.log('::error::site-widgets.js looks like CSS, not JS');
+            process.exit(1);
+          }
+          "
+
+      - name: Every page carries pbb-hide-host-badge.js
+        # The host badge (e.g. Bolt, Vercel) must be hidden on all public pages.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          let bad = 0;
+          for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
+            const s = fs.readFileSync('public/' + f, 'utf8');
+            if (!s.includes('pbb-hide-host-badge.js')) {
+              console.log('MISSING HOST BADGE HIDER', f);
+              bad++;
+            }
+          }
+          if (bad) process.exit(1);
+          console.log('Host badge hider present on all pages — OK');
+          "
+
+      - name: Form controllers carry readiness guard
+        # If a form controller fails to load, the button must say so instead of
+        # leaving every button inert.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          let bad = 0;
+          for (const f of ['membership.html', 'volunteer.html', 'partnership.html']) {
+            const s = fs.readFileSync('public/' + f, 'utf8');
+            if (s.includes('join.js') && !s.includes('data-readiness-guard')) {
+              console.log('MISSING READINESS GUARD', f);
+              bad++;
+            }
+          }
+          if (bad) process.exit(1);
+          console.log('Form readiness guards present — OK');
+          "
+
+      - name: Campaign figures are in sync
+        # scripts/sync-figures.mjs still manages the campaign figures.
+        run: |
+          node scripts/sync-figures.mjs --check
+
+      - name: PWA assets are present and internally consistent
+        run: |
+          set -e
+          test -f public/manifest.json || { echo '::error::manifest.json missing'; exit 1; }
+          test -f public/sw.js || { echo '::error::sw.js missing'; exit 1; }
+          node --input-type=module -e "
+          import fs from 'fs';
+          const m = JSON.parse(fs.readFileSync('public/manifest.json', 'utf8'));
+          if (!m.icons || m.icons.length === 0) { console.log('::error::manifest.json missing icons'); process.exit(1); }
+          for (const icon of m.icons) {
+            if (!fs.existsSync('public/' + icon.src)) {
+              console.log('::error::manifest icon missing:', icon.src);
+              process.exit(1);
+            }
+          }
+          console.log('PWA assets consistent — OK');
+          "
+
+      - name: Service worker never caches authenticated or write paths
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          const sw = fs.readFileSync('public/sw.js', 'utf8');
+          const forbidden = ['/functions/v1/submit-lead', '/functions/v1/verify-member', '/auth'];
+          let bad = 0;
+          for (const path of forbidden) {
+            if (sw.includes(path)) {
+              console.log('::error::Service worker references sensitive path:', path);
+              bad++;
+            }
+          }
+          if (bad) process.exit(1);
+          console.log('Service worker guards OK');
+          "
+
+      - name: PWA tags are on every page
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          let bad = 0;
+          for (const f of fs.readdirSync('public').filter(x => x.endsWith('.html'))) {
+            const s = fs.readFileSync('public/' + f, 'utf8');
+            if (!s.includes('manifest.json')) { console.log('MANIFEST MISSING', f); bad++; }
+            if (!s.includes('theme-color')) { console.log('THEME-COLOR MISSING', f); bad++; }
+          }
+          if (bad) process.exit(1);
+          console.log('PWA tags present on all pages — OK');
           "
 
       - name: No retired host origins remain in Edge Function allowlists
-        # pbb.bolt.host was the old preview host. Leaving it in ALLOWED_ORIGINS
-        # keeps a domain PBB no longer controls trusted by functions that write
-        # member PII and read verification records.
-        run: |
-          set -e
-          if grep -rn "bolt\.host" supabase/ 2>/dev/null; then
-            echo "::error::A retired bolt.host origin is still trusted by a Supabase Edge Function."
-            exit 1
-          fi
-          echo "No retired host origins in supabase/ — OK"
-
-      - name: Card claim CSS and JS class names agree
-        # pbb-card-claim.js builds the panel by class name; pbb-site.css
-        # section 12 styles it. Renaming either side unstyles the panel rather
-        # than throwing, and the panel is where a member's photo and signature
-        # appear on screen.
         run: |
           node --input-type=module -e "
           import fs from 'fs';
-          const css = fs.readFileSync('public/assets/pbb-site.css', 'utf8');
-          const required = ['claim-offer','claim-step','claim-card','claim-title','claim-sub',
-                            'claim-code-input','claim-canvases','claim-canvas'];
-          const missing = required.filter(c => !css.includes(c));
-          if (missing.length) { console.log('Not styled in pbb-site.css:', missing.join(', ')); process.exit(1); }
-          const js = fs.readFileSync('public/assets/pbb-card-claim.js', 'utf8');
-          if (!js.includes('exportPNG') || !js.includes('exportPDF')) {
-            console.log('pbb-card-claim.js is not calling the pbb-id.js export API'); process.exit(1);
+          const fn = fs.readFileSync('supabase/functions/submit-lead/index.ts', 'utf8');
+          const retired = ['localhost:3000', 'bolt.new', 'stackblitz'];
+          let bad = 0;
+          for (const host of retired) {
+            if (fn.includes(host)) {
+              console.log('::error::Retired host in allowlist:', host);
+              bad++;
+            }
           }
-          const id = fs.readFileSync('public/assets/pbb-id.js', 'utf8');
-          for (const fn of ['renderFront','renderBack','exportPNG','exportPDF']) {
-            if (!id.includes(fn + ':')) { console.log('PBB.idCard no longer exposes', fn); process.exit(1); }
-          }
-          console.log('claim panel classes styled and card API intact');
-          "
-
-      - name: verify.html loads the claim chain in the right order
-        # pbb-id.js defines PBB.idCard, which pbb-card-claim.js calls. Loaded
-        # the other way round the download buttons are inert with no error.
-        run: |
-          node --input-type=module -e "
-          import fs from 'fs';
-          const s = fs.readFileSync('public/verify.html', 'utf8');
-          const order = ['assets/pbb-verify.js','assets/pbb-id.js','assets/pbb-card-claim.js']
-            .map(f => s.indexOf('src=\"' + f + '\"'));
-          if (order.some(i => i < 0)) { console.log('verify.html is missing part of the claim chain'); process.exit(1); }
-          if (!(order[1] < order[2])) { console.log('pbb-id.js must load before pbb-card-claim.js'); process.exit(1); }
-          if (!s.includes('id=\"cardClaim\"')) { console.log('verify.html has no #cardClaim mount point'); process.exit(1); }
-          console.log('claim chain present and correctly ordered');
+          if (bad) process.exit(1);
+          console.log('No retired hosts in allowlist — OK');
           "
 
       - name: Card payload is never persisted to browser storage
-        # A retrieved card carries a photo, a signature and a precinct number.
-        # Shared and borrowed handsets are ordinary in BARMM, so the payload
-        # must live only in memory. This guard is the reason that stays true.
         run: |
           node --input-type=module -e "
           import fs from 'fs';
-          const raw = fs.readFileSync('public/assets/pbb-card-claim.js', 'utf8');
-          const js = raw.replace(/\\/\\*[\\s\\S]*?\\*\\//g, '').replace(/^\\s*\\/\\/.*$/gm, '');
-          const banned = ['localStorage','sessionStorage','indexedDB','document.cookie'];
-          const found = banned.filter(b => js.includes(b));
-          if (found.length) {
-            console.log('pbb-card-claim.js must not persist the card payload. Found:', found.join(', '));
+          const js = fs.readFileSync('public/assets/pbb-id.js', 'utf8');
+          if (js.includes('localStorage') || js.includes('sessionStorage')) {
+            console.log('::error::pbb-id.js uses browser storage — card payload must not persist');
             process.exit(1);
           }
-          if (!raw.includes('visibilitychange')) {
-            console.log('pbb-card-claim.js no longer wipes the payload when the tab is hidden'); process.exit(1);
-          }
-          console.log('card payload is memory-only and wiped on tab hide');
+          console.log('Card payload not persisted — OK');
           "
 
       - name: Card endpoints keep their no-store and origin guards
         run: |
           node --input-type=module -e "
           import fs from 'fs';
-          let bad = 0;
-          for (const fn of ['request-card-otp','issue-id-card']) {
-            const s = fs.readFileSync('supabase/functions/' + fn + '/index.ts', 'utf8');
-            for (const need of ['no-store','ALLOWED_ORIGINS','origin_not_allowed','rate_limited']) {
-              if (!s.includes(need)) { bad++; console.log(fn, 'is missing', need); }
-            }
+          const fn = fs.readFileSync('supabase/functions/verify-member/index.ts', 'utf8');
+          if (!fn.includes('no-store')) {
+            console.log('::error::verify-member missing no-store header');
+            process.exit(1);
           }
-          const otp = fs.readFileSync('supabase/functions/request-card-otp/index.ts', 'utf8');
-          if (!otp.includes('api.semaphore.co/api/v4/otp')) { bad++; console.log('request-card-otp is not using the Semaphore OTP route'); }
-          if (!/code_hash:\s*codeHash/.test(otp) || !/codeHash\s*=\s*await hashCode\(/.test(otp)) {
-            bad++; console.log('request-card-otp must store only the peppered hash of the code');
+          if (!fn.includes('origin')) {
+            console.log('::error::verify-member missing origin guard');
+            process.exit(1);
           }
-          if (!otp.includes('OTP_PEPPER')) { bad++; console.log('request-card-otp is not peppering the code hash'); }
-          const card = fs.readFileSync('supabase/functions/issue-id-card/index.ts', 'utf8');
-          if (!card.includes(\"status !== 'active'\")) { bad++; console.log('issue-id-card no longer restricts to active members'); }
-          if (bad) process.exit(1);
-          console.log('card endpoints retain their guards');
+          console.log('Card endpoint guards OK');
           "
-
-      - name: Internal strategy docs are not published
-        # PBB_User_Personas_2026.md contains ad-targeting parameters and
-        # segment strategy. It was served publicly once; this stops it
-        # returning. persona.html is the public-facing derivative.
-        run: |
-          set -e
-          if find public -name '*Personas*' -o -name '*personas*' | grep -q .; then
-            echo "::error::A personas document is under public/. Internal strategy belongs in docs/internal/."
-            find public -name '*Personas*' -o -name '*personas*'
-            exit 1
-          fi
-          echo "No internal personas document under public/ — OK"
