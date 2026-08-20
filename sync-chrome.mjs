@@ -27,8 +27,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC = join(ROOT, 'public')
 const CHECK = process.argv.includes('--check')
 
-/* Pages that deliberately keep their own chrome. */
-const SKIP = new Set([])
+/* Pages that deliberately keep their own chrome.
+
+   offline.html is the service-worker fallback. It is rendered precisely when
+   the network is unreachable, so it must not gain a nav, a footer or the
+   runtime config block — every one of those pulls in a file that, at the
+   moment this page is shown, may not be fetchable. It is self-contained on
+   purpose and stays that way. */
+const SKIP = new Set(['offline.html'])
 
 /* Legal pages predate the design system and have their own minimal layout;
    rewriting their nav would break it. They are linked from every footer. */
@@ -224,7 +230,11 @@ const EXTRA_SCRIPTS = {
   // verify.html had a form, a button and a result container with nothing
   // wired to any of them, and ignored the ?m= parameter its own printed QR
   // codes point at. pbb-verify.js is that controller.
-  'verify.html': ['assets/pbb-verify.js'],
+  //
+  // pbb-id.js and pbb-card-claim.js were added for member self-service card
+  // retrieval. Order is load-bearing: pbb-id.js defines PBB.idCard, which
+  // pbb-card-claim.js calls to draw the card once the OTP has been proven.
+  'verify.html': ['assets/pbb-verify.js', 'assets/pbb-id.js', 'assets/pbb-card-claim.js'],
 }
 
 function scriptBlock(slug) {
@@ -244,6 +254,12 @@ function scriptBlock(slug) {
   // it still needs to be present so a [data-join-popup] button works
   // anywhere.
   //
+  // pbb-pwa.js goes on EVERY page, immediately after site-widgets.js. It
+  // watches for body.has-cookie-banner, which site-widgets.js sets, so it must
+  // load after it — otherwise the install bar can appear over an unanswered
+  // consent banner. It also registers the service worker, which has to happen
+  // on whichever page the visitor happens to land on first.
+  //
   // pbb-hide-host-badge.js is last because it only reads the DOM. It hides
   // the host-injected bolt.new attribution anchor in cases the CSS rule in
   // pbb-tokens.css section 9 cannot reach (open shadow roots, late
@@ -254,11 +270,13 @@ function scriptBlock(slug) {
        '<script src="assets/pbb-messenger.js" defer></script>',
        '<script src="assets/pbb-join-popup.js" defer></script>',
        '<script src="assets/site-widgets.js" defer></script>',
+       '<script src="assets/pbb-pwa.js" defer></script>',
        '<script src="assets/pbb-hide-host-badge.js" defer></script>']
     : ['<script src="assets/pbb-app.js" defer></script>',
        '<script src="assets/pbb-messenger.js" defer></script>',
        '<script src="assets/pbb-join-popup.js" defer></script>',
        '<script src="assets/site-widgets.js" defer></script>',
+       '<script src="assets/pbb-pwa.js" defer></script>',
        '<script src="assets/pbb-hide-host-badge.js" defer></script>']
   /* An outside observer for the form pages.
    *
@@ -359,18 +377,31 @@ for (const file of readdirSync(PUBLIC).filter((f) => f.endsWith('.html')).sort()
      site-widgets.js          the cookie banner. A privacy policy page with no
                               consent banner is the most conspicuous possible
                               place for it to be missing.
+     pbb-pwa.js               registers the service worker and builds the
+                              install bar. Omitting it here would make
+                              installability depend on the landing page.
      pbb-hide-host-badge.js   the host attribution badge is injected on every
                               page, so it has to be handled on every page.
 
    Nothing else here is touched.
    -------------------------------------------------------------------------- */
 const BADGE_TAG = '<script src="assets/pbb-hide-host-badge.js" defer></script>'
+const PWA_TAG = '<script src="assets/pbb-pwa.js" defer></script>'
 const WIDGETS_TAG_RE = /<script src="assets\/site-widgets\.js"[^>]*><\/script>/
 
 for (const file of LEGAL) {
   const path = join(PUBLIC, file)
   const before = readFileSync(path, 'utf8')
   let after = before
+
+  if (!after.includes('assets/pbb-pwa.js')) {
+    const m = after.match(WIDGETS_TAG_RE)
+    if (!m) {
+      console.error(`${file}: no site-widgets.js tag to anchor to — fix by hand`)
+      process.exit(1)
+    }
+    after = after.replace(WIDGETS_TAG_RE, `${m[0]}\n${PWA_TAG}`)
+  }
 
   if (!after.includes('assets/pbb-hide-host-badge.js')) {
     const m = after.match(WIDGETS_TAG_RE)
