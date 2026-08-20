@@ -15,6 +15,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Montserrat:wght@500;600;700;800&family=Roboto+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PBB">
 <link rel="stylesheet" href="assets/pbb-tokens.css">
 <link rel="stylesheet" href="assets/pbb-site.css">
 <link rel="stylesheet" href="assets/site-widgets.css">
@@ -124,6 +129,12 @@
 
       <div id="verifyResult" hidden></div>
 
+      <!-- Member self-service card retrieval. pbb-card-claim.js fills this in
+           only after a lookup returns an active member, and empties it again
+           on any other outcome. Nothing renders here for someone verifying
+           another person's ID. -->
+      <div id="cardClaim" hidden></div>
+
       <div class="callout" style="margin-top:var(--pbb-space-6)">
         <p style="margin-bottom:.4em"><strong>Bakit limitado ang ipinapakita?</strong></p>
         <p style="margin:0">
@@ -220,9 +231,12 @@
 </script>
 <script src="assets/pbb-app.js"></script>
 <script src="assets/pbb-verify.js"></script>
+<script src="assets/pbb-id.js"></script>
+<script src="assets/pbb-card-claim.js"></script>
 <script src="assets/pbb-messenger.js" defer></script>
 <script src="assets/pbb-join-popup.js" defer></script>
 <script src="assets/site-widgets.js" defer></script>
+<script src="assets/pbb-pwa.js" defer></script>
 <script src="assets/pbb-hide-host-badge.js" defer></script>
 <script>
   window.addEventListener('load', function () {
