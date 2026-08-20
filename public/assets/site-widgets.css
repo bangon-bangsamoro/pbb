@@ -433,3 +433,256 @@ body.has-cookie-banner .a11y-toolbar { bottom: 210px; }
 @media print {
   .a11y-toolbar, .cookie-banner, .cookie-modal-overlay { display: none !important; }
 }
+
+/* ==========================================================================
+   5. PERSISTENT BOTTOM ACTION BAR
+   --------------------------------------------------------------------------
+   Moved here from pbb-site.css on 20 Aug 2026. The markup is authored
+   directly in each page, not built by JS, but the bar appears on all 22
+   pages while pbb-site.css is loaded by only 18 — the four legal pages load
+   site-widgets.css alone. Living in this file is what makes the bar styled
+   everywhere it renders.
+
+   Depends on: pbb-tokens.css
+   ========================================================================== */
+
+/* --- Persistent bottom action bar (mobile only) -------------------------
+   The conversion links (Sumali / membership / volunteer) previously lived
+   only in the footer, i.e. below every other link on the page. This lifts
+   them to a always-reachable bar and is what actually produces the "app"
+   feel — not a shorter footer.
+
+   Hidden at >=720px, where the sticky header nav already carries the CTA. */
+.bottom-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  background: var(--pbb-forest-deep);
+  border-top: 1px solid #ffffff1f;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.bottom-bar a {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--pbb-tap);
+  padding: var(--pbb-space-2) var(--pbb-space-1);
+  font-family: var(--pbb-font-label);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  /* Labels are the header's verbatim wording, so two of the four wrap to a
+     second line on a 380px screen. Wrapping is correct here; truncating or
+     shortening them would recreate the drift this bar is meant to avoid. */
+  line-height: 1.15;
+  hyphens: none;
+  color: var(--pbb-ink-soft);
+  text-decoration: none;
+}
+.bottom-bar a[aria-current="page"] { color: var(--pbb-gold-bright); }
+.bottom-bar a.bar-cta {
+  background-image: var(--pbb-gold-metal);
+  color: var(--pbb-ink-dark);
+  font-weight: 700;
+}
+.bottom-bar a:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright);
+  outline-offset: -3px;
+}
+
+/* Reserve the bar's height so it never covers the last line of the footer,
+   including the COMELEC disclosure. */
+@media (max-width: 719.98px) {
+  body { padding-bottom: calc(var(--pbb-tap) + 12px + env(safe-area-inset-bottom, 0px)); }
+  /* back-to-top is fixed at bottom:16px and would sit under the bar. */
+  .back-to-top { bottom: calc(var(--pbb-tap) + 28px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (min-width: 720px) {
+  .bottom-bar { display: none; }
+}
+
+@media print {
+  .bottom-bar { display: none; }
+}
+
+/* ==========================================================================
+   6. PWA INSTALL BAR
+   --------------------------------------------------------------------------
+   Styles the DOM built by assets/pbb-pwa.js. Class names are load-bearing —
+   the JS creates these elements by class, so a rename here silently unstyles
+   the bar rather than throwing. Change both files in the same commit.
+
+   WHY THIS LIVES IN site-widgets.css AND NOT pbb-site.css
+   All 21 pages load site-widgets.css; only the 17 non-legal pages load
+   pbb-site.css. Putting it there would ship an unstyled stack of buttons on
+   privacy.html, terms.html, cookies.html and accessibility.html — the exact
+   failure the bottom action bar currently has.
+
+   POSITION
+   On phones the persistent .bottom-bar occupies bottom:0, so this docks
+   directly above it. From 720px the bottom bar is hidden and this floats
+   with a normal margin. z-index 80: above the bottom bar (60) and the a11y
+   toolbar (70), below the cookie banner (90) — consent outranks install.
+   ========================================================================== */
+
+.pwa-install {
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(var(--pbb-tap, 48px) + env(safe-area-inset-bottom, 0px));
+  z-index: 80;
+  padding: var(--pbb-space-3, 0.75rem);
+  transform: translateY(120%);
+  opacity: 0;
+  transition:
+    transform 0.28s var(--pbb-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    opacity 0.28s var(--pbb-ease-out, ease);
+  pointer-events: none;
+}
+.pwa-install.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.pwa-install[hidden] { display: none; }
+
+.pwa-install-inner {
+  position: relative;
+  max-width: var(--pbb-wrap, 1180px);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--pbb-space-3, 0.75rem);
+  padding: var(--pbb-space-3, 0.75rem);
+  padding-inline-end: var(--pbb-space-6, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 3px solid var(--pbb-gold, #C9A227);
+  border-radius: var(--pbb-radius, 10px);
+  background: var(--pbb-forest-deep, #063D1B);
+  color: var(--pbb-ink, #EAF1EC);
+  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.65);
+}
+
+.pwa-install-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+}
+
+.pwa-install-copy { flex: 1 1 auto; min-width: 0; }
+
+.pwa-install-title {
+  margin: 0;
+  font-family: var(--pbb-font-label, system-ui, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--pbb-gold-bright, #F7DE8E);
+}
+
+.pwa-install-sub {
+  margin: 2px 0 0;
+  font-family: var(--pbb-font-body, system-ui, sans-serif);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  /* AA on #063D1B. Do not lighten the background without rechecking. */
+  color: var(--pbb-ink-soft, #C8D8CC);
+}
+
+.pwa-install-ios {
+  margin: 0 0 var(--pbb-space-2, 0.5rem);
+  font-family: var(--pbb-font-body, system-ui, sans-serif);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--pbb-ink, #EAF1EC);
+}
+.pwa-install-ios strong { color: var(--pbb-gold-bright, #F7DE8E); }
+
+.pwa-install-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pbb-space-2, 0.5rem);
+}
+
+.pwa-btn {
+  min-height: var(--pbb-tap, 48px);
+  padding-inline: var(--pbb-space-4, 1rem);
+  border: none;
+  border-radius: var(--pbb-radius-sm, 8px);
+  font-family: var(--pbb-font-label, system-ui, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.pwa-btn-primary {
+  background-image: var(--pbb-gold-metal, linear-gradient(180deg, #F7DE8E, #D9AF33 55%, #8B6914));
+  color: var(--pbb-ink-dark, #12210F);
+}
+.pwa-btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--pbb-ink-soft, #C8D8CC);
+  font-weight: 600;
+}
+.pwa-btn:focus-visible,
+.pwa-install-close:focus-visible {
+  outline: 2px solid var(--pbb-gold-bright, #F7DE8E);
+  outline-offset: 2px;
+}
+
+.pwa-install-close {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 4px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-content: center;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--pbb-ink-soft, #C8D8CC);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Narrow phones: stack the actions so the two buttons stay full-width and
+   the title is never squeezed to two words per line. */
+@media (max-width: 519px) {
+  .pwa-install-inner { flex-wrap: wrap; }
+  .pwa-install-actions {
+    flex: 1 0 100%;
+    flex-direction: row;
+  }
+  .pwa-btn { flex: 1 1 0; }
+}
+
+/* From 720px the persistent bottom bar is hidden, so reclaim its offset. */
+@media (min-width: 720px) {
+  .pwa-install { bottom: env(safe-area-inset-bottom, 0px); }
+}
+
+/* Coexistence: while the install bar is up, lift the floating controls that
+   share the bottom-right corner, same mechanism as the cookie banner. */
+body.has-pwa-install .back-to-top,
+body.has-pwa-install .msgr-fab { bottom: 152px; }
+body.has-pwa-install .a11y-toolbar { bottom: 216px; }
+
+/* The cookie banner always wins — pbb-pwa.js will not show the install bar
+   while it is up, but if both ever render, consent stays on top. */
+body.has-cookie-banner .pwa-install { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pwa-install { transition: none; }
+}
+
+@media print {
+  .pwa-install { display: none !important; }
+}
