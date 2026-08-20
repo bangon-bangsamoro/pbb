@@ -292,7 +292,7 @@
     if (!head.querySelector('link[rel="manifest"]')) {
       var link = document.createElement('link');
       link.rel = 'manifest';
-      link.href = '/manifest.webmanifest';
+      link.href = '/manifest.json';
       head.appendChild(link);
     }
 
