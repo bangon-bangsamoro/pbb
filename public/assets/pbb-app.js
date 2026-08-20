@@ -166,7 +166,10 @@
                         'there is nowhere to send this submission. Set them in the ' +
                         'page config block on every form page.');
         }
-        return Promise.reject({ state: 'unconfigured', reason: err.kind });
+        /* Carry the payload through so renderResult can offer a route that
+           actually works. Someone who has just given consent and typed their
+           details must not be told the site threw them away. */
+        return Promise.reject({ state: 'unconfigured', reason: err.kind, payload: payload });
       }
 
       var queued = queueForRetry(envelope);
@@ -276,12 +279,60 @@
          happen. Nothing has been stored, and the member should not be left
          thinking they are registered. */
       case 'unconfigured':
+      case 'failed': {
+        /* The submission could not reach us — either the backend is not
+           configured, or the network failed and the envelope could not be
+           queued.
+
+           WHY THIS IS NOT JUST AN ERROR MESSAGE.
+           By the time this runs, the person has read a consent statement,
+           agreed to it, typed their name and number, and pressed a button.
+           Telling them it was discarded and that they should start again in
+           a different app is the point at which most people simply stop.
+           On a bad-signal day in BARMM this path fires for people with a
+           working phone and every intention of volunteering.
+
+           So instead of a dead end, hand them a prefilled SMS. One tap, the
+           message is already written, their details reach the hotline, and
+           nothing sensitive is written to a possibly shared phone. */
+        var p = ctx.payload || {};
+        var parts = ['SUMALI'];
+        if (p.fullName) parts.push(p.fullName);
+        if (p.municipality) parts.push(p.municipality);
+        else if (p.provinceCode) parts.push(String(p.provinceCode).replace(/_/g, ' '));
+        var body = parts.join(' ');
+
+        var tel = config.hotline.replace(/\D/g, '');
+        if (tel.charAt(0) === '0') tel = '63' + tel.slice(1);
+
         statusEl.className = 'form-status err';
-        statusEl.textContent =
-          'Hindi pa nakakonekta ang online na pagpapalista, kaya hindi naipadala ang detalye mo — ' +
-          'at hindi rin ito naka-save. Pasensiya na. Mag-text ng SUMALI sa ' + config.hotline +
-          ' o mag-message sa aming Facebook Page, at kami na ang magpapalista sa iyo.';
+        statusEl.innerHTML = '';
+
+        var msg = document.createElement('p');
+        msg.style.margin = '0 0 .75em';
+        msg.textContent = 'Hindi namin naabot ang server ngayon' +
+          (first ? ', ' + first : '') + ', kaya hindi pa naipapadala ang detalye mo. ' +
+          'Pindutin lang ito at kami na ang bahala — nakahanda na ang mensahe.';
+        statusEl.appendChild(msg);
+
+        /* iOS wants sms:...&body=, everything else wants ?body=. Sending the
+           wrong one drops the prefilled text silently, which turns a one-tap
+           handoff back into "type it yourself". */
+        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        var link = document.createElement('a');
+        link.className = 'btn btn-gold btn-block';
+        link.href = 'sms:+' + tel + (isIOS ? '&' : '?') + 'body=' + encodeURIComponent(body);
+        link.textContent = 'I-text ang aking sign-up sa ' + config.hotline;
+        statusEl.appendChild(link);
+
+        var alt = document.createElement('p');
+        alt.style.margin = '.75em 0 0';
+        alt.style.fontSize = '.85em';
+        alt.textContent = 'O tumawag sa ' + config.hotline +
+          ', o mag-message sa aming Facebook Page. Hindi ka namin kalilimutan.';
+        statusEl.appendChild(alt);
         return false;
+      }
 
       default:
         statusEl.className = 'form-status err';
