@@ -717,3 +717,79 @@ footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline;
 }
 
 .foryou-line { font-size: .95rem; line-height: 1.55; }
+
+/* ==========================================================================
+   12. MEMBER CARD CLAIM
+   --------------------------------------------------------------------------
+   Styles the panel built by assets/pbb-card-claim.js on verify.html. Class
+   names are load-bearing — the JS creates these elements by class, so a
+   rename here silently unstyles the panel rather than throwing. Change both
+   files in the same commit.
+
+   This lives in pbb-site.css rather than site-widgets.css because the panel
+   appears on exactly one page, and verify.html loads both. The bottom action
+   bar moved the other way for the opposite reason: it renders on all 22.
+   ========================================================================== */
+
+.claim-offer,
+.claim-step,
+.claim-card {
+  margin-top: var(--pbb-space-6);
+  padding: var(--pbb-space-6);
+  border: 1px solid var(--pbb-forest-line);
+  border-top: 3px solid var(--pbb-gold);
+  border-radius: var(--pbb-radius);
+  background: var(--pbb-white);
+}
+
+.claim-title {
+  margin: 0 0 .35em;
+  font-family: var(--pbb-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pbb-forest-deep);
+}
+
+.claim-sub {
+  margin: 0 0 var(--pbb-space-5);
+  font-size: .92rem;
+  line-height: 1.55;
+  color: var(--pbb-ink-muted);
+}
+
+/* Six characters, widely tracked, tabular figures. A code typed wrong because
+   the digits ran together costs an SMS credit and one of three attempts. */
+.claim-code-input {
+  font-family: var(--pbb-font-label), monospace;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5em;
+  text-align: center;
+  text-indent: .5em;
+}
+
+.claim-canvases {
+  display: grid;
+  gap: var(--pbb-space-4);
+  margin-bottom: var(--pbb-space-5);
+}
+
+/* The canvas is rendered at 1011x638 (CR80 at 300 DPI) and scaled down for
+   display. height:auto keeps the aspect ratio without a wrapper. */
+.claim-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: var(--pbb-radius-sm);
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, .45);
+}
+
+.claim-card .btn + .btn { margin-top: var(--pbb-space-3); }
+
+@media (min-width: 720px) {
+  .claim-canvases { grid-template-columns: 1fr 1fr; }
+}
+
+/* A membership card should never end up on a printout of the verify page. */
+@media print {
+  #cardClaim { display: none !important; }
+}
