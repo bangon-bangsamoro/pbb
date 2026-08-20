@@ -34,7 +34,7 @@
        cookie banner              90
        cookie modal               95+
 
-   Depends on: site-widgets.css (section 5), manifest.webmanifest, /sw.js
+   Depends on: site-widgets.css (section 5), manifest.json, /sw.js
    ========================================================================== */
 
 (function () {
