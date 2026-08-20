@@ -378,68 +378,16 @@ footer.site a:hover { color: var(--pbb-gold-bright); text-decoration: underline;
      strip the attribute below 720px instead. */
 }
 
-/* --- Persistent bottom action bar (mobile only) -------------------------
-   The conversion links (Sumali / membership / volunteer) previously lived
-   only in the footer, i.e. below every other link on the page. This lifts
-   them to a always-reachable bar and is what actually produces the "app"
-   feel — not a shorter footer.
+/* --- Persistent bottom action bar -------------------------------------
+   MOVED to section 5 of assets/site-widgets.css on 20 Aug 2026.
 
-   Hidden at >=720px, where the sticky header nav already carries the CTA. */
-.bottom-bar {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 60;
-  display: flex;
-  background: var(--pbb-forest-deep);
-  border-top: 1px solid #ffffff1f;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-.bottom-bar a {
-  flex: 1 1 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--pbb-tap);
-  padding: var(--pbb-space-2) var(--pbb-space-1);
-  font-family: var(--pbb-font-label);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-align: center;
-  /* Labels are the header's verbatim wording, so two of the four wrap to a
-     second line on a 380px screen. Wrapping is correct here; truncating or
-     shortening them would recreate the drift this bar is meant to avoid. */
-  line-height: 1.15;
-  hyphens: none;
-  color: var(--pbb-ink-soft);
-  text-decoration: none;
-}
-.bottom-bar a[aria-current="page"] { color: var(--pbb-gold-bright); }
-.bottom-bar a.bar-cta {
-  background-image: var(--pbb-gold-metal);
-  color: var(--pbb-ink-dark);
-  font-weight: 700;
-}
-.bottom-bar a:focus-visible {
-  outline: 2px solid var(--pbb-gold-bright);
-  outline-offset: -3px;
-}
+   The bar is rendered on all 22 pages, but only 18 of them load this file.
+   The four legal pages (privacy, terms, cookies, accessibility) load
+   site-widgets.css alone, so while these rules lived here those pages
+   shipped the bar as an unstyled row of plain links pinned to the top of
+   the document. Do not move them back.
+   ---------------------------------------------------------------------- */
 
-/* Reserve the bar's height so it never covers the last line of the footer,
-   including the COMELEC disclosure. */
-@media (max-width: 719.98px) {
-  body { padding-bottom: calc(var(--pbb-tap) + 12px + env(safe-area-inset-bottom, 0px)); }
-  /* back-to-top is fixed at bottom:16px and would sit under the bar. */
-  .back-to-top { bottom: calc(var(--pbb-tap) + 28px + env(safe-area-inset-bottom, 0px)); }
-}
-
-@media (min-width: 720px) {
-  .bottom-bar { display: none; }
-}
-
-@media print {
-  .bottom-bar { display: none; }
-}
 /* A control that must look like body text but behave like a button — used for
    "Cookie Preferences". Replaces a long inline style="" attribute, which would
    have needed a CSP hash or 'unsafe-inline' once vercel.json's CSP tightens. */
