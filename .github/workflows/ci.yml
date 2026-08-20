@@ -223,6 +223,44 @@ jobs:
           console.log('every page pairs site-widgets.css with site-widgets.js');
           "
 
+      - name: Widget JS is JavaScript, not a copy of the stylesheet
+        # On 20 Aug 2026 site-widgets.js was committed as a byte-identical copy
+        # of site-widgets.css. The class-name guard below passed, because it
+        # only ever read the CSS file — and the corrupted JS contained every
+        # required class name too, being the CSS. The cookie-consent banner and
+        # the accessibility toolbar were dead on all 22 pages until it was
+        # caught. Under RA 10173 the consent notice has to render where the
+        # data is collected, so this is a compliance failure, not a glitch.
+        #
+        # This guard checks the property that actually broke: that each of
+        # these files is the kind of file it claims to be.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          import crypto from 'crypto';
+          const md5 = f => crypto.createHash('md5').update(fs.readFileSync(f)).digest('hex');
+          let bad = 0;
+          const PAIRS = [
+            ['public/assets/site-widgets.js', 'public/assets/site-widgets.css'],
+            ['public/assets/pbb-pwa.js',      'public/assets/site-widgets.css'],
+          ];
+          for (const [js, css] of PAIRS) {
+            if (md5(js) === md5(css)) { bad++; console.log(js, 'is a byte-identical copy of', css); }
+          }
+          const w = fs.readFileSync('public/assets/site-widgets.js', 'utf8');
+          if (!/addEventListener|document\\.createElement/.test(w)) {
+            bad++; console.log('site-widgets.js contains no DOM code — it is not the widget controller');
+          }
+          if (/^\\s*\\.[a-z-]+\\s*\\{/m.test(w.replace(/\\/\\*[\\s\\S]*?\\*\\//g, ''))) {
+            bad++; console.log('site-widgets.js contains CSS rule blocks outside comments');
+          }
+          for (const need of ['a11y-toolbar', 'has-cookie-banner']) {
+            if (!w.includes(need)) { bad++; console.log('site-widgets.js no longer builds', need); }
+          }
+          if (bad) process.exit(1);
+          console.log('widget JS is JavaScript and builds both widgets');
+          "
+
       - name: Widget class names in CSS match those built by the JS
         # The JS creates elements by class name and toggles html.pbb-* modes.
         # Renaming either side silently unstyles a widget rather than throwing.
@@ -368,6 +406,89 @@ jobs:
             exit 1
           fi
           echo "No retired host origins in supabase/ — OK"
+
+      - name: Card claim CSS and JS class names agree
+        # pbb-card-claim.js builds the panel by class name; pbb-site.css
+        # section 12 styles it. Renaming either side unstyles the panel rather
+        # than throwing, and the panel is where a member's photo and signature
+        # appear on screen.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          const css = fs.readFileSync('public/assets/pbb-site.css', 'utf8');
+          const required = ['claim-offer','claim-step','claim-card','claim-title','claim-sub',
+                            'claim-code-input','claim-canvases','claim-canvas'];
+          const missing = required.filter(c => !css.includes(c));
+          if (missing.length) { console.log('Not styled in pbb-site.css:', missing.join(', ')); process.exit(1); }
+          const js = fs.readFileSync('public/assets/pbb-card-claim.js', 'utf8');
+          if (!js.includes('exportPNG') || !js.includes('exportPDF')) {
+            console.log('pbb-card-claim.js is not calling the pbb-id.js export API'); process.exit(1);
+          }
+          const id = fs.readFileSync('public/assets/pbb-id.js', 'utf8');
+          for (const fn of ['renderFront','renderBack','exportPNG','exportPDF']) {
+            if (!id.includes(fn + ':')) { console.log('PBB.idCard no longer exposes', fn); process.exit(1); }
+          }
+          console.log('claim panel classes styled and card API intact');
+          "
+
+      - name: verify.html loads the claim chain in the right order
+        # pbb-id.js defines PBB.idCard, which pbb-card-claim.js calls. Loaded
+        # the other way round the download buttons are inert with no error.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          const s = fs.readFileSync('public/verify.html', 'utf8');
+          const order = ['assets/pbb-verify.js','assets/pbb-id.js','assets/pbb-card-claim.js']
+            .map(f => s.indexOf('src=\"' + f + '\"'));
+          if (order.some(i => i < 0)) { console.log('verify.html is missing part of the claim chain'); process.exit(1); }
+          if (!(order[1] < order[2])) { console.log('pbb-id.js must load before pbb-card-claim.js'); process.exit(1); }
+          if (!s.includes('id=\"cardClaim\"')) { console.log('verify.html has no #cardClaim mount point'); process.exit(1); }
+          console.log('claim chain present and correctly ordered');
+          "
+
+      - name: Card payload is never persisted to browser storage
+        # A retrieved card carries a photo, a signature and a precinct number.
+        # Shared and borrowed handsets are ordinary in BARMM, so the payload
+        # must live only in memory. This guard is the reason that stays true.
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          const raw = fs.readFileSync('public/assets/pbb-card-claim.js', 'utf8');
+          const js = raw.replace(/\\/\\*[\\s\\S]*?\\*\\//g, '').replace(/^\\s*\\/\\/.*$/gm, '');
+          const banned = ['localStorage','sessionStorage','indexedDB','document.cookie'];
+          const found = banned.filter(b => js.includes(b));
+          if (found.length) {
+            console.log('pbb-card-claim.js must not persist the card payload. Found:', found.join(', '));
+            process.exit(1);
+          }
+          if (!raw.includes('visibilitychange')) {
+            console.log('pbb-card-claim.js no longer wipes the payload when the tab is hidden'); process.exit(1);
+          }
+          console.log('card payload is memory-only and wiped on tab hide');
+          "
+
+      - name: Card endpoints keep their no-store and origin guards
+        run: |
+          node --input-type=module -e "
+          import fs from 'fs';
+          let bad = 0;
+          for (const fn of ['request-card-otp','issue-id-card']) {
+            const s = fs.readFileSync('supabase/functions/' + fn + '/index.ts', 'utf8');
+            for (const need of ['no-store','ALLOWED_ORIGINS','origin_not_allowed','rate_limited']) {
+              if (!s.includes(need)) { bad++; console.log(fn, 'is missing', need); }
+            }
+          }
+          const otp = fs.readFileSync('supabase/functions/request-card-otp/index.ts', 'utf8');
+          if (!otp.includes('api.semaphore.co/api/v4/otp')) { bad++; console.log('request-card-otp is not using the Semaphore OTP route'); }
+          if (!/code_hash:\s*codeHash/.test(otp) || !/codeHash\s*=\s*await hashCode\(/.test(otp)) {
+            bad++; console.log('request-card-otp must store only the peppered hash of the code');
+          }
+          if (!otp.includes('OTP_PEPPER')) { bad++; console.log('request-card-otp is not peppering the code hash'); }
+          const card = fs.readFileSync('supabase/functions/issue-id-card/index.ts', 'utf8');
+          if (!card.includes(\"status !== 'active'\")) { bad++; console.log('issue-id-card no longer restricts to active members'); }
+          if (bad) process.exit(1);
+          console.log('card endpoints retain their guards');
+          "
 
       - name: Internal strategy docs are not published
         # PBB_User_Personas_2026.md contains ad-targeting parameters and
