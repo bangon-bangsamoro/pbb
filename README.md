@@ -365,4 +365,4 @@ ACAPS is the actual upstream data source and risk methodology (INFORM Risk Index
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Apache — see [LICENSE](LICENSE).
