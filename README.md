@@ -278,43 +278,59 @@ fields back would be a queryable directory of who supports whom.
 ---
 
 ## Project structure
-
-```
-public/
-  home.html               Slim persona-routing hub
-  bangon-*.html           One page per BANGON pillar (6)
-  join.html               Hub — routes to the three form pages
-  membership.html         Membership form + PBB ID generation
-  volunteer.html          Volunteer sign-up
-  partnership.html        Alliance & Partnership Agreement
-  verify.html             Public membership-ID lookup
-  privacy.html, terms.html, cookies.html, accessibility.html
-  robots.txt, sitemap.xml
-  assets/
-    pbb-tokens.css        Design system — single source of truth
-    pbb-site.css          Page chrome (header, nav, hero, footer)
-    pbb-forms.css         Form-page styles (capture, signature, ID preview)
-    pbb-app.js            window.PBB: transport, persona, lang, chrome
-    pbb-id.js             Photo capture, signature pad, ID card renderer
-    join.js               Controllers for all three form pages
-    site-widgets.js       Cookie + accessibility widget
-docs/
-  internal/               Personas, Messenger scripts — NOT served publicly
-scripts/
-  build-bangon-pages.mjs  One-shot scaffold for the six pillar pages
-index.html                Vite entry for the dashboard
-src/                      INFORM dashboard (React + TS)
-  index.css               Imports pbb-tokens.css; dashboard-only styles
-supabase/
-  migrations/
-    20260811123735_comprehensive_schema.sql   roles, leads, content, risk data
-    20260812000000_pillar_cta_forms.sql       pillar CTA forms + grants
-    20260813000000_onboarding_pipeline.sql    chapters, stages, lockdown
-    20260814000000_membership_ids.sql         members, ID issuance, verification
-  functions/
-    submit-lead/          Public write path for every form
-    verify-member/        Public ID verification
-.github/workflows/ci.yml  typecheck, lint, build, HTML, JS, secret scan
+pbb/
+├── .github/
+│   └── workflows/
+│       └── ci.yaml                 # FIXED: removed sync-chrome orphan, fixed secrets scan
+├── public/                         # Static campaign site (no build step)
+│   ├── home.html                   # Persona-routing hub
+│   ├── bangon.html                 # BANGON platform hub
+│   ├── about.html
+│   ├── voter-education.html
+│   ├── faq.html
+│   ├── contact.html
+│   ├── bangon-*.html               # 6 pillar pages
+│   ├── join.html                   # Hub — routes to forms, keeps legacy links
+│   ├── membership.html             # Membership form + PBB ID generation
+│   ├── volunteer.html              # Volunteer sign-up
+│   ├── partnership.html            # Alliance & Partnership Agreement
+│   ├── verify.html                 # Public membership-ID lookup (noindex)
+│   ├── privacy.html, terms.html, cookies.html, accessibility.html
+│   ├── robots.txt, sitemap.xml
+│   ├── manifest.json               # PWA manifest
+│   ├── sw.js                       # Service worker
+│   └── assets/
+│       ├── pbb-tokens.css          # Design system — single source of truth
+│       ├── pbb-site.css            # Page chrome (header, nav, hero, footer)
+│       ├── pbb-forms.css           # Form-page styles
+│       ├── pbb-app.js              # window.PBB: transport, persona, lang, chrome
+│       ├── pbb-id.js               # Photo capture, signature pad, ID card renderer
+│       ├── join.js                 # Controllers for all three form pages
+│       ├── site-widgets.js         # Cookie + accessibility widget
+│       └── site-widgets.css        # Widget styles (must pair with JS on every page)
+│       # NOTE: sync-chrome.mjs REMOVED — nav/footer are hand-maintained
+├── src/                            # INFORM dashboard (React + TS + Vite)
+│   ├── index.css                   # Imports pbb-tokens.css; dashboard-only styles
+│   ├── main.tsx
+│   └── ...
+├── supabase/
+│   ├── migrations/
+│   │   ├── 20260811123735_comprehensive_schema.sql
+│   │   ├── 20260812000000_pillar_cta_forms.sql
+│   │   ├── 20260813000000_onboarding_pipeline.sql
+│   │   └── 20260814000000_membership_ids.sql
+│   └── functions/
+│       ├── submit-lead/            # Public write path for every form
+│       └── verify-member/          # Public ID verification
+├── scripts/
+│   ├── build-bangon-pages.mjs      # One-shot scaffold for pillar pages
+│   └── sync-figures.mjs            # Manages campaign figures (still in CI)
+├── docs/
+│   └── internal/                   # Personas, Messenger scripts — NOT served publicly
+├── index.html                      # Vite entry for the dashboard
+├── package.json
+├── .env.example                    # Example env vars (excluded from secret scan)
+└── README.md
 ```
 
 ## Data protection
