@@ -1,0 +1,85 @@
+{
+  "id": "/",
+  "name": "Partido Bangon Bangsamoro",
+  "short_name": "PBB",
+  "description": "Ang opisyal na app ng Partido Bangon Bangsamoro — BANGON Platform, paano bumoto, at pagsali sa kilusan.",
+  "lang": "tl-PH",
+  "dir": "ltr",
+  "start_url": "/?src=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
+  "orientation": "portrait",
+  "theme_color": "#063D1B",
+  "background_color": "#063D1B",
+  "categories": [
+    "politics",
+    "education",
+    "government"
+  ],
+  "icons": [
+    {
+      "src": "/assets/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/pwa-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/pwa-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sumali Ngayon",
+      "short_name": "Sumali",
+      "url": "/join.html?src=pwa-shortcut",
+      "icons": [
+        {
+          "src": "/assets/pwa-icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Paano Bomoto?",
+      "short_name": "Bomoto",
+      "url": "/voter-education.html?src=pwa-shortcut",
+      "icons": [
+        {
+          "src": "/assets/pwa-icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "BANGON Platform",
+      "short_name": "BANGON",
+      "url": "/bangon.html?src=pwa-shortcut",
+      "icons": [
+        {
+          "src": "/assets/pwa-icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
