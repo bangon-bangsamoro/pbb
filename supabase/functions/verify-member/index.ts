@@ -28,7 +28,6 @@ import { createClient, type SupabaseClient } from 'jsr:@supabase/supabase-js@2'
 const ALLOWED_ORIGINS = [
   'https://bangonbangsamoro.com',
   'https://www.bangonbangsamoro.com',
-  'https://pbb.bolt.host',
   'http://localhost:5173',
   'http://localhost:4173',
 ]
