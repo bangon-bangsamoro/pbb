@@ -262,4 +262,57 @@
     buildCookieBanner();
     applyPrefs(getPrefs());
   }
+
+  /* ==================================================================
+     PWA BOOTSTRAP
+     ------------------------------------------------------------------
+     Injects the manifest link, the theme-color meta tag, and pbb-pwa.js
+     at runtime, instead of each page carrying its own <link> and
+     <script> tags.
+
+     WHY FROM HERE. This file is already loaded by all 23 pages. The
+     alternative is a six-line edit to every page, which through the
+     GitHub web UI means 23 separate commits and 23 chances for one page
+     to be left behind. Right now exactly 1 page carries the manifest
+     link and 2 load pbb-pwa.js, which is that failure already happening.
+     One file every page loads cannot go half-applied.
+
+     THE TRADE, stated honestly. Chrome prefers a static
+     <link rel="manifest"> in the HTML head; a dynamically inserted one
+     is honoured but evaluated slightly later, so on a cold first visit
+     the install prompt may need one extra navigation before it offers
+     itself. For 23 pages that must not disagree, that is worth paying.
+     If static tags are ever added, the checks below detect them and this
+     block does nothing.
+     ================================================================== */
+  (function bootstrapPWA() {
+    var head = document.head;
+    if (!head) return;
+
+    if (!head.querySelector('link[rel="manifest"]')) {
+      var link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = '/manifest.webmanifest';
+      head.appendChild(link);
+    }
+
+    if (!head.querySelector('meta[name="theme-color"]')) {
+      var meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      meta.content = '#063D1B';
+      head.appendChild(meta);
+    }
+
+    /* pbb-pwa.js registers the service worker and builds the install bar.
+       It watches for body.has-cookie-banner, which this file sets, so
+       loading it from here guarantees an ordering that two separate
+       script tags only happened to get right. */
+    if (!document.querySelector('script[src*="pbb-pwa.js"]')) {
+      var sc = document.createElement('script');
+      sc.src = '/assets/pbb-pwa.js';
+      sc.defer = true;
+      head.appendChild(sc);
+    }
+  }());
+
 })();
