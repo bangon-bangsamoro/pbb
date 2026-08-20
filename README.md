@@ -277,7 +277,7 @@ fields back would be a queryable directory of who supports whom.
 
 ---
 
-## Project structure
+plain
 pbb/
 ├── .github/
 │   └── workflows/
@@ -331,7 +331,6 @@ pbb/
 ├── package.json
 ├── .env.example                    # Example env vars (excluded from secret scan)
 └── README.md
-```
 
 ## Data protection
 
