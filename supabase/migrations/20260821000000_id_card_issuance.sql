@@ -145,9 +145,9 @@ comment on table public.id_card_issuance_log is
  * Returns null for any member that is not 'active'. A suspended or revoked
  * member must not be able to pull a card that still looks valid.
  */
+update public.approvers set phone = '09XXXXXXXXX'
+ where title = 'Secretary General';
 create or replace function public.member_for_card_claim(
-  p_member_no text,
-  p_phone     text
 )
 returns uuid
 language plpgsql
