@@ -1,6 +1,25 @@
 <!doctype html>
 <html lang="tl" class="no-js">
 <head>
+<html lang="tl" class="no-js">
+<head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '790541051484697');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=790541051484697&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>I-verify ang PBB Membership ID</title>
@@ -23,8 +42,9 @@
 <link rel="stylesheet" href="assets/pbb-site.css">
 <link rel="stylesheet" href="assets/site-widgets.css">
 <link rel="stylesheet" href="assets/pbb-join-popup.css">
-<link rel="stylesheet" href="assets/pbb-forms.css">
-
+<link rel="stylesheet" href="assets/pbb-forms.css">  
+<link rel="stylesheet" href="assets/legal.css">
+     
 <style>
   .verdict { border-radius: var(--pbb-radius); padding: var(--pbb-space-5); margin-top: var(--pbb-space-4); }
   .verdict-ok      { background: #E8F3EA; border: 2px solid var(--pbb-forest); }
@@ -97,10 +117,6 @@
     </a>
     <figcaption>Ilagay ang numero ng membership ID upang tingnan kung ito ay tunay at aktibo.</figcaption>
   </figure>
-
-
-  
-
 
   <section>
     <div class="wrap" style="max-width:640px">
@@ -229,6 +245,7 @@
   };
 </script>
 <script src="assets/pbb-app.js"></script>
+<script src="assets/join.js"></script>
 <script src="assets/pbb-verify.js"></script>
 <script src="assets/pbb-id.js"></script>
 <script src="assets/pbb-card-claim.js"></script>
